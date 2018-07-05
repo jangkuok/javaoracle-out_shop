@@ -62,14 +62,14 @@ public class OuterVo implements Serializable {
 	 * @param amount	수량
 	 */
 	public OuterVo(OuterDTO outer) {
-		this.outerNo = outer.getOuterNo();
+/*		this.outerNo = outer.getOuterNo();
 		this.type = outer.getType();
 		this.name = outer.getName();
 		this.size = outer.getSize();
 		this.content = outer.getContent();
 		this.price = outer.getPrice();
 		this.color = outer.getColor();
-		this.amount = outer.getAmount();
+		this.amount = outer.getAmount();*/
 	}
 
 }
