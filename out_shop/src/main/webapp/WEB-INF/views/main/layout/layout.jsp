@@ -10,10 +10,8 @@
 <title>OUTSHOP</title>
 <!-- Bootstrap core CSS -->
 <link href="${pageContext.request.contextPath}/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
 <!-- Custom styles for this template -->
 <link href="${pageContext.request.contextPath}/bootstrap/css/modern-business.css" rel="stylesheet">
-	
 
 </head>
 <body>

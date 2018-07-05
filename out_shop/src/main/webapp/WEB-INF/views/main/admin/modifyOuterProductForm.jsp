@@ -57,7 +57,7 @@ $(document).ready(function() {
 		action="${pageContext.request.contextPath}/admin/modifyOuterProduct.do" method="post">	
 		<input type="hidden" name="outerNo" id="outerNo" value="${outerVo.outerNo}"/>
 		<input type="hidden" name="insertDate" id="insertDate" value="${outerVo.insertDate}"/>
-		<input type="hidden" name="thumbnailUrl" id="thumbnailUrl" value="${outerVo.thumbnailUrl}"/>
+		<input type="hidden" name="thumbnailName" id="thumbnailName" value="${outerVo.thumbnailName}"/>
 		
 		<table id="outerAdd" border="1" width="50%">
 			<tr>
