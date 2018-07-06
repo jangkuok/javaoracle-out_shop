@@ -64,18 +64,37 @@
 				#{outerNo}
 			   )
 	</insert>
-
 	<!-- 상품 삭제 SQL -->
 	<delete id="deleteWishList" parameterType="int">
 		DELETE FROM WISHLIST WHERE WISH_NO = #{wishNo}
 	</delete>
 	
+	<!-- BOARD_Review 카운트  -->
+	<select id = "selectWishListCount" resultType="_int">
+		SELECT COUNT(*) FROM WISHLIST
+	</select>
+	
+	
 	
 	<!-- 상품 List 조회 SQL -->
-	<select id="selectWishList" parameterType="string" resultMap="outer-wishList-resultmap">
-		<include refid="select-wishList-outer-sql"/>
-		AND w.MEMBER_ID = #{memberId}
+	<select id="selectWishList" parameterType="hashmap" resultMap="outer-wishList-resultmap">	
+		SELECT WISH_NO, MEMBER_ID, OUTER_NO, OUTER_NAME, OUTER_PRICE, OUTER_THUMBNAIL_NAME
+		FROM(
+			SELECT ROWNUM RNUM, WISH_NO, MEMBER_ID, OUTER_NO, OUTER_NAME, OUTER_PRICE, OUTER_THUMBNAIL_NAME
+			FROM( 			
+						SELECT		w.WISH_NO, w.MEMBER_ID, o.OUTER_NO,
+								  	o.OUTER_NAME, o.OUTER_PRICE, 
+									o.OUTER_THUMBNAIL_NAME
+						FROM		WISHLIST w, OUTER_TB o	
+						WHERE		w.OUTER_NO = o.OUTER_NO (+) 
+						AND			w.MEMBER_ID = #{memberId}
+                        ORDER BY    w.WISH_NO DESC 
+				)
+			WHERE ROWNUM &lt;=#{endIndex}	
+			)
+		WHERE RNUM>=#{startIndex}
 	</select>
+	
 	
 	<!-- 상품 등록 중복확인 SQL -->
 	<select id="selectWishListOverlapped" parameterType="hashmap" resultMap="wishList-resultmap">

@@ -1,6 +1,8 @@
 package com.outer_shopping.project.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -30,9 +32,9 @@ import com.outer_shopping.project.vo.WishListVo;
 
 @Controller
 @RequestMapping("/member")
-public class MemberController {
+public class MemberProductController {
 
-	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MemberProductController.class);
 	
 	@Autowired
 	private MemberService service;
@@ -45,104 +47,24 @@ public class MemberController {
 	
 	@Autowired
 	private AuthorityService authorityService;
-	
-	//회원가입 성공
-	@RequestMapping("/successJoinPage.do")
-	public String successPage() {
-		
-		return "/member/successJoinPage";
-	}	
 
-	/**
-	 * 회원 정보 확인(마이페이지) 
-	 */
-	@RequestMapping(value="/myPage.do", method = RequestMethod.GET	)
-	public String myPage(Model model,@RequestParam(value="id",required=false) String id) {
-		
-		model.addAttribute("memberVo", service.viewMember(id));
-		
-		logger.info("############# 마이페이지 이동 #############");
-		return "member/myPage";
-	}
-	
-	/**
-	 * 수정페이지 이동 
-	 */
-	@RequestMapping(value="/modifyPage.do", method = RequestMethod.POST)
-	public String modifyPage(Model model,@RequestParam(value="id",required=false) String id) {
-		
-		model.addAttribute("memberVo", service.viewMember(id));
-		
-		logger.info("############# 수정페이지 이동 #############");
-		return "member/modifyPage";
-	}
-	
-	/**
-	 * 회원정보 수정하기
-	 */
-	@RequestMapping(value = "/modifyCheck.do", method = RequestMethod.POST)
-	public ModelAndView modifyCheck(Model model,@Valid @ModelAttribute("memberVo") MemberVo memberVo,
-								BindingResult errors) {
-	
-		ModelAndView mv = new ModelAndView();
-	        
-		//에러 발생시 
-		if(errors.hasErrors()) {
-			logger.info("############# 회원수정 에러 #############");
-			mv.addObject("error","error");
-			mv.addObject("memberVo", memberVo);
-			mv.setViewName("member/modifyPage");
-			
-		}else{
-			service.modifyMember(memberVo);
-			
-			AuthorityVo authority = authorityService.findAuthority(memberVo.getId());
-			
-			authority.setLoginPw(memberVo.getPw());
-			
-			authorityService.modifyAuthority(authority);
-			
-			mv.addObject("memberVo", memberVo);
-			mv.setViewName("member/myPage");
-			
-			logger.info("############# 회원수정 완료 #############");
-		}
-			
-		return mv;
-	}	
-	/**
-	 * 회원정보 삭제
-	 */
-	@RequestMapping(value = "/deleteMember.do", method = RequestMethod.POST)
-	public String deleteMember(Model model,@RequestParam(value="id",required=false) String id,
-			@RequestParam(value="pw",required=false) String pw, @RequestParam(value="pw2",required=false) String pw2,
-			HttpSession session) {		
-		if(pw.equals(pw2)) {
-			service.deleteMember(id);
-			authorityService.removeAuthority(id);
-
-			logger.info("############# 회원탈퇴 완료 #############");
-		}else {
-
-			logger.info("############# 회원삭제 비밀번호 불일치 #############");
-			model.addAttribute("msg", "deleteError");
-			model.addAttribute("memberVo", service.viewMember(id));
-			
-			return "member/myPage";
-		}
-		logger.info("############# 메인페이지 이동 #############");
-		return "redirect:/logoutButton.do";
-	}
-	
 	/**
 	 * 관심상품 조회
 	 */
-	@RequestMapping(value = "/wishListSearch.do", method = RequestMethod.POST)
-	public String wishListSearch(Model model,@RequestParam(value="id",required=false) String id) {
+	@RequestMapping(value = "/wishListSearch.do", method = {RequestMethod.GET ,RequestMethod.POST})
+	public String wishListSearch(Model model,@RequestParam(value="memberId",required=false) String memberId,
+			@RequestParam(defaultValue="1") int page) {
 		
-		List<WishListVo> list = wishListService.getWishList(id);
+		Map<String, Object> map = new HashMap<>();
 		
-		model.addAttribute("list", list);
+		map  = wishListService.getWishList(memberId,page);
+		
+		model.addAttribute("list", map.get("list"));
+		
+		model.addAttribute("pageBean", map.get("pageBean"));
+	 
+		//List<WishListVo> list = wishListService.getWishList(id);
+		//model.addAttribute("list", list);
 
 		logger.info("############# 관심상품페이지 이동 #############");
 		return "member/wishListPage";

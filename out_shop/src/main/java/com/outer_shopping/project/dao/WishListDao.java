@@ -17,13 +17,18 @@ public interface WishListDao {
 	 */
 	void deleteWishList(int wishNo);
 	
+	/**
+	 * 글 목록 전체 갯수
+	 * @return
+	 */
+	int selectWishListCount();
 	
 	/**
 	 * 회원 관심상품 목록
 	 * @param memberId
 	 * @return
 	 */
-	List<WishListVo> selectWishList(String memberId);
+	List<WishListVo> selectWishList(String memberId,int startIndex, int endIndex);
 	
 	
 	/**

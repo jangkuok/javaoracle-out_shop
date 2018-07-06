@@ -1,12 +1,15 @@
 package com.outer_shopping.project.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.outer_shopping.project.dao.WishListDao;
 import com.outer_shopping.project.service.WishListSerice;
+import com.outer_shopping.project.util.PagingBean;
 import com.outer_shopping.project.vo.WishListVo;
 
 @Service("WishListSerice")
@@ -47,15 +50,23 @@ public class WishListServiceImpl implements WishListSerice {
 	 * 회원 관심상품 목록
 	 */
 	@Override
-	public List<WishListVo> getWishList(String memberId) {
-		 List<WishListVo> list = null;
+	public Map<String, Object> getWishList(String memberId,int page) {
+		List<WishListVo> list = null;
+		 
+		HashMap<String, Object> map = new HashMap<>();
 		try {
-			list = dao.selectWishList(memberId);
+			int totalCount = dao.selectWishListCount();
+			PagingBean pageBean = new PagingBean(totalCount, page);
+			map.put("pageBean", pageBean);
+			list = dao.selectWishList(memberId,pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());
+			map.put("list", list);
+			
 		}catch (Exception e) {
 			System.out.println("getWishList(service) : ");
 			e.printStackTrace();
 		}
-		return list;
+		
+		return map;
 	}
 
 	/**

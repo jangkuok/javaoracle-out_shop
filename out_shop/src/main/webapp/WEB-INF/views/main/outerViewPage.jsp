@@ -201,11 +201,7 @@ $(document).ready(function() {
 		<script>
 			alert("이미 추가한 상품입니다.");
 		</script>
-	</c:if>
-	
-	<%-- <jsp:include page="include/loginForm.jsp" flush="false"/><br> --%>
-	
-	
+	</c:if>	
 	<!-- 관리자 로그인 할 경우 -->
 	<sec:authorize access="hasRole('ROLE_ADMIN')">   
 		<form id="updateProductForm" name="updateProductForm" action="${pageContext.request.contextPath}/admin/modifyOuterPage.do" method="post">
@@ -225,12 +221,50 @@ $(document).ready(function() {
 		</form>
 	</sec:authorize>
 	
+	<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
+
+	<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">
+	<div class="row" style="margin-bottom:100px;">
+	<div class="col-lg-5" style="margin-right:50px;">
+		<div style="margin-right:100px;">
+			<img class="img-rounded" src="<c:url value='/image/${outer.imageName}'/>" width="400" height="400"/>
+		</div>
+	</div>
 	
-	<div style="text-align: center;">
-		<input type="hidden" id="outerNo" value="${outer.outerNo}">	
-		<img style="float:left;" src="<c:url value='/image/${outer.imageName}'/>" width="300" height="300"/>
-		<div style="text-align:left;">
-			<table border="0">
+	<div class="col-lg-6 mb-7">
+          <div class="card h-100">
+            <div class="card-body">
+     			<input class="textTrans" type="text" id="outerName" value="${outer.name}" readOnly="readOnly"><br>
+     			<input type="hidden" id="sizeNo" value="">
+				[필수]사이즈 선택<br>
+				<select id ="sizeSelect" name="sizeSelect">
+					<option value="선택하세요">선택하세요</option>
+					<option value="S">S</option>
+					<option value="M">M</option>
+					<option value="L">L</option>
+					<option value="XL">XL</option>
+					<option value="FREE">FREE</option>
+				</select><br>
+				[필수]색상 선택<br> 
+				<select id ="colorSelect" name="colorSelect">
+				<option value="선택하세요">선택하세요</option>
+				</select>
+				<table id="outerViewInfo" border="1">
+					<tbody id="productTbody"></tbody>		
+				</table>
+            </div>
+            <div class="card-footer" style="text-align:center;">
+            	TOTAL &nbsp; <input class="textTrans" type="text" id="totalPrice" value="0" readOnly="readOnly"><br>
+            </div>
+          </div>
+        </div>
+	
+	
+		<h2 style="text-align:center;">PRODUCT INFO</h2>
+		<hr>
+	
+	
+<%-- 		<table border="0">
 				<tr>
 					<td>
 						<input class="textTrans" type="text" id="outerName" value="${outer.name}" readOnly="readOnly">
@@ -277,12 +311,17 @@ $(document).ready(function() {
 					</td>
 				</tr>
 			</table>
+			</div> --%>
+		</div>	
+		<div class="row">
+			<div class="col-lg-12">
+				<center>
+					<c:forEach var="imageList" items="${outer.imageList}" varStatus="st">
+						<img src="<c:url value='/image/${imageList.pictureName}'/>" width="650"/><br>
+					</c:forEach>
+				</center>
+			</div>
 		</div>
-	</div>
-	<div style="text-align: center;">
-		<c:forEach var="imageList" items="${outer.imageList}" varStatus="st">
-			<img src="<c:url value='/image/${imageList.pictureName}'/>" width="650"/><br>
-		</c:forEach>
 	</div>
 </body>
 </html>

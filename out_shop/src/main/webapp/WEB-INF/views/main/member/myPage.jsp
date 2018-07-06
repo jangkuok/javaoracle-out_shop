@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!DOCTYPE html>
+<html lang="ko-kr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${memberVo.name}님의 마이페이지</title>
 <style type="text/css">
 form{
@@ -22,7 +24,7 @@ $(document).ready(function(){
     });
 });  
 
-//새로고침 뒤로가기 방지 javascript
+/* //새로고침 뒤로가기 방지 javascript
 document.onkeydown = function(e){
     key = (e) ? e.keyCode : event.keyCode;
     if(key==8 || key==116){
@@ -34,7 +36,7 @@ document.onkeydown = function(e){
           event.returnValue = false;
        }
     }
-};
+}; */
 
 //삭제 버튼 submit 
 function delete_member(){
@@ -43,42 +45,67 @@ function delete_member(){
     }
 };
 </script>
+<style>
+    body {
+        background: #f8f8f8;
+        padding: 60px 0;
+    }
+    
+    infoForm > div {
+    	margin: 15px 0;
+    }
+</style>
 </head>
 <body>
-<%-- <jsp:include page="../include/loginForm.jsp" flush="false"/><br> --%>
+<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
+<div>
+<h1>MY PAGE</h1><hr>
+</div>
 <c:if test="${msg == 'deleteError'}">
 	<script>
 		alert("비밀번호가 일치하지 않습니다.");
 	</script>
 </c:if>
-
-	아이디 : ${memberVo.id }<br>
-	이름 : ${memberVo.name }<br>
-	이메일 : ${memberVo.email }<br>
-	핸드폰번호 : ${memberVo.phoneNum }<br>
-	주소 : ${memberVo.zipcode})${memberVo.address} ${memberVo.address2 }<br>
-	등급 : ${memberVo.grade }<br>
-	
-	<form id="wishListForm" name="wishListForm" action="${pageContext.request.contextPath}/member/wishListSearch.do" method="post">
-		<input type="hidden" id="id" name="id" value="${memberVo.id}">
-		<input type="submit" id="wish" name="wish" value="관심상품">
-	</form>
-	<form id="orderListForm" name="orderListForm" action="${pageContext.request.contextPath}/member/orderListSearch.do" method="post">
-		<input type="hidden" id="id" name="id" value="${memberVo.id}">
-		<input type="submit" id="order" name="order" value="주문목록">
-	</form>	
-	<form id="modifyForm" name="modifyForm" action="${pageContext.request.contextPath}/member/modifyPage.do" method="post">
-		<input type="hidden" id="id" name="id" value="${memberVo.id}">
-		<input type="submit" id="modify" name="modify" value="수정하기">
-	</form>
-	<input type="button" id="showButton" name="showButton" value="탈퇴하기">
-	<div id="showDiv" name="showDiv" style="display: none">
-		<form id="deleteForm" name="deleteForm" action="${pageContext.request.contextPath}/member/deleteMember.do" method="post">
-			<input type="hidden" id="id" name="id" value="${memberVo.id}">
-			<input type="hidden" id="pw" name="pw" value="${memberVo.pw}">
-			<input type="text" id="pw2" name="pw2">
-			<input type="button" id="deleteButton" name="deleteButton" value="탈퇴하기" onclick="delete_member();">
-		</form>
+     <div class="row">
+        <div class="col-lg-6 mb-6">
+          <div class="card h-100">
+            <h4 class="card-header">회원정보</h4>
+            <div class="card-body">
+              	 <h4><strong>${memberVo.name} [${memberVo.id}] 님</strong></h4>
+		         <h5>이메일 : ${memberVo.email}</h5>
+		         <h5>핸드폰번호 : ${memberVo.phoneNum}</h5>
+		         <h5>주소 :</h5>
+		         <h7>${memberVo.address} ${memberVo.address2}</h7>
+		         <h5>등급 : ${memberVo.grade}</h5>
+            </div>
+            <div class="card-footer" style="text-align:center;">          	
+            	<a href="${pageContext.request.contextPath}/member/modifyPage.do?memberId=${memberVo.id}"
+            		 class="btn btn-dark">회원수정</a>
+              	<a href="#" class="btn btn-dark">회원탈퇴</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+        	<h4><strong>
+	      		<a href="${pageContext.request.contextPath}/member/wishListSearch.do?memberId=${outerWishList.outerNo}${memberVo.id}">
+	      			WISHLIST
+	      		</a>
+	      		&nbsp;&nbsp;&nbsp;&nbsp;관심 상품
+			 </strong></h4><hr>
+			 <h4><strong>
+	      	 <a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${outerWishList.outerNo}${memberVo.id}">
+			      	ORDER
+			    </a>
+			    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;주문 목록
+			 </strong></h4><hr>	
+			 <h4><strong>
+	      		<a href="#">
+			      	BOARD
+			    </a>
+			    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;게시물 관리
+			 </strong></h4><hr>		 
+		</div>	 
 	</div>
+</div>
 </body>
 </html>

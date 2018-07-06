@@ -71,9 +71,125 @@
 <title>수정하기</title>
 </head>
 <body>
-<%-- <jsp:include page="../include/loginForm.jsp" flush="false"/><br> --%>
-		<form:form commandName="memberVo" id="modify" name="modify" method="post" action="${pageContext.request.contextPath}/member/modifyCheck.do">
-			아이디 : 	<form:input id="id" name="id" path="id" size="25" readonly="true" value="${memberVo.id}" /><br>
+<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
+<div>
+<h1>MODIFY</h1><hr>
+</div>
+	<form:form commandName="memberVo" id="modify" name="modify" method="post" action="${pageContext.request.contextPath}/member/modifyCheck.do">	
+		<table class="table table-bordered">
+			  <thead>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <th scope="row">아이디</th>
+			      <td>
+				      	<div class="row">
+				      	  <div class="col-sm-5">
+				      		<form:input class="form-control" name="id" path="id" size="25" value="${memberForm.id}" readonly="true"/>
+				      	  </div>
+						</div> 	 
+						<form:errors path="id" cssClass="errMsg" />
+			      </td>
+			    </tr>
+			    <tr>
+			      <th scope="row">패스워드</th>
+			      <td>
+			      	  <div class="row">
+				      	<div class="col-sm-5">
+			    			<form:password class="form-control" name="pw" path="pw" size="25" maxlength="20"/>
+			    	    </div>
+			    	   </div>
+					   <form:errors path="pw" cssClass="errMsg" />
+			      </td>
+			    </tr>
+			    <tr>
+			      <th scope="row">이름</th>
+			      <td>	
+			      	  <div class="row">
+				      	<div class="col-sm-5">		      
+			      			<form:input class="form-control" name="name" path="name" size="25" maxlength="15"/>	
+						</div>
+					  </div> 		      		
+					  <form:errors path="name" cssClass="errMsg" value="${memberForm.name}"/>					
+			      </td>
+			    </tr>
+			    <tr>
+			      <th scope="row">핸드폰 번호</th>
+			      <td>
+			      	  <div class="row">
+				      	<div class="col-sm-5">		      
+			      			<form:input class="form-control" name="phoneNum" path="phoneNum" size="25" maxlength="11"/>
+						</div>
+					  </div> 		      		
+					  <form:errors path="phoneNum" cssClass="errMsg"/>					
+			      </td>
+			    </tr>
+			    <tr>
+			      <th scope="row">이메일</th>
+			      <td>
+			      	  <div class="row">
+				      	<div class="col-sm-5">		      
+			      			<form:input class="form-control" name="email" path="email" size="25"/>
+						</div>
+					  </div> 	      		
+					  <form:errors name="email" path="email" cssClass="errMsg" value="${memberForm.email}"/>
+						
+			      </td>
+			    </tr>
+			    <tr>
+			      <th scope="row">주소</th>
+			      <td>
+			      	  <div class="row">
+				      	<div class="col-sm-5">	
+				      		<form:input class="form-control" name="zipcode" path="zipcode" size="25" readonly="true" value="${memberVo.zipcode}"/>
+						</div>
+						<div class="col-sm-3">
+							<input type="button" class="btn btn-dark" value="주소 검색" onClick="getPostcodeAddress()"><br>
+						</div>
+					  </div> 	      							
+			      </td>
+			    </tr>			    
+			    <tr>
+			      <th scope="row"></th>
+			      <td>
+			      	  <div class="row">
+				      	<div class="col-sm-5">	
+				      		<form:input class="form-control" name="address" path="address" size="25" readonly="true" value="${memberVo.address}"/><br>
+						</div>
+					  </div>
+					  <div class="row"> 
+						<div class="col-sm-5">
+						 	<form:input class="form-control" name="address2" path="address2" size="25" value="${memberVo.address2}"/>		
+						</div>	      	
+					  </div>					  					
+			      </td>
+			    </tr>				    
+			    <tr>
+			      <th scope="row">성별</th>
+			      <td>
+			      	 <div class="radio">
+			     	 	 <form:radiobutton name="sex" path="sex" value="남자" label="남자"/>
+			     	 </div>
+			     	 <div class="radio">
+			     	  	<form:radiobutton name="sex" path="sex" value="여자" label="여자"/>
+			     	 </div>	     		
+				 </td>
+			    </tr>
+			    <tr>
+			      <th scope="row">등급</th>
+			      <td>
+			      	 <div class="row">
+				      	<div class="col-sm-5">
+			      	 		<form:input class="form-control" name="grade" path="grade" size="25" readonly="true" value="${memberVo.grade}" />    		
+				 		</div>
+				 	</div>
+				 </td>
+			    </tr>		    		    
+			  </tbody>
+			</table>			
+			<input type="submit" class="btn btn-dark" id="modifyButton" name="modifyButton" value="수정">
+			<input type="reset" class="btn" id="reset" name="reset" value="초기화">
+<%-- 			아이디 : 	<form:input id="id" name="id" path="id" size="25" readonly="true" value="${memberVo.id}" /><br>
 			비밀번호 :  <form:password name="pw" path="pw" size="25" maxlength="20"/>
 						<form:errors path="pw" cssClass="errMsg" /><br>
 			이름 : 		<form:input name="name" path="name" size="25" maxlength="15" readonly="true" value="${memberVo.name}" />	
@@ -88,10 +204,10 @@
 			상세주소 :	<form:input id="address2" name="address2" path="address2" size="25" value="${memberVo.address2}"/><br>	
 			등급 : 	<form:input id="grade" name="grade" path="grade" size="25" readonly="true" value="${memberVo.grade}" />				
 			<form:hidden id="sex" name="sex" path="sex" value="${memberVo.sex}"/>	
-			<form:hidden id="enabled" name="enabled" path="enabled" value="1"/><br>	
-		<input type="submit" id="modifyButton" name="modifyButton" value="수정">
-		<input type="reset" id="reset" name="reset" value="초기화">
-	</form:form>
+			<form:hidden id="enabled" name="enabled" path="enabled" value="1"/><br>	 
+--%>
 
+	</form:form>
+</div>
 </body>
 </html>

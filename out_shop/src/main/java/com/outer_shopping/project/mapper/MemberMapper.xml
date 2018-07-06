@@ -91,7 +91,6 @@
 		WHERE	MEMBER_ID = #{id}
 	</update>
 	
-	
 	<!-- 회원 탈퇴 SQL -->
 	<delete id="deleteMember" parameterType="String">
 		DELETE FROM MEMBER WHERE MEMBER_ID = #{id}

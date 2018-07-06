@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.outer_shopping.project.dao.WishListDao;
+import com.outer_shopping.project.mapper.WishListMapper;
 import com.outer_shopping.project.vo.WishListVo;
 
 @Repository
@@ -17,22 +18,14 @@ public class WishListDaoImpl implements WishListDao {
 	@Autowired
 	private SqlSession session;
 
-	/**
-	 * mapper SQL_ID 메소드
-	 * @param id
-	 * @return
-	 */
-	private String makeSqlId(String id){
-		return "com.outer_shopping.project.mapper.WishListMapper."+id;
-	}
-	
+
 	/**
 	 * 관심상품 등록
 	 */
 	@Override
 	public void insertWishList(WishListVo wish) {
-		try {
-			session.insert(makeSqlId("insertWishList"), wish);
+		try {		
+			session.getMapper(WishListMapper.class).insertWishList(wish);
 		}catch (Exception e) {
 			System.out.println("insertWishList(dao) : ");
 			e.printStackTrace();
@@ -47,24 +40,38 @@ public class WishListDaoImpl implements WishListDao {
 	@Override
 	public void deleteWishList(int wishNo) {
 		try {
-			session.delete(makeSqlId("deleteWishList"), wishNo);
+			session.getMapper(WishListMapper.class).deleteWishList(wishNo);
 		}catch (Exception e) {
 			System.out.println("deleteWishList(dao) : ");
 			e.printStackTrace();
 		}
 		
 	}
+	
+	/**
+	 * 글전체 목록 수
+	 */
+	@Override
+	public int selectWishListCount() {
+		return session.getMapper(WishListMapper.class).selectWishListCount();
+	}
+
 
 	/**
 	 * 회원 관심상품 목록
 	 */
 	@Override
-	public List<WishListVo> selectWishList(String memberId) {
+	public List<WishListVo> selectWishList(String memberId,int startIndex, int endIndex) {
 		
 		 List<WishListVo> list = null;
 		
-		try {
-			list = session.selectList(makeSqlId("selectWishList"), memberId);
+		try {			
+			Map<String, Object> input = new HashMap<String, Object>();
+			input.put("memberId",memberId);
+			input.put("startIndex",startIndex);
+			input.put("endIndex",endIndex);
+		
+			list = session.getMapper(WishListMapper.class).selectWishList(input);
 		}catch (Exception e) {
 			System.out.println("selectWishList(dao) : ");
 			e.printStackTrace();
@@ -85,7 +92,7 @@ public class WishListDaoImpl implements WishListDao {
 		input.put("outerNo",outerNo);
 		
 		try {
-			wishList = session.selectOne(makeSqlId("selectWishListOverlapped"), input);
+			wishList = session.getMapper(WishListMapper.class).selectWishListOverlapped(input);
 		}catch (Exception e) {
 			System.out.println("selectWishListOverlapped(dao) : ");
 			e.printStackTrace();

@@ -62,4 +62,60 @@ primary key (OUTER_NO))
 SELECT 	ORDER_NO, TOTAL_PRICE, HANDLING, MEMBER_ID, ADDRESS, PHONENUM, EMAIL, MESSAGE, ORDER_DATE
 FROM ORDER_CHECK	
 ORDER BY ORDER_NO DESC;	
+
+
+
+
+SELECT * FROM (
+            SELECT  
+                   m.*, FLOOR((ROWNUM - 1)/10 + 1) page  
+            FROM (  
+                     	SELECT		w.WISH_NO, w.MEMBER_ID,
+								  	o.OUTER_TYPE, o.OUTER_NAME, 
+									o.OUTER_CONTENT, o.OUTER_PRICE, 
+									o.OUTER_DATE, o.OUTER_THUMBNAIL_NAME, 
+									o.OUTER_IMAGENAME, o.OUTER_NO  
+						FROM		WISHLIST w, OUTER_TB o	
+						WHERE		w.OUTER_NO = o.OUTER_NO (+) 
+						AND			w.MEMBER_ID = 'ffffffff'
+                        ORDER BY    w.WISH_NO DESC 
+                 ) m  
+          	)  
+          
+ WHERE page = 1;
+
+ 
+
+SELECT WISH_NO, MEMBER_ID, OUTER_NAME, OUTER_PRICE, OUTER_THUMBNAIL_NAME
+		FROM(
+			SELECT ROWNUM RNUM, WISH_NO, MEMBER_ID, OUTER_NAME, OUTER_PRICE, OUTER_THUMBNAIL_NAME
+			FROM( 	
+                    	SELECT		w.WISH_NO, w.MEMBER_ID,
+								  	o.OUTER_NAME, o.OUTER_PRICE, 
+									o.OUTER_THUMBNAIL_NAME
+						FROM		WISHLIST w, OUTER_TB o	
+						WHERE		w.OUTER_NO = o.OUTER_NO (+) 
+						AND			w.MEMBER_ID = 'ffffffff'
+                        ORDER BY    w.WISH_NO DESC 
+				)
+			WHERE ROWNUM &lt;= 2
+			)
+WHERE RNUM>=1;
+
+		SELECT WISH_NO, MEMBER_ID, OUTER_NO
+		FROM(
+			SELECT ROWNUM RNUM, WISH_NO, MEMBER_ID, OUTER_NO
+			FROM( 	
+                    	SELECT 	WISH_NO, MEMBER_ID, OUTER_NO
+						FROM WISHLIST
+						WHERE MEMBER_ID = 'ffffffff'
+                        ORDER BY WISH_NO DESC 
+				)
+			WHERE ROWNUM &lt;= 1
+			)
+		WHERE RNUM>=1;
+		
+	
+
+
 	

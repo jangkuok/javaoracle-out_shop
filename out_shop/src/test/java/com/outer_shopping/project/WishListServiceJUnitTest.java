@@ -64,7 +64,7 @@ public class WishListServiceJUnitTest {
 	public void wishListSelectTest(){
 		log.info("######### JUnit(wishListSelectTest) 테스트 ##############");
 		
-		//service.getWishList("kkkkkkkk");
+		service.getWishList("ffffffff", 1);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class WishListServiceJUnitTest {
 	public void wishListSelectOverlappedTest(){
 		log.info("######### JUnit(wishListSelectOverlappedTest) 테스트 ##############");
 		
-		service.getWishListOverlapped("kkkkkkkk", 25);
+		//service.getWishListOverlapped("kkkkkkkk", 25);
 	}	 
 	
 

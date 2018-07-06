@@ -150,7 +150,7 @@ public class MemberDaoImpl implements MemberDao {
 		try {
 			member = session.selectOne(makeSqlId("selectMember"),id);
 		} catch (Exception e) {
-			System.out.println("deleteMember(dao) : ");
+			System.out.println("getMember(dao) : ");
 			e.printStackTrace();
 		}	
 		
