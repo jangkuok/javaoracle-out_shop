@@ -2,10 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>   
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="ko-kr">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <title>나의 WishList</title>
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
@@ -51,7 +51,7 @@ $(document).ready(function() {
 
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>WISHLIST</h1><hr>
+<h1>WISH LIST</h1><hr>
 </div>
 	<c:if test="${empty list}">
 	<center>
@@ -63,7 +63,7 @@ $(document).ready(function() {
 	<c:if test="${not empty list}">
 		<center>
 		<div>
-		<table class="table table-hover">
+		<table class="table table-hover" >
 			<thead>
 			<tr>
 				<th></th>
@@ -97,9 +97,9 @@ $(document).ready(function() {
 			</c:forEach>
 			</tbody>
 		</table>
-		<input type="button" id="deleteWishList" name="deleteWishList" value="상품삭제">
 		</div>
 		</center>
+		<input type="button" id="deleteWishList" name="deleteWishList" value="상품삭제">
 		
 
 <%-- ######################################################

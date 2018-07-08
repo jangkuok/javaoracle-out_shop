@@ -9,6 +9,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
+          	<!-- 회원 , 비회원일 경우 -->
           	<sec:authorize access="!hasRole('ROLE_ADMIN')">	 
           		<li class="nav-item">
 	              <a class="nav-link" href="#">Jacket</a>
@@ -30,7 +31,10 @@
 	            </li>	
 				<li class="nav-item">
 	              <a class="nav-link" href="#">Review</a> 
-	            </li>	    
+	            </li>
+	            <li class="nav-item">
+	              <a class="nav-link" href="${pageContext.request.contextPath}/outer/cartPage.do">Cart</a> 
+	            </li>	 	    
 	        </sec:authorize>
 	                 
             <!-- 비로그인일 경우 -->
@@ -40,19 +44,7 @@
 	            </li>
 	            <li class="nav-item">
 	              <a class="nav-link" href="${pageContext.request.contextPath}/joinPage.do">Join</a>
-	            </li>	           
-	              <%--
-	              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	                OTHER
-	              </a>
-	              
- 	              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
-	                	<a class="dropdown-item" href="${pageContext.request.contextPath}/joinPage.do">JOIN</a>
-					    <a class="dropdown-item" href="${pageContext.request.contextPath}/outer/cartPage.do">CART</a>
-					    <a class="dropdown-item" href="#">REVIEW</a>
-	              </div> 
-	              --%>
-	            </li>		
+	            </li>	           		
 			</sec:authorize>
 			
             <!-- 회원 로그인 할 경우 -->

@@ -87,7 +87,7 @@ public class MemberProductController {
 	 * 주문목록 조회
 	 */
 	@RequestMapping(value = "/orderListSearch.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public String orderListSearch(Model model,@RequestParam(value="id",required=false) String memberId) {
+	public String orderListSearch(Model model,@RequestParam(value="memberId",required=false) String memberId) {
 		
 		List<OrderCheckVo> list = orderService.getMemberOrderList(memberId);
 		

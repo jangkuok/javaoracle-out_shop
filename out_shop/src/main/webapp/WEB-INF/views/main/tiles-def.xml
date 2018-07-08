@@ -24,4 +24,5 @@
  	<definition name="*/*" extends="layout">
         <put-attribute name="content" value="/WEB-INF/views/main/{1}/{2}.jsp" />
     </definition>
+    
 </tiles-definitions>

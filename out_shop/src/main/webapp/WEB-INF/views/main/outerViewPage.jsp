@@ -2,13 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="ko-kr">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <title>Insert title here</title>
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="http://cdn.rawgit.com/jmnote/jquery.nonajaxform/33a7/jquery.nonajaxform.min.js"></script>
 <style>
 .textTrans{
 	background-color:transparent;
@@ -21,10 +20,10 @@ $(document).ready(function() {
 	
 	$("#outerViewInfo").hide();
 	
-	$("#sizeSelect").change(function() {
-		
+	//색상 보여주기
+	$("#sizeSelect").change(function() {		
 		$("#colorSelect").find("option").remove();
-		$("#colorSelect").append($("<option value"+'선택하세요'+">선택하세요</option>"));
+		$("#colorSelect").append($("<option value"+'[필수]색상 선택'+">[필수]색상 선택</option>"));
 		$.ajax
 		({		
 			"url":"${pageContext.request.contextPath}/outer/outerSizeCheck.do", 
@@ -47,9 +46,8 @@ $(document).ready(function() {
 	
 	var index = parseInt("1");
 	
-	
-	$(document).on('change','#colorSelect',function() {
-		
+	//선택한 상품 보여주기
+	$(document).on('change','#colorSelect',function() {		
 		var size = $("#sizeSelect").val();
 		var color = $("#colorSelect").val();
 		var no = $("#outerNo").val();
@@ -59,15 +57,16 @@ $(document).ready(function() {
 		
 		//선택한 상품 추가
 		var product = '<tr name="trProduct"><td id="selectProductItems'+index+'" name="selectProductItems">'+
-		'<input class="textTrans" type="hidden" id="productNo'+index+'" name="productNo" value="'+ no +'" readonly="">'+
-		'<input class="textTrans" type="text" id="productName'+index+'" name="productName" size="15" value="'+ name +'" readonly="">'+
-		'<input class="textTrans" type="text" id="productSize'+index+'" name="productSize" size="4" value="'+ size +'" readonly="">'+
-		'<input class="textTrans" type="text" id="productColor'+index+'" name="productColor" size="5" value="'+ color +'" readonly="">'+
-		'<input class="textTrans" type="text" id="productPrice'+index+'" name="productPrice" size="7" value="'+ price +'" readonly="">'+
-		'<input type="button" id="close'+index+'" name="close" value="X">'+
+		'<h7><input class="textTrans" type="hidden" id="cartNo'+index+'" name="product" value="'+ index +'" readonly="">'+
+		'<input class="textTrans" type="hidden" id="productNo'+index+'" name="product" value="'+ no +'" readonly="">'+
+		'<input class="textTrans" type="text" id="productName'+index+'" name="product" size="15" value="'+ name +'" readonly="">'+
+		'<input class="textTrans" type="text" id="productSize'+index+'" name="product" size="4" value="'+ size +'" readonly="">'+
+		'<input class="textTrans" type="text" id="productColor'+index+'" name="product" size="5" value="'+ color +'" readonly="">'+
+		'<input class="textTrans" type="text" id="productPrice'+index+'" name="product" size="7" value="'+ price +'" readonly="">'+
+		'<input class="textTrans" type="button" id="close'+index+'" name="close" value="X"></h7>'+
 		'</td></tr>';
-
-		var error = "선택하세요";
+		
+		var error = "[필수]색상 선택";
 		
 		if(color != error){
 			$("#outerViewInfo").show();	
@@ -140,7 +139,7 @@ $(document).ready(function() {
 		selectPrice = parseInt(selectPrice) - parseInt(price);
 		$("#totalPrice").val(selectPrice);
 	});
-	
+
 	//상품 주문 
 	$("#buyB").on('click',function(e) {
 		var loginId = $('#id').val();
@@ -158,16 +157,28 @@ $(document).ready(function() {
 		}else{
 			var productArr = []; 
 
-		    $("td[name='selectProductItems']").children().each(function(i){
+		    $("input[name='product']").each(function(i){
 		    	productArr.push($(this).val());
 		    });
 		    
-			$.form({
-				"action": "${pageContext.request.contextPath}/member/orderPage.do",
-				"type":"POST",
-				"data": {"productList" : productArr, "loginId" : loginId},
-				"dataType":"text"
-			}).submit();
+		    
+ 		    var $form = $('<form></form>');
+		    $form.attr('action', '${pageContext.request.contextPath}/member/orderPage.do');
+		    $form.attr('method', 'post');
+		    $form.appendTo('body');
+		    
+		    var index = 1;
+		    
+		    var input = '<input value="'+$('#memberId').val()+'" name="memberId" type="hidden">';
+		    $form.append(input);
+		    
+		    for (var i = 0; i < productArr.length; i++) {
+		    	var input = '<input value="'+productArr[i]+'" name="productInfo'+index+'" type="hidden">';
+		    	$form.append(input);
+		    	index++;
+			}
+		    
+		    $form.submit();
 		}
 	});
 	
@@ -180,16 +191,27 @@ $(document).ready(function() {
 		}
 		var productArr = []; 
 
-	    $("td[name='selectProductItems']").children().each(function(i){
+		$("input[name='product']").each(function(i){
 	    	productArr.push($(this).val());
 	    });
-	    	    
-		$.form({
-			"action": "${pageContext.request.contextPath}/outer/addCart.do",
-			"type":"GET",
-			"data": {"productList" : productArr, "outerNo" : $('#outerNo').val()},
-			"dataType":"text"
-		}).submit();
+	    
+	    var $form = $('<form></form>');
+	    $form.attr('action', '${pageContext.request.contextPath}/outer/addCart.do');
+	    $form.attr('method', 'post');
+	    $form.appendTo('body');
+	    
+	    var index = 1;
+	    
+	    var input = '<input value="'+$('#outerNo').val()+'" name="outerNo" type="hidden">';
+	    $form.append(input);
+	    
+	    for (var i = 0; i < productArr.length; i++) {
+	    	var input = '<input value="'+productArr[i]+'" name="productInfo'+index+'" type="hidden">';
+	    	$form.append(input);
+	    	index++;
+		}
+	    
+	    $form.submit();
 	});
 	
 });
@@ -222,104 +244,68 @@ $(document).ready(function() {
 	</sec:authorize>
 	
 	<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
-
-	<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">
-	<div class="row" style="margin-bottom:100px;">
-	<div class="col-lg-5" style="margin-right:50px;">
-		<div style="margin-right:100px;">
-			<img class="img-rounded" src="<c:url value='/image/${outer.imageName}'/>" width="400" height="400"/>
-		</div>
-	</div>
-	
-	<div class="col-lg-6 mb-7">
-          <div class="card h-100">
-            <div class="card-body">
-     			<input class="textTrans" type="text" id="outerName" value="${outer.name}" readOnly="readOnly"><br>
-     			<input type="hidden" id="sizeNo" value="">
-				[필수]사이즈 선택<br>
-				<select id ="sizeSelect" name="sizeSelect">
-					<option value="선택하세요">선택하세요</option>
-					<option value="S">S</option>
-					<option value="M">M</option>
-					<option value="L">L</option>
-					<option value="XL">XL</option>
-					<option value="FREE">FREE</option>
-				</select><br>
-				[필수]색상 선택<br> 
-				<select id ="colorSelect" name="colorSelect">
-				<option value="선택하세요">선택하세요</option>
-				</select>
-				<table id="outerViewInfo" border="1">
-					<tbody id="productTbody"></tbody>		
-				</table>
-            </div>
-            <div class="card-footer" style="text-align:center;">
-            	TOTAL &nbsp; <input class="textTrans" type="text" id="totalPrice" value="0" readOnly="readOnly"><br>
-            </div>
-          </div>
-        </div>
-	
-	
-		<h2 style="text-align:center;">PRODUCT INFO</h2>
-		<hr>
-	
-	
-<%-- 		<table border="0">
-				<tr>
-					<td>
-						<input class="textTrans" type="text" id="outerName" value="${outer.name}" readOnly="readOnly">
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<input class="textTrans" type="text" id="outerPrice" value="${outer.price}" readOnly="readOnly">
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<input type="hidden" id="sizeNo" value="">
-							[필수]사이즈 선택<br>
-							<select id ="sizeSelect" name="sizeSelect">
-								<option value="선택하세요">선택하세요</option>
-								<option value="S">S</option>
-								<option value="M">M</option>
-								<option value="L">L</option>
-								<option value="XL">XL</option>
-								<option value="FREE">FREE</option>
-							</select><br>
-							[필수]색상 선택<br> 
-							<select id ="colorSelect" name="colorSelect">
-							<option value="선택하세요">선택하세요</option>
-								<table id="outerViewInfo" border="1">
-									<tbody id="productTbody"></tbody>		
-								</table>
+		<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">
+		<div class="row" style="margin-bottom:100px;">
+			<div class="col-lg-5" style="margin-right:50px;">
+				<div style="margin-right:100px;">
+					<img class="img-rounded" src="<c:url value='/image/${outer.imageName}'/>" width="400" height="400"/>
+				</div>
+			</div>	
+			<div class="col-lg-6 mb-7">
+	          <div class="card h-100">
+	            <div class="card-body">
+	            	<div class="col-sm-5">
+	     				<h4><input class="textTrans" type="text" id="outerName" value="${outer.name}" readOnly="readOnly"><br></h4>
+	     			</div>
+	     			<div class="col-sm-12">
+	     				<h6>${outer.content}</h6>
+	     			</div>
+	     			<div class="col-sm-12">
+	     				<h6><input class="textTrans" type="text" id="outerPrice" value="${outer.price}" size="4" readOnly="readOnly">won<br></h6>			
+	     			</div>
+	     			<div class="col-sm-6">
+	     				<input type="hidden" id="sizeNo" value="">
+	     			</div>	     			
+	     			<div class="col-sm-5" style="margin-bottom:2px;">
+					<select class="form-control" id ="sizeSelect" name="sizeSelect">
+						<option value="[필수]사이즈 선택">[필수]사이즈 선택</option>
+						<option value="S">S</option>
+						<option value="M">M</option>
+						<option value="L">L</option>
+						<option value="XL">XL</option>
+						<option value="FREE">FREE</option>
+					</select><br>
+					</div>
+					<div class="col-sm-5" style="margin-bottom:2px;">
+						<select class="form-control" id ="colorSelect" name="colorSelect">
+						<option value="[필수]색상 선택">[필수]색상 선택</option>
 						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						TOTAL &nbsp; <input class="textTrans" type="text" id="totalPrice" value="0" readOnly="readOnly"><br>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<input type="button" id="buyB" name="buyB" value="Buy Now"><br>
-						<sec:authorize access="hasRole('ROLE_USER')">
-							<input type="button" id="wishB" name="wishB" value="Wish List"><br>
-						</sec:authorize>				
-						<input type="button" id="cartB" name="cartB" value="Add To Cart">
-					</td>
-				</tr>
-			</table>
-			</div> --%>
+					</div>
+					<div class="col-sm-12">
+						<table class="table table-hover" id="outerViewInfo">
+							<tbody id="productTbody"></tbody>		
+						</table>
+					</div>
+	            </div>
+		            <div class="card-footer" style="text-align:right;">
+		            	
+		            	TOTAL &nbsp; <input class="textTrans" type="text" id="totalPrice" value="0" size="4" readOnly="readOnly"> won
+		            	<sec:authorize access="hasRole('ROLE_USER')">
+							<input type="hidden" id="memberId" name="memberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
+							<input class="form-control" type="button" id="wishB" name="wishB" value="Wish List">
+						</sec:authorize>	
+		            	<input class="form-control btn btn-dark" type="button" id="buyB" name="buyB" value="Buy Now">		
+						<input class="form-control" type="button" id="cartB" name="cartB" value="Add To Cart">
+		           	</div>
+	          	</div>
+	        </div>
 		</div>	
-		<div class="row">
-			<div class="col-lg-12">
-				<center>
-					<c:forEach var="imageList" items="${outer.imageList}" varStatus="st">
-						<img src="<c:url value='/image/${imageList.pictureName}'/>" width="650"/><br>
-					</c:forEach>
-				</center>
+		<div class="row">		
+			<div class="col-lg-12" style="text-align:center;">
+				<h2>PRODUCT INFO</h2><hr>
+				<c:forEach var="imageList" items="${outer.imageList}" varStatus="st">
+					<img src="<c:url value='/image/${imageList.pictureName}'/>" width="650"/><br>
+				</c:forEach>
 			</div>
 		</div>
 	</div>

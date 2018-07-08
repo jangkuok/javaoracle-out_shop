@@ -1,33 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="ko-kr">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
 <title>나의 주문 목록</title>
-<!-- bootstrap CSS : 3.3.7 -->
-<link rel="stylesheet" 
-	  href="<c:url value='/js/bootstrap/3.3.7/css/bootstrap.min.css/' />">
+<!-- Bootstrap core CSS -->
+<link href="${pageContext.request.contextPath}/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="${pageContext.request.contextPath}/bootstrap/css/modern-business.css" rel="stylesheet">
+<!-- jQuery -->
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 
-<!-- jQuery : 3.2.1 -->
-<script src="<c:url value='/js/jQuery/3.2.1/jquery-3.2.1.min.js' />"></script>
-
-<!-- bootstrap JS : 3.3.7 -->
-<script src="<c:url value='/js/bootstrap/3.3.7/js/bootstrap.min.js' />"></script>
-<!-- form -->
-<script src="http://cdn.rawgit.com/jmnote/jquery.nonajaxform/33a7/jquery.nonajaxform.min.js"></script>
 <script type="text/javascript">
 //상품 선택하기
 $(document).ready(function() {
-	 // 게시글 팝업(modal) 보기
-	 
-	
-	 
+	 // 게시글 팝업(modal) 보기 
     $("input[id^=orderProductList_]").click(function (e) {
        
         var orderNo = e.target.id.substring(17); 
-         
+        
+     
         $.ajax ({
             "url" : "${pageContext.request.contextPath}/member/productListSearch.do",
             "type" : "POST",
@@ -40,8 +34,8 @@ $(document).ready(function() {
             		 '<td>'+ item.productSize + '</td>'+
             		 '<td>'+ item.productColor + '</td>'+
             		 '<td>'+ item.productPrice + '</td></tr>'
-            		 
-            		 $('tbody#modalTbody').append(product);
+
+            		 $('.modal-body tbody').append(product);
             	 });
             }                  
         });
@@ -86,39 +80,10 @@ function handingOrder(i){
 </script>
 </head>
 <body>
-    <div class="modal fade" id="myModal" role="dialog">
-      <div class="modal-dialog">
-     
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">주문 상세보기</h4>
-          </div>
-         
-          <div id="article_content" class="modal-body">
-	          <table border="1">
-				<thead>
-				<tr>
-					<th>상품번호</th>
-					<th>상품이름</th>
-					<th>사이즈</th>
-					<th>색상</th>
-					<th>가격</th>
-				</tr>
-				</thead>
-				<tbody id="modalTbody">
-
-				</tbody>
-			</table>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-<%-- <jsp:include page="../include/loginForm.jsp" flush="false"/><br> --%>
+<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
+<div>
+<h1>ORDER LIST</h1><hr>
+</div>
 	<c:if test="${empty list}">
 		<div>
 			주문 내역이 없습니다.
@@ -126,7 +91,7 @@ function handingOrder(i){
 	</c:if>
 	
 	<c:if test="${not empty list}">		
-		<table border="1">
+		<table  class="table table-hover">
 			<thead>
 			<tr>
 				<th>주문번호</th>
@@ -147,7 +112,8 @@ function handingOrder(i){
 					<td>${orderList.handing}</td>
 					<td>
 						<c:if test="${orderList.handing != '주문취소'}">
-							<input type="button" id="orderProductList_${orderList.orderNo}" data-toggle="modal" data-target="#myModal" value="상세보기" >
+							<input type="button" id="orderProductList_${orderList.orderNo}" class="" 
+								data-toggle="modal" data-target="#myModal" value="상세보기">					
 						</c:if>
 					</td>
 					<td>
@@ -167,30 +133,36 @@ function handingOrder(i){
 			</tbody>
 		</table>
 	</c:if>
-	
-	
-	
-	
-	
-	
-	<%-- 	<c:forEach var="orderList" items="${list}" varStatus="st">
-			<div>
-				<div id="">
-						주문번호 : ${orderList.orderNo } /
-						입금액 : ${orderList.totalPrice } / 
-						주문날짜 : ${orderList.orderDate } / 
-						진행상황 : ${orderList.handing }
-						<input type="hidden" id="orderNo_${orderList.orderNo}" name="orderNo" value="${orderList.orderNo}">
-						<form id="cancel_${orderList.orderNo}" action="${pageContext.request.contextPath}/member/cancelOrder.do" method="post">
-							<input type="hidden" id="memberId" value="${orderList.memberId}">
-							<input type="button" value="주문취소" onclick="cancelOrderButton(${orderList.orderNo});">
-						</form>	
-						<input type="button"  id="orderProductList_${orderList.orderNo}" data-toggle="modal" data-target="#myModal" value="상세보기" >
-
-				</div>
+ </div>
+<!-- The modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabelLarge" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="modalLabelLarge">PRODUCT INFO</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
 			</div>
-		</c:forEach>
-	</c:if>
- --%>
+			
+			<div class="modal-body">
+				<table class="table table-hover">
+					<thead>
+					<tr>
+						<th>상품번호</th>
+						<th>상품이름</th>
+						<th>사이즈</th>
+						<th>색상</th>
+						<th>가격</th>
+					</tr>
+					</thead>
+					<tbody id="modalTbody">
+
+					</tbody>
+				</table>
+			</div>		
+		</div>
+	</div>
+</div>
 </body>
 </html>

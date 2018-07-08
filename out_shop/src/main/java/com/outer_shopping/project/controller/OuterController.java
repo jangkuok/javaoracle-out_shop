@@ -2,6 +2,7 @@ package com.outer_shopping.project.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -78,7 +79,6 @@ public class OuterController {
 	@ResponseBody
 	public String createWishList(@RequestParam(value="outerNo",required=false) int outerNo,
 			@RequestParam(value="id",required=false) String memberId) {
-	
 		
 			WishListVo wish = new WishListVo();
 
@@ -100,9 +100,9 @@ public class OuterController {
 	 * 카트 등록 
 	 */
 	@RequestMapping(value = "/addCart.do", method = {RequestMethod.GET,RequestMethod.POST})
-	public String addcart(Model model,@RequestParam(value="productList[]",required=false) List<String> productList,
-			@RequestParam(value="outerNo",required=false) int outerNo,
+	public String addcart(Model model, @RequestParam Map<String, Object> map,
 			HttpSession session, RedirectAttributes ra) {
+		
 		//현재 세션에 있는 list
 		List<ProductVo> sessionList = (List)session.getAttribute("cart");
 		
@@ -110,15 +110,15 @@ public class OuterController {
 			
 		int no = 1;
 		
-		for(int i = 0; i< productList.size(); i++) {	
+		for(int i = 2; i< map.size(); i++) {	
 			
 			ProductVo cart = new ProductVo();	
 			cart.setCartNo(no);
-			cart.setProductNo(Integer.parseInt(productList.get(i).toString()));	i++;
-			cart.setProductName(productList.get(i).toString()); 				i++;
-			cart.setProductSize(productList.get(i).toString()); 				i++;
-			cart.setProductColor(productList.get(i).toString()); 				i++;
-			cart.setProductPrice(productList.get(i).toString()); 				i++;
+			cart.setProductNo(Integer.parseInt(map.get("productInfo"+i).toString()));	    i++;
+			cart.setProductName(map.get("productInfo"+i).toString()); 						i++;
+			cart.setProductSize(map.get("productInfo"+i).toString()); 						i++;
+			cart.setProductColor(map.get("productInfo"+i).toString()); 						i++;
+			cart.setProductPrice(Integer.parseInt(map.get("productInfo"+i).toString())); 	i++;	
 			no++;
 			
 			newList.add(cart);
@@ -133,7 +133,7 @@ public class OuterController {
 							newList.get(i).getProductColor().equals(sessionList.get(j).getProductColor())) {
 						
 						ra.addAttribute("addNo", "error");
-						ra.addAttribute("outerNo",outerNo);
+						ra.addAttribute("outerNo",Integer.parseInt(map.get("outerNo").toString()));
 						
 						logger.info("############# 장바구니 존재 #############");
 						return "redirect:/outer/outerView.do";
@@ -162,14 +162,16 @@ public class OuterController {
 		return "redirect:/outer/cartPage.do";
 	}
 	
+	/**
+	 * 장바구니 페이지 이동
+	 */
 	@RequestMapping(value = "/cartPage.do", method = RequestMethod.GET)
 	public String createWishList(HttpSession session) {
 		logger.info("############# 장바구니페이지 이동 #############");
 
 		return "cartPage";	
 	}
-	
-	
+		
 	/**
 	 * 카트 삭제
 	 */

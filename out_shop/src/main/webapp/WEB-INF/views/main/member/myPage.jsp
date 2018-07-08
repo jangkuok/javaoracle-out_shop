@@ -86,23 +86,24 @@ function delete_member(){
           </div>
         </div>
         <div class="col-lg-6">
+        	<input type="hidden" id="memberId" name="memberId" value="${memberVo.id}">
         	<h4><strong>
-	      		<a href="${pageContext.request.contextPath}/member/wishListSearch.do?memberId=${outerWishList.outerNo}${memberVo.id}">
+	      		<a href="${pageContext.request.contextPath}/member/wishListSearch.do?memberId=${memberVo.id}">
 	      			WISHLIST
 	      		</a>
-	      		&nbsp;&nbsp;&nbsp;&nbsp;관심 상품
+	      		<p style="text-align:right;">관심 상품</p>	      		
 			 </strong></h4><hr>
 			 <h4><strong>
-	      	 <a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${outerWishList.outerNo}${memberVo.id}">
+	      	 <a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${memberVo.id}">
 			      	ORDER
 			    </a>
-			    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;주문 목록
+			    <p style="text-align:right;">주문 목록</p>
 			 </strong></h4><hr>	
 			 <h4><strong>
 	      		<a href="#">
 			      	BOARD
 			    </a>
-			    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;게시물 관리
+			    <p style="text-align:right;">게시물 관리</p>
 			 </strong></h4><hr>		 
 		</div>	 
 	</div>
