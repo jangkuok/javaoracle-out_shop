@@ -44,7 +44,7 @@ $(document).ready(function() {
 		});
 	});
 	
-	var index = parseInt("1");
+	var count = 1;
 	
 	//선택한 상품 보여주기
 	$(document).on('change','#colorSelect',function() {		
@@ -54,16 +54,19 @@ $(document).ready(function() {
 		var name = $("#outerName").val();
 		var price = $("#outerPrice").val();
 		var selectPrice = $("#totalPrice").val();
+		var thumbnailName = $("#thumbnailName").val();
+		
 		
 		//선택한 상품 추가
-		var product = '<tr name="trProduct"><td id="selectProductItems'+index+'" name="selectProductItems">'+
-		'<h7><input class="textTrans" type="hidden" id="cartNo'+index+'" name="product" value="'+ index +'" readonly="">'+
-		'<input class="textTrans" type="hidden" id="productNo'+index+'" name="product" value="'+ no +'" readonly="">'+
-		'<input class="textTrans" type="text" id="productName'+index+'" name="product" size="15" value="'+ name +'" readonly="">'+
-		'<input class="textTrans" type="text" id="productSize'+index+'" name="product" size="4" value="'+ size +'" readonly="">'+
-		'<input class="textTrans" type="text" id="productColor'+index+'" name="product" size="5" value="'+ color +'" readonly="">'+
-		'<input class="textTrans" type="text" id="productPrice'+index+'" name="product" size="7" value="'+ price +'" readonly="">'+
-		'<input class="textTrans" type="button" id="close'+index+'" name="close" value="X"></h7>'+
+		var product = '<tr name="trProduct"><td id="selectProductItems'+count+'" name="selectProductItems">'+
+		'<h7><input class="textTrans" type="hidden" id="cartNo'+count+'" name="product" value="'+ count +'" readonly="">'+
+		'<input class="textTrans" type="hidden" id="productNo'+count+'" name="product" value="'+ no +'" readonly="">'+
+		'<input class="textTrans" type="hidden" id="thumbnailName'+count+'" name="product" value="'+ thumbnailName +'" readonly="">'+
+		'<input class="textTrans" type="text" id="productName'+count+'" name="product" size="15" value="'+ name +'" readonly="">'+
+		'<input class="textTrans" type="text" id="productSize'+count+'" name="product" size="4" value="'+ size +'" readonly="">'+
+		'<input class="textTrans" type="text" id="productColor'+count+'" name="product" size="5" value="'+ color +'" readonly="">'+
+		'<input class="textTrans" type="text" id="productPrice'+count+'" name="product" size="7" value="'+ price +'" readonly="">'+
+		'<input class="textTrans" type="button" id="close'+count+'" name="close" value="X"></h7>'+
 		'</td></tr>';
 		
 		var error = "[필수]색상 선택";
@@ -71,7 +74,7 @@ $(document).ready(function() {
 		if(color != error){
 			$("#outerViewInfo").show();	
 			$('#productTbody').append(product);
-			index++;	
+			count++;
 			selectPrice = parseInt(selectPrice) +  parseInt(price);
 			$("#totalPrice").val(selectPrice);
 		}
@@ -130,7 +133,7 @@ $(document).ready(function() {
 		var no = e.target.id.substring(5);
 		
 		$("#selectProductItems"+no).remove();
-		index--;
+		count--;
 		
 		if(index == 1){
 			$("#outerViewInfo").hide();
@@ -144,7 +147,7 @@ $(document).ready(function() {
 	$("#buyB").on('click',function(e) {
 		var loginId = $('#id').val();
 		
-		if(index == 1){
+		if(count == '1'){
 			alert("선택한 상품이 없습니다.");
 			return;
 		}
@@ -185,33 +188,35 @@ $(document).ready(function() {
 	
 	//카트 등록 
 	$("#cartB").on('click',function(e) {
-		if(index == 1){
+		if(count == '1'){
 			alert("선택한 상품이 없습니다.");
 			return;
+		}else{
+			var productArr = []; 
+	
+			$("input[name='product']").each(function(i){
+		    	productArr.push($(this).val());
+		    });
+		    
+		    var $form = $('<form></form>');
+		    $form.attr('action', '${pageContext.request.contextPath}/outer/addCart.do');
+		    $form.attr('method', 'post');
+		    $form.appendTo('body');
+		    
+		    var index = 1;
+		    
+		    var input = '<input value="'+$('#outerNo').val()+'" name="outerNo" type="hidden">';
+		    $form.append(input);
+		    
+		    for (var i = 0; i < productArr.length; i++) {
+		    	var input = '<input value="'+productArr[i]+'" name="productInfo'+index+'" type="hidden">';
+		    	$form.append(input);
+		    	index++;
+			}
+		    
+		    $form.submit();
+		    
 		}
-		var productArr = []; 
-
-		$("input[name='product']").each(function(i){
-	    	productArr.push($(this).val());
-	    });
-	    
-	    var $form = $('<form></form>');
-	    $form.attr('action', '${pageContext.request.contextPath}/outer/addCart.do');
-	    $form.attr('method', 'post');
-	    $form.appendTo('body');
-	    
-	    var index = 1;
-	    
-	    var input = '<input value="'+$('#outerNo').val()+'" name="outerNo" type="hidden">';
-	    $form.append(input);
-	    
-	    for (var i = 0; i < productArr.length; i++) {
-	    	var input = '<input value="'+productArr[i]+'" name="productInfo'+index+'" type="hidden">';
-	    	$form.append(input);
-	    	index++;
-		}
-	    
-	    $form.submit();
 	});
 	
 });
@@ -245,6 +250,7 @@ $(document).ready(function() {
 	
 	<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 		<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">
+		<input type="hidden" id="thumbnailName" name="thumbnailName" value="${outer.thumbnailName}">
 		<div class="row" style="margin-bottom:100px;">
 			<div class="col-lg-5" style="margin-right:50px;">
 				<div style="margin-right:100px;">
@@ -255,7 +261,7 @@ $(document).ready(function() {
 	          <div class="card h-100">
 	            <div class="card-body">
 	            	<div class="col-sm-5">
-	     				<h4><input class="textTrans" type="text" id="outerName" value="${outer.name}" readOnly="readOnly"><br></h4>
+	     				<h4><input class="textTrans" type="text" id="outerName" value="${outer.name}" readOnly="readOnly"></h4>
 	     			</div>
 	     			<div class="col-sm-12">
 	     				<h6>${outer.content}</h6>

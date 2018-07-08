@@ -63,9 +63,6 @@ public class MemberProductController {
 		
 		model.addAttribute("pageBean", map.get("pageBean"));
 	 
-		//List<WishListVo> list = wishListService.getWishList(id);
-		//model.addAttribute("list", list);
-
 		logger.info("############# 관심상품페이지 이동 #############");
 		return "member/wishListPage";
 	}
@@ -87,12 +84,15 @@ public class MemberProductController {
 	 * 주문목록 조회
 	 */
 	@RequestMapping(value = "/orderListSearch.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public String orderListSearch(Model model,@RequestParam(value="memberId",required=false) String memberId) {
+	public String orderListSearch(Model model,@RequestParam(value="memberId",required=false) String memberId,
+			@RequestParam(defaultValue="1") int page) {
 		
-		List<OrderCheckVo> list = orderService.getMemberOrderList(memberId);
 		
-		model.addAttribute("list", list);
-
+		Map<String, Object> map = orderService.getMemberOrderList(memberId,page);
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("pageBean", map.get("pageBean"));
+		
 		logger.info("############# 주문목록 이동 #############");
 		return "member/orderListPage";
 	}	
@@ -122,9 +122,9 @@ public class MemberProductController {
 		
 		orderService.handingUpdateOrder(orderNo,handing);
 		
-		List<OrderCheckVo> list = orderService.getMemberOrderList(memberId);
+		//List<OrderCheckVo> list = orderService.getMemberOrderList(memberId);
 		
-		model.addAttribute("list", list);
+		//model.addAttribute("list", list);
 		
 		logger.info("############# 주문 취소 #############");
 		return "member/orderListPage";

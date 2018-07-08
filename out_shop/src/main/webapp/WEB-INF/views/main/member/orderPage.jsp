@@ -15,9 +15,11 @@ $(document).ready(function() {
 	
 	var price = 0;
 	
+	var productListCount = $('#productListTable tbody tr').length;
+	
 	//상품금액
-	$('td[name="tdPrice"]').each(function(){
-		var no = $(this).text();  
+	$('input[name="price"]').each(function(){
+		var no = $(this).val();  
 		price = parseInt(price) + parseInt(no);
 		//상품가격
 		$("input[name='productPrice']").val(price);
@@ -47,7 +49,7 @@ $(document).ready(function() {
 		$("input[name='checkBox']:checked").each(function(){
 			 var no = $(this).val();		
 			 
-			 var price = $('#tdPrice'+no).text();
+			 var price = $('#productPrice'+no).val();
 			 
 			 //총 상품 가격
 			 var productPrice = $('#productPrice').val();
@@ -75,6 +77,7 @@ $(document).ready(function() {
 			 
 			 //해당 상품 삭제
 			 $("#trProduct"+no).remove();
+			 productListCount--;
 		}) ;	
 	});
 
@@ -88,30 +91,13 @@ $(document).ready(function() {
 	$('#buyB').on('click',function(){
 		//상품정보 배열에 넣기
 		var productArr = []; 
+
+		$("input[name='cartProduct']").each(function(i){
+			productArr.push($(this).val());
+	    });
 		
-
-		//테이블 행의 모든 값 가져오기
-		$('#tbodyProduct tr').each(function(i){   			    	
-	    	var tr = $('#tbodyProduct tr').eq(i);
-	    	
-
-		    var td = tr.children();
-		    
-		    var cartNo = td.eq(1).text();
-	        var productNo = td.eq(2).text();
-	        var productName = td.eq(3).text();
-	        var productColor = td.eq(4).text();
-	        var productSize = td.eq(5).text();
-	        var productPrice = td.eq(6).text();
-	        
-	        productArr.push(cartNo);
-	        productArr.push(productNo);
-	        productArr.push(productName);
-	        productArr.push(productColor);
-	        productArr.push(productSize);
-	        productArr.push(productPrice);
-
-		});
+		alert(productArr);
+		
 		//주문 정보 배열에 넣기
 		var deliveryInfoArr = []; 
 		
@@ -143,9 +129,13 @@ $(document).ready(function() {
 		}
 		   
 		//상품 개수
+		var productCount = '<input value="'+productListCount+'" name="productCount" type="hidden">';
+		$form.append(productCount);
+		
+		//상품 input 개수
 		var count = '<input value="'+index+'" name="count" type="hidden">';
 		$form.append(count);
-		
+				
 		var index2 = 1;
 		
 		//회원정보
@@ -212,7 +202,7 @@ function getPostcodeAddress() {
 }
 </script> 
 <style>
-.textTrans{
+.textTran{
 	background-color:transparent;
 	border:0 solid black;
 	text-align:right;
@@ -230,30 +220,50 @@ function getPostcodeAddress() {
 <h1>주문내역</h1><hr>
 </div>
 	<div>
-		<table class="table table-hover" id="orderProduct">
+		<table id="productListTable" class="table table-hover">
 			<thead>
 			<tr>
 				<th></th>
 				<th>번호</th>
-				<th>상품 번호</th>
-				<th>상품 이름</th>
+				<th>이미지</th>
+				<th>이름</th>
 				<th>사이즈</th>
 				<th>색상</th>
 				<th>가격</th>
 			</tr>
 			</thead>
-			<tbody id="tbodyProduct">
+			<tbody>
 				<c:forEach var="orderList" items="${orderList}" varStatus="st">
 					<tr id="trProduct${orderList.cartNo}">
 						<td>
-							<input type="checkBox" id="checkBox" name="checkBox" value="${orderList.cartNo}">
+							<input type="checkBox" id="checkBox" name="checkBox" value="${st.count}">
 						</td>
-						<td>${orderList.cartNo}</td>
-						<td>${orderList.productNo}</td>
-						<td>${orderList.productName}</td>
-						<td>${orderList.productColor}</td>
-						<td>${orderList.productSize}</td>
-						<td id="tdPrice${orderList.cartNo}" name="tdPrice">${orderList.productPrice}</td>
+						<td>
+							<input class="textTrans" type="text" id="cartNo" name="cartProduct" size="2" value="${st.count}" readOnly="readOnly">
+						</td>
+						<td>
+							<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${orderList.productNo}">
+								<img src="<c:url value='/image/thumbnail/${orderList.thumbnailName}'/>"/>
+							</a>
+							<input type="hidden" id="productNo" name="cartProduct" value="${orderList.productNo}">
+							<input type="hidden" id="thumbnailName" name="cartProduct" value="${orderList.thumbnailName}">
+						</td>
+						<td>
+							<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${orderList.productNo}">
+								${orderList.productName}
+							</a>
+							<input type="hidden" id="productName" name="cartProduct" value="${orderList.productName}">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productColor" name="cartProduct" value="${orderList.productColor}" readOnly="readOnly">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productSize" name="cartProduct" value="${orderList.productSize}" readOnly="readOnly">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productPrice${st.count}" name="cartProduct" value="${orderList.productPrice}" readOnly="readOnly">
+							<input type="hidden" id="price" name="price" value="${orderList.productPrice}" readOnly="readOnly">
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -262,15 +272,15 @@ function getPostcodeAddress() {
 			<table class="table table-hover">
 				<tr>
 					<td colspan="7" >
-								상품금액<input class="textTrans" type="text" id="productPrice" name="productPrice" size="6" value="0"> +
-								배송비<input class="textTrans" type="text" id="deliveryPrice" name="deliveryPrice" size="6" value="0"> = 
-								합계 : <input class="textTrans" type="text" id="totalPrice1" name="totalPrice" size="8" value="0"><br>
+								상품금액<input class="textTran" type="text" id="productPrice" name="productPrice" size="6" value="0">
+								배송비<input class="textTran" type="text" id="deliveryPrice" name="deliveryPrice" size="6" value="0"> 
+								합계 : <input class="textTran" type="text" id="totalPrice1" name="totalPrice" size="8" value="0"><br>
 					</td>
 				</tr>
 			</table>
 		</div>
 	</div>
-<input type="button" id="removeProduct" name="removeProduct" value="상품삭제">
+<input type="button" class="btn btn-dark" id="removeProduct" name="removeProduct" value="상품삭제">
 <hr>	
 	<div>
 		주문정보
@@ -279,7 +289,7 @@ function getPostcodeAddress() {
 				<th width="20%">주문자*</th>
 				<td width="80%">
 					<div class="col-sm-5">
-						<input class="form-control" type="text" id="" name="" value="${memberVo.name}">
+						<input class="form-control" type="text" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
 					</div>
 				</td>
 			</tr>
@@ -287,16 +297,16 @@ function getPostcodeAddress() {
 				<th>주소*</th>
 				<td id="addressMagin">
 					<div class="col-sm-3">
-						<input type="text" class="form-control" id="" name="" value="${memberVo.zipcode}">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.zipcode}">
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="" name="" value="${memberVo.address}">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address}">
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						기본주소
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="" name="" value="${memberVo.address2}">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address2}">
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						나머지주소
@@ -307,7 +317,7 @@ function getPostcodeAddress() {
 				<th>휴대전화*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="" name="" value="${memberVo.phoneNum}">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.phoneNum}">
 					</div>
 				</td>
 			</tr>
@@ -315,7 +325,7 @@ function getPostcodeAddress() {
 				<th>이메일*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="" name="" value="${memberVo.email}">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.email}">
 					</div>
 				</td>
 			</tr>
@@ -324,7 +334,7 @@ function getPostcodeAddress() {
 <hr>	
 	<div>
 		배송정보
-		<input type="hidden" id="memberId" name="memberId" value="${memberVo.id}">
+		<input type="hidden" id="memberId" name="memberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
 		<table class="table table-hover">
 			<tr>
 				<th width="20%">배송지 선택</th>
@@ -337,7 +347,7 @@ function getPostcodeAddress() {
 				<th>주문자*</th>
 				<td>
 					<div class="col-sm-5">
-						<input type="text" class="form-control" id="name" name="name" value="${memberVo.name}">
+						<input type="text" class="form-control" id="name" name="name" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
 					</div>
 				</td>
 			</tr>
@@ -345,19 +355,19 @@ function getPostcodeAddress() {
 				<th>주소*</th>
 				<td id="addressMagin2">
 					<div class="col-sm-2" style="float:left;">
-						<input type="text" class="form-control" id="zipcode" name="deliveryInfo" value="${memberVo.zipcode}">
+						<input type="text" class="form-control" id="zipcode" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.zipcode}">
 					</div>
 					<div class="col-sm-3" style="float:left;">
 						<input class="btn btn-dark" type="button" value="주소 검색" onClick="getPostcodeAddress()">
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address" name="deliveryInfo" value="${memberVo.address}"> 
+						<input type="text" class="form-control" id="address" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address}"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						기본주소
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address2" name="deliveryInfo" value="${memberVo.address2}"> 
+						<input type="text" class="form-control" id="address2" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address2}"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						나머지주소
@@ -368,7 +378,7 @@ function getPostcodeAddress() {
 				<th>휴대전화*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="phoneNum" name="deliveryInfo" value="${memberVo.phoneNum}">
+						<input type="text" class="form-control" id="phoneNum" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.phoneNum}">
 					</div>
 				</td>
 			</tr>
@@ -376,7 +386,7 @@ function getPostcodeAddress() {
 				<th>이메일*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="email" name="deliveryInfo" value="${memberVo.email}">
+						<input type="text" class="form-control" id="email" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.email}">
 					</div>
 				</td>
 			</tr>

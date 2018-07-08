@@ -115,6 +115,7 @@ public class OuterController {
 			ProductVo cart = new ProductVo();	
 			cart.setCartNo(no);
 			cart.setProductNo(Integer.parseInt(map.get("productInfo"+i).toString()));	    i++;
+			cart.setThumbnailName(map.get("productInfo"+i).toString());					    i++;
 			cart.setProductName(map.get("productInfo"+i).toString()); 						i++;
 			cart.setProductSize(map.get("productInfo"+i).toString()); 						i++;
 			cart.setProductColor(map.get("productInfo"+i).toString()); 						i++;
@@ -146,6 +147,7 @@ public class OuterController {
 					
 					cart.setCartNo(no);
 					cart.setProductNo(sessionList.get(i).getProductNo());
+					cart.setThumbnailName(sessionList.get(i).getThumbnailName());
 					cart.setProductName(sessionList.get(i).getProductName());
 					cart.setProductColor(sessionList.get(i).getProductColor());
 					cart.setProductSize(sessionList.get(i).getProductSize());
@@ -201,6 +203,7 @@ public class OuterController {
 			ProductVo cart = new ProductVo();					
 			cart.setCartNo(no);
 			cart.setProductNo(sessionList.get(j).getProductNo());
+			cart.setThumbnailName(sessionList.get(j).getThumbnailName());
 			cart.setProductName(sessionList.get(j).getProductName());
 			cart.setProductColor(sessionList.get(j).getProductColor());
 			cart.setProductSize(sessionList.get(j).getProductSize());

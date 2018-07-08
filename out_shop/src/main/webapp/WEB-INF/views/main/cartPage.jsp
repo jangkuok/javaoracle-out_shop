@@ -6,9 +6,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>장바구니</title>
-
-<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-
 <script type="text/javascript">
 //카트 삭제
 $(document).ready(function() {
@@ -23,12 +20,8 @@ $(document).ready(function() {
 			var checkbox = $("input[name='checkBox']:checked");
 			
 			//테이블 행의 모든 값 가져오기
-			checkbox.each(function(i){   			    	
-		    	var tr = checkbox.parent().parent().eq(i);
-			    var td = tr.children();
-			    
-			    var cartNo = td.eq(1).text();
-
+			checkbox.each(function(i){  
+				var cartNo = $(this).val();
 		        checkArr.push(cartNo);
 		    });
 
@@ -65,30 +58,26 @@ function orderProduct(){
 		   	}		
 		}else{
 			
-			var rowData = [];
 			var checkArr = []; 
 			var checkbox = $("input[name='checkBox']:checked");
-			
-			//테이블 행의 모든 값 가져오기
-			checkbox.each(function(i){   			    	
-		    	var tr = checkbox.parent().parent().eq(i);
-			    var td = tr.children();
-			    rowData.push(tr.text());
-			    
-			    var cartNo = td.eq(1).text();
-		        var productNo = td.eq(2).text();
-		        var productName = td.eq(3).text();
-		        var productColor = td.eq(4).text();
-		        var productSize = td.eq(5).text();
-		        var productPrice = td.eq(6).text();
+
+			$("input[name='checkBox']:checked").each(function(){
+				var cartNo = $('#cartNo'+$(this).val()).val();
+		        var productNo = $('#productNo'+$(this).val()).val();
+		        var thumbnailName = $('#thumbnailName'+$(this).val()).val();
+		        var productName = $('#productName'+$(this).val()).val();
+		        var productColor = $('#productColor'+$(this).val()).val();
+		        var productSize = $('#productSize'+$(this).val()).val();
+		        var productPrice = $('#productPrice'+$(this).val()).val();
 		        
 		        checkArr.push(cartNo);
 		        checkArr.push(productNo);
-		        checkArr.push(productName);
+		        checkArr.push(thumbnailName);		        
+		        checkArr.push(productName);	        
 		        checkArr.push(productColor);
 		        checkArr.push(productSize);
 		        checkArr.push(productPrice);
-			});	
+		    });
 			
 			alert(checkArr);
 		    
@@ -134,7 +123,7 @@ function orderProduct(){
 			<tr>
 				<th></th>
 				<th>번호</th>
-				<th>상품 번호</th>
+				<th>이미지</th>
 				<th>이름</th>
 				<th>색상</th>
 				<th>사이즈</th>
@@ -145,14 +134,33 @@ function orderProduct(){
 				<c:forEach var="cartList" items="${sessionScope.cart}" varStatus="st">
 					<tr>
 						<td>
-							<input type="checkBox" id="checkBox" name="checkBox">
+							<input type="checkBox" id="checkBox" name="checkBox" value="${cartList.cartNo}">
 						</td>
-						<td>${cartList.cartNo}</td>
-						<td>${cartList.productNo}</td>
-						<td>${cartList.productName}</td>
-						<td>${cartList.productColor}</td>
-						<td>${cartList.productSize}</td>
-						<td>${cartList.productPrice}</td>
+						<td>
+							<input class="textTrans" type="text" id="cartNo${cartList.cartNo}" name="cartProduct" size="2" value="${cartList.cartNo}" readOnly="readOnly">
+						</td>
+						<td>
+							<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${cartList.productNo}">
+								<img src="<c:url value='/image/thumbnail/${cartList.thumbnailName}'/>"/>
+							</a>
+							<input type="hidden" id="productNo${cartList.cartNo}" name="cartProduct" value="${cartList.productNo}">
+							<input type="hidden" id="thumbnailName${cartList.cartNo}" name="cartProduct" value="${cartList.thumbnailName}">
+						</td>
+						<td>
+							<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${cartList.productNo}">
+								${cartList.productName}
+							</a>
+							<input type="hidden" id="productName${cartList.cartNo}" name="cartProduct" value="${cartList.productName}">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productColor${cartList.cartNo}" name="cartProduct" value="${cartList.productColor}" readOnly="readOnly">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productSize${cartList.cartNo}" name="cartProduct" value="${cartList.productSize}" readOnly="readOnly">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productPrice${cartList.cartNo}" name="cartProduct" value="${cartList.productPrice}" readOnly="readOnly">
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>

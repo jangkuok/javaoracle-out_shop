@@ -49,6 +49,7 @@ public class OrderController {
 			
 			cart.setCartNo(Integer.parseInt(map.get("productInfo"+i).toString()));			i++;
 			cart.setProductNo(Integer.parseInt(map.get("productInfo"+i).toString())); 		i++;
+			cart.setThumbnailName((map.get("productInfo"+i).toString())); 					i++;
 			cart.setProductName(map.get("productInfo"+i).toString());						i++;
 			cart.setProductColor(map.get("productInfo"+i).toString());						i++;
 			cart.setProductSize(map.get("productInfo"+i).toString());						i++;
@@ -57,8 +58,6 @@ public class OrderController {
 			list.add(cart);
 		}	
 		
-		model.addAttribute("memberVo", memberService.viewMember(map.get("memberId").toString()));
-		model.addAttribute("orderNo", orderservice.getSeq()+1);
 		model.addAttribute("orderList", list);
 		
 		logger.info("############# 주문 페이지 이동 #############");
@@ -79,6 +78,7 @@ public class OrderController {
 			
 			cart.setCartNo(Integer.parseInt(map.get("productInfo"+i).toString()));		    i++;
 			cart.setProductNo(Integer.parseInt(map.get("productInfo"+i).toString())); 	    i++;
+			cart.setThumbnailName((map.get("productInfo"+i).toString())); 					i++;
 			cart.setProductName(map.get("productInfo"+i).toString());						i++;
 			cart.setProductSize(map.get("productInfo"+i).toString());					    i++;
 			cart.setProductColor(map.get("productInfo"+i).toString());						i++;
@@ -87,7 +87,6 @@ public class OrderController {
 			list.add(cart);
 		}	
 		
-		System.out.println(list);
 		
 		model.addAttribute("memberVo", memberService.viewMember(map.get("memberId").toString()));
 		model.addAttribute("orderList", list);
@@ -101,9 +100,18 @@ public class OrderController {
 	@RequestMapping(value = "/orderProduct.do", method = {RequestMethod.GET,RequestMethod.POST})
 	public String orderProduct(Model model,@RequestParam Map<String, Object> map) {
 		
+		//주문에 관한 상품 등록
+		int productCount = Integer.parseInt(map.get("productCount").toString());
+		
 		//주문자 정보 저장
 		OrderCheckVo check = new OrderCheckVo();
-
+		check.setThumbnailName(map.get("productInfo3").toString());
+		
+		if(productCount == 1) {
+			check.setOrderName(map.get("productInfo4").toString());
+		}else {
+			check.setOrderName(map.get("productInfo4").toString() + " 외" + (productCount - 1));
+		}
 		check.setMemberId(map.get("memberId").toString());
 		check.setAddress(map.get("deliveryInfoArr1").toString() + " " + map.get("deliveryInfoArr2").toString() + " " + map.get("deliveryInfoArr3").toString());
 		check.setPhoneNum(map.get("deliveryInfoArr4").toString());
@@ -119,17 +127,17 @@ public class OrderController {
 		orderservice.addOrderCheck(check);
 		logger.info("############# 주문 정보 등록 #############");
 		
-		//주문에 관한 상품 등록
+		
 		int count = Integer.parseInt(map.get("count").toString());
 		
 		List<OrderProductVo> list = new ArrayList<>();
-		
 
 		for (int i = 2; i < count; i++) {
 
 			OrderProductVo product = new OrderProductVo();
 
 			product.setOuterNo(Integer.parseInt(map.get("productInfo"+i).toString())); i++;
+			product.setThumbnailName(map.get("productInfo"+i).toString()); i++;
 			product.setProductName(map.get("productInfo"+i).toString()); i++;
 			product.setProductSize(map.get("productInfo"+i).toString()); i++;
 			product.setProductColor(map.get("productInfo"+i).toString()); i++;
@@ -138,6 +146,7 @@ public class OrderController {
 			
 			list.add(product);
 		}
+		
 		
 		orderservice.addOrderProduct(list);
 		logger.info("############# 주문 상품 등록 #############");

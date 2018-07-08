@@ -103,9 +103,6 @@ public class AdminOuterController {
 	            MultipartFile mFile = multi.getFile(uploadFile);
 	            String fileName = mFile.getOriginalFilename();
 	            
-	            System.out.println("실제 파일 이름 : " +fileName);
-	            
-	          
 	            newFileName = System.currentTimeMillis()+"."+fileName.substring(fileName.lastIndexOf(".")+1);
 	            outer.setImageName(newFileName);
 	            
@@ -144,7 +141,6 @@ public class AdminOuterController {
 	      
 			outerService.createOuter(outer);
 			
-			System.out.println(outer.getOuterNo());
 			model.addAttribute("outerNo", outer.getOuterNo());
 			
 			logger.info("############# 상품 등록 #############");
@@ -187,8 +183,6 @@ public class AdminOuterController {
     public String addOuterPicture(@ModelAttribute("outerPictureVo") OuterPictureVo outerPictureVo,
     		RedirectAttributes ra){
 
-		System.out.println(outerPictureVo);
-		
 		List<MultipartFile> file = outerPictureVo.getImageFiles(); // 업로드 파일
 		
 		try {

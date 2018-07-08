@@ -98,7 +98,7 @@ public class OrderProductServiceJUnitTest {
 	public void selectOrderListTest(){
 		log.info("######### JUnit(selectOrderListTest) 테스트 ##############");
 	
-		service.getMemberOrderList("kkkkkkkk");
+		//service.getMemberOrderList("kkkkkkkk");
 	}
 	
 	@Test

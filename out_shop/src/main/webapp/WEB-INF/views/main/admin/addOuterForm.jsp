@@ -240,6 +240,7 @@
 					<option value="자켓">자켓</option>
 					<option value="조끼">조끼</option>
 					<option value="패딩">패딩</option>
+					<option value="가디건">가디건</option>
 				</select>
 			</td>
 		</tr>
