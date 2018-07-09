@@ -58,6 +58,7 @@ public class OrderController {
 			list.add(cart);
 		}	
 		
+		model.addAttribute("memberVo", memberService.viewMember(map.get("memberId").toString()));
 		model.addAttribute("orderList", list);
 		
 		logger.info("############# 주문 페이지 이동 #############");

@@ -22,7 +22,9 @@ function loginCheck(){
         $("#id").focus();
         return false;
     }
-    $("#loginForm").submit();
+    $("#loginForm").submit();    
+
+
 };
 </script>
 <style>
@@ -51,13 +53,12 @@ function loginCheck(){
 <div>
 <h1>LOGIN</h1><hr>
 </div>
-	<center>
     <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-success">         
             <div class="panel-body">
                 <form id="loginForm" name="loginForm" action="${pageContext.request.contextPath}/loginForm.do" method="post">
                     <div>
-                    	<input type="text" class="form-control" id="loginId" name="loginId" placeholder="아이디" autofocus>
+                    	<input type="text" class="form-control" id="loginId" name="loginId" placeholder="아이디"  autofocus>
                     </div>
                     <div>
                     	<input type="password" class="form-control" id="loginPw" name="loginPw" placeholder="패스워드">
@@ -77,7 +78,6 @@ function loginCheck(){
             </div>          
         </div>
     </div>
-    </center>
 </div>	
 
 </body>

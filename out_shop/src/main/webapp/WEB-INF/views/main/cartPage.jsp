@@ -45,7 +45,7 @@ $(document).ready(function() {
 function orderProduct(){
 	$(document).ready(function(){
 		
-		var loginId = $('#id').val();
+		var loginId = $('#memberId').val();
 		
 		if ( $("input[name='checkBox']:checked").length == 0) {
 		      alert("주문할 상품을 선택하세요.");
@@ -119,6 +119,7 @@ function orderProduct(){
 </c:if>
 <c:if test="${not empty sessionScope.cart}">
 <input type="hidden" id="count" name="count" value="${sessionScope.size()}">
+<input type="hidden" id="memberId" name="memberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
 		<table class="table table-hover">
 			<thead>
 			<tr>

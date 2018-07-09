@@ -30,6 +30,12 @@ public interface MemberService {
 	 * @param memberVo
 	 */
 	void modifyMember(MemberVo memberVo);
+	
+	/**
+	 * 회원 주소 정보 수정하기
+	 * @param memberVo
+	 */
+	void modifyMemberAddress(MemberVo memberVo);
 
 	/**
 	 * 회원 탈퇴하기
