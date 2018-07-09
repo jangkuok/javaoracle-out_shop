@@ -94,7 +94,7 @@ function delete_member(){
 	      		<p style="text-align:right;">관심 상품</p>	      		
 			 </strong></h4><hr>
 			 <h4><strong>
-	      	 <a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${memberVo.id}">
+	      	 <a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${memberVo.id}&items=전체">
 			      	ORDER
 			    </a>
 			    <p style="text-align:right;">주문 목록</p>

@@ -1,32 +1,44 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
 <!DOCTYPE html>
 <html lang="ko-kr">
 <head>
-  <meta charset="utf-8">
-<title>나의 주문 목록</title>
-<!-- Bootstrap core CSS -->
-<link href="${pageContext.request.contextPath}/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<!-- Custom styles for this template -->
-<link href="${pageContext.request.contextPath}/bootstrap/css/modern-business.css" rel="stylesheet">
+<meta charset="utf-8">
+<title>주문 목록</title>
 <!-- jQuery -->
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 
 <script type="text/javascript">
+<!-- 가격 "," 처리 추가  -->
+function commaNum(num) {  
+    var len, point, str;  
+
+    num = num + "";  
+    point = num.length % 3  
+    len = num.length;  
+
+    str = num.substring(0, point);  
+    while (point < len) {  
+        if (str != "") str += ",";  
+        str += num.substring(point, point + 3);  
+        point += 3;  
+    }  
+    return str;  
+}
 //상품 선택하기
 $(document).ready(function() {
 	 // 게시글 팝업(modal) 보기 
     $("input[id^=orderProductList_]").click(function (e) {
        
         var orderNo = e.target.id.substring(17); 
-        
+        var message = $('#message').val();
      
         $.ajax ({
-            "url" : "${pageContext.request.contextPath}/member/productListSearch.do",
-            "type" : "POST",
-            "data":{ "orderNo" : orderNo},
+            "url" : "${pageContext.request.contextPath}/admin/adminProductListSearch.do?orderNo="+orderNo,
+            "type" : "GET",
+            "data": {"orderNo" : orderNo},
             "dataType":"json",
             "success" : function (data) {
             	 $.each(data,function(index,item){
@@ -37,8 +49,13 @@ $(document).ready(function() {
             		 item.productName + '</a></td>'+
             		 '<td>'+ item.productSize + '</td>'+
             		 '<td>'+ item.productColor + '</td>'+
-            		 '<td>'+ item.productPrice + '</td></tr>'
-
+            		 '<td>'+ commaNum(item.productPrice) + '</td></tr>'
+            		 if(message == ""){
+            			 $('#orderMessage').val('메세지가 없습니다.');
+            		 }else{
+            			 $('#orderMessage').val(message);	 
+            		 }
+					 
             		 $('.modal-body tbody').append(product);
             	 });
             }                  
@@ -49,13 +66,13 @@ $(document).ready(function() {
         });
     });
 });
-
-//결제하기
-function payment(i){
+   
+//상품 준비
+function productPreparations(i){
 	$(document).ready(function() {
 	
-     	if(confirm('결제를 하시겠습니까?')) { 
-    		$('#payForm'+i).submit();
+     	if(confirm('결제를 확인했습니까?')) { 
+    		$('#productPreparationsForm'+i).submit();
 	    }else { 
 	    	return;
 	    }
@@ -63,33 +80,33 @@ function payment(i){
 }
 
 
-//주문취소
+//배송 시작
+function startDelivery(i){
+	$(document).ready(function() {
+     	if(confirm('배송을 시작 하시겠습니까?')) { 
+     		$('#startDeliveryForm'+i).submit();
+	    }else { 
+	    	return;
+	    }
+	});
+}
+
+//주문취소 완료
 function cancelOrder(i){
 	$(document).ready(function() {
-     	if(confirm('주문을 취소 하시겠습니까?')) { 
-     		$('#cancelForm'+i).submit();
+     	if(confirm('해당회원의 주문을 취소를 완료하겠습니까?')) { 
+     		$('#cancelOrderForm'+i).submit();
 	    }else { 
 	    	return;
 	    }
 	});
 }
 
-//주문완료
-function successOrder(i){
+//주문취소 완료
+function successDelivery(i){
 	$(document).ready(function() {
-     	if(confirm('주문을 완료 하시겠습니까?')) { 
-     		$('#successOrderForm'+i).submit();
-	    }else { 
-	    	return;
-	    }
-	});
-}
-
-//반품 신청
-function returnOrder(i){
-	$(document).ready(function() {
-     	if(confirm('반품 하시겠습니까?')) { 
-     		$('#returnOrderForm'+i).submit();
+     	if(confirm('배송을 완료하겠습니까?')) { 
+     		$('#successDeliveryForm'+i).submit();
 	    }else { 
 	    	return;
 	    }
@@ -97,30 +114,35 @@ function returnOrder(i){
 }
 
 </script>
+
 </head>
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
 <h1>ORDER LIST</h1><hr>
 </div>
-	<a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=1달" class="btn btn-primary">현재 ~ 1달전</a>
-	<a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=3달" class="btn btn-primary">현재 ~ 3달전</a>
-	<a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=1년" class="btn btn-primary">현재 ~ 1년전</a>
-	<a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=전체" class="btn btn-primary">전체</a>
+	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=결제대기중" class="btn btn-primary">결제 대기중</a>
+	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=상품준비중" class="btn btn-primary">상품 준비중</a>
+	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=배송중" class="btn btn-primary">배송중</a>
+	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=배송완료" class="btn btn-primary">배송완료</a>
+	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=주문취소" class="btn btn-primary">주문취소</a>
+	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=주문취소완료" class="btn btn-primary">주문취소 완료</a>
+	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=전체보기" class="btn btn-primary">전체보기</a>
 			
-	<c:if test="${empty list}">
-		<div style="text-align:center;">
+	<c:if test="${empty orderList}">
+		<div style="margin-top:110px;text-align:center;">
 			주문 내역이 없습니다.
 		</div>
 	</c:if>
 	
-	<c:if test="${not empty list}">		
+	<c:if test="${not empty orderList}">
 		<table  class="table table-hover">
 			<thead>
 			<tr>
 				<th>주문번호</th>
 				<th>이미지</th>
 				<th>주문이름</th>
+				<th>주문자</th>
 				<th>입금액</th>
 				<th>주문날짜</th>
 				<th>진행상황</th>
@@ -128,7 +150,7 @@ function returnOrder(i){
 			</tr>
 			</thead>
 			<tbody>
-			<c:forEach var="orderList" items="${list}" varStatus="st">
+			<c:forEach var="orderList" items="${orderList}" varStatus="st">
 				<tr>
 					<td>${orderList.orderNo}</td>
 					<td>
@@ -136,47 +158,47 @@ function returnOrder(i){
 					</td>
 					<td>
 						${orderList.orderName}<br>
-						<input type="button" id="orderProductList_${orderList.orderNo}" class="btn" 
-							data-toggle="modal" data-target="#myModal" value="상세보기">					
-						
+						<input type="hidden" id="message" value="${orderList.message}">
+						<input type="button" id="orderProductList_${orderList.orderNo}" class="btn"	data-toggle="modal" data-target="#myModal" value="상세보기">
+					</td>
+					<td>
+						${orderList.memberName}<br>
+						[${orderList.memberId}]
 					</td>
 					<td>
 						<fmt:formatNumber value="${orderList.totalPrice}" pattern="#,###.##"/>
 					</td>
 					<td>${orderList.orderDate}</td>
 					<td>${orderList.handing}</td>
-					<td>
-						<c:if test="${orderList.handing == '결제 대기중' || orderList.handing == '상품 준비중'}">
-								<form id="cancelForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do" method="post" style="margin-bottom:1px;">
-									<input type="hidden" id="handing" name="handing" value="주문취소">
+					<td> 
+						<c:if test="${orderList.handing == '결제완료'}">
+								<form id="productPreparationsForm${orderList.orderNo}" action="${pageContext.request.contextPath}/admin/haningUpdateOrder.do" method="post">
+									<input type="hidden" id="handing" name="handing" value="상품 준비중">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">
-									<input type="hidden" id="memberId" name="memberId" value="${orderList.memberId}">
-									<input type="button" class="btn btn-dark" value="주문취소" onclick="cancelOrder(${orderList.orderNo})">
+									<input type="button" class="btn btn-dark"  value="상품준비" onclick="productPreparations(${orderList.orderNo})">
 								</form>
 						</c:if>
-						<c:if test="${orderList.handing == '결제 대기중'}">
-								<form id="payForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do" method="post">
-									<input type="hidden" id="handing" name="handing" value="결제완료">
+						<c:if test="${orderList.handing == '주문취소'}">
+								<form id="cancelOrderForm${orderList.orderNo}" action="${pageContext.request.contextPath}/admin/haningUpdateOrder.do" method="post">
+									<input type="hidden" id="handing" name="handing" value="주문취소 완료">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">
-									<input type="hidden" id="memberId" name="memberId" value="${orderList.memberId}">
-									<input type="button" class="btn btn-dark" value="결제하기" onclick="payment(${orderList.orderNo})">
+									<input type="button" class="btn btn-dark" value="취소완료" onclick="cancelOrder(${orderList.orderNo})">
 								</form>
 						</c:if>
-						<c:if test="${orderList.handing == '배송완료'}">
-								<form id="successOrderForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do" method="post" style="margin-bottom:1px;">
-									<input type="hidden" id="handing" name="handing" value="주문완료">
+						<c:if test="${orderList.handing == '상품 준비중'}">
+								<form id="startDeliveryForm${orderList.orderNo}" action="${pageContext.request.contextPath}/admin/haningUpdateOrder.do" method="post">
+									<input type="hidden" id="handing" name="handing" value="배송중">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">
-									<input type="hidden" id="memberId" name="memberId" value="${orderList.memberId}">
-									<input type="button" class="btn btn-dark" value="주문완료" onclick="successOrder(${orderList.orderNo})">
+									<input type="button" class="btn btn-dark" value="배송출발" onclick="startDelivery(${orderList.orderNo})">
 								</form>
-								
-								<form id="returnOrderForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do" method="post">
-									<input type="hidden" id="handing" name="handing" value="반품중">
+						</c:if>		
+						<c:if test="${orderList.handing == '배송중'}">
+								<form id="successDeliveryForm${orderList.orderNo}" action="${pageContext.request.contextPath}/admin/haningUpdateOrder.do" method="post">
+									<input type="hidden" id="handing" name="handing" value="배송완료">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">
-									<input type="hidden" id="memberId" name="memberId" value="${orderList.memberId}">
-									<input type="button" class="btn btn-dark" value="반품하기" onclick="returnOrder(${orderList.orderNo})">
+									<input type="button" class="btn btn-dark" value="배송완료" onclick="successDelivery(${orderList.orderNo})">
 								</form>
-						</c:if>					
+						</c:if>											
 					</td>
 				</tr>
 			</c:forEach>
@@ -195,7 +217,7 @@ function returnOrder(i){
 			<c:choose>
 				<c:when test="${requestScope.pageBean.previousPageGroup}">
 					<%-- 이전페이지 그룹이 있디면 : previousPageGroup()--%>
-					<a class="page-link" href="${pageContext.request.contextPath}/member/orderListSearch.do?page=1&memberId=${param.memberId}&items=${param.items}" aria-label="Previous">
+					<a class="page-link" href="${pageContext.request.contextPath}/amdin/adminOrderListPage.do?page=1&items=${requestScope.items}" aria-label="Previous">
 		       			<span aria-hidden="true">&laquo;</span>
 		        		<span class="sr-only">Previous</span>
 		      		</a>
@@ -216,7 +238,7 @@ function returnOrder(i){
 				<c:forEach begin="${requestScope.pageBean.beginPage}" end="${requestScope.pageBean.endPage}" var="page">
 					<c:choose>
 						<c:when test="${requestScope.pageBean.page != page}"> <%-- 현재패이지가 아니라면 --%>
-							<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/member/orderListSearch.do?page=${page}&memberId=${param.memberId}&items=${param.items}">${page}</a></li>
+							<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/amdin/adminOrderListPage.do?page=${page}&items=${requestScope.items}">${page}</a></li>
 						</c:when>
 						<c:otherwise>
 							<li class="page-item"><a class="page-link">${page}</a></li>
@@ -231,7 +253,7 @@ function returnOrder(i){
 			<c:choose> 	
 				<c:when test="${requestScope.pageBean.nextPageGroup}">
 					<%-- 다음페이지 그룹이 있디면 : nextPageGroup()--%>
-		    		<a class="page-link" href="${pageContext.request.contextPath}/member/orderListSearch.do?page=${requestScope.pageBean.endPage + 1}&memberId=${param.memberId}&items=${param.items}" aria-label="Next">
+		    		<a class="page-link" href="${pageContext.request.contextPath}/amdin/adminOrderListPage.do?page=${requestScope.pageBean.endPage + 1}&items=${requestScope.items}" aria-label="Next">
 		        		<span aria-hidden="true">&raquo;</span>
 		        		<span class="sr-only">Next</span>
 		      		</a>		
@@ -262,6 +284,9 @@ function returnOrder(i){
 			</div>
 			
 			<div class="modal-body">
+				<div class="col-lg-10">
+					<input class="textTrans" type="text" id="orderMessage" value="">
+				</div>
 				<table class="table table-hover">
 					<thead>
 					<tr>
@@ -280,6 +305,6 @@ function returnOrder(i){
 			</div>		
 		</div>
 	</div>
-</div>
+</div>	
 </body>
 </html>

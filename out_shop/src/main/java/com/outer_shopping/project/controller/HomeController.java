@@ -21,10 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.outer_shopping.project.service.AuthorityService;
 import com.outer_shopping.project.service.MemberService;
 import com.outer_shopping.project.service.OuterService;
-import com.outer_shopping.project.service.OuterSizeService;
 import com.outer_shopping.project.vo.AuthorityVo;
 import com.outer_shopping.project.vo.MemberVo;
-import com.outer_shopping.project.vo.OuterSizeVo;
 import com.outer_shopping.project.vo.OuterVo;
 
 /**
@@ -154,7 +152,7 @@ public class HomeController {
 	/**
 	 * 로그인 페이지 이동
 	 */
-	@RequestMapping(value = "/loginFormPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/loginFormPage.do", method = {RequestMethod.GET,RequestMethod.POST})
 	public String loginFormPage(Model model) {
 		
 		logger.info("############# 로그인 페이지 이동 #############");

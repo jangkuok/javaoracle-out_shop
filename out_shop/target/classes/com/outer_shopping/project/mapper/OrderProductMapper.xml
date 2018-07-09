@@ -8,25 +8,38 @@
 			+ order 조회
 	 -->
 	<sql id="all-column">
-	ORDER_NO, ORDER_THUMBNAIL_NAME, ORDER_NAME, TOTAL_PRICE, HANDLING, MEMBER_ID, ADDRESS, PHONENUM, EMAIL, MESSAGE, ORDER_DATE
+		ORDER_NO, ORDER_MEMBER_NAME, 
+		ORDER_THUMBNAIL_NAME, ORDER_NAME, 
+		TOTAL_PRICE, HANDLING, 
+		MEMBER_ID, ADDRESS, 
+		PHONENUM, EMAIL, 
+		MESSAGE, ORDER_DATE
 	</sql> 
 	
 	<!-- ORDER_CHECK 전체 조회 sql -->
 	<sql id="select-orderCherk-sql">
-		SELECT 	ORDER_NO, ORDER_THUMBNAIL_NAME, ORDER_NAME, TOTAL_PRICE, HANDLING, MEMBER_ID, ADDRESS, PHONENUM, EMAIL, MESSAGE, ORDER_DATE
+		SELECT 	ORDER_NO, ORDER_MEMBER_NAME, 
+				ORDER_THUMBNAIL_NAME, ORDER_NAME, 
+				TOTAL_PRICE, HANDLING, 
+				MEMBER_ID, ADDRESS, 
+				PHONENUM, EMAIL, 
+				MESSAGE, ORDER_DATE
 		FROM ORDER_CHECK
 	</sql>	 
 	
 	<!-- ORDER_PRODUCT 전체 조회 sql -->
 	<sql id="select-orderProduct-sql">
-		SELECT 	PRODUCT_NO, OUTER_NO, PRODUCT_THUMBNAIL_NAME, PRODUCT_NAME, PRODUCT_COLOR, PRODUCT_SIZE, PRODUCT_PRICE, ORDER_NO	
+		SELECT 	PRODUCT_NO, OUTER_NO, 
+				PRODUCT_THUMBNAIL_NAME, PRODUCT_NAME, 
+				PRODUCT_COLOR, PRODUCT_SIZE, 
+				PRODUCT_PRICE, ORDER_NO	
 		FROM ORDER_PRODUCT
 	</sql>	 	
 	
 	
 	<!-- ORDER_CHECK + ORDER_PRODUCT sql -->
 	<sql id="select-order-produck-sql">
-	SELECT		c.TOTAL_PRICE, c.ORDER_THUMBNAIL_NAME, 
+	SELECT		c.ORDER_MEMBER_NAME, c.TOTAL_PRICE, c.ORDER_THUMBNAIL_NAME, 
 				c.ORDER_NAME, c.HANDLING, 
 				c.MEMBER_ID, c.ADDRESS,
 				c.PHONENUM, c.EMAIL,
@@ -42,6 +55,7 @@
 	<!-- ORDER_CHECK resultMap -->
 	<resultMap id="orderCheck-resultmap" type="com.outer_shopping.project.vo.OrderCheckVo">
 		<id column="ORDER_NO" property="orderNo"/>
+		<result column="ORDER_MEMBER_NAME" property="memberName"/>
 		<result column="ORDER_THUMBNAIL_NAME" property="thumbnailName"/>
 		<result column="ORDER_NAME" property="orderName"/>
 		<result column="TOTAL_PRICE" property="totalPrice"/>
@@ -93,6 +107,7 @@
 		INSERT INTO ORDER_CHECK
 		VALUES(
 				#{orderNo},
+				#{memberName},
 				#{thumbnailName},
 				#{orderName},
 				#{totalPrice},
@@ -143,14 +158,51 @@
 			SELECT ROWNUM RNUM, <include refid="all-column"/>
 			FROM( 			
 						<include refid="select-orderCherk-sql"/>
-						ORDER BY ORDER_NO DESC
+							<choose>
+							 	<when test="items == '결제완료'">
+						            WHERE HANDLING LIKE '결제완료'
+						            ORDER BY ORDER_NO DESC
+						        </when>
+						        
+						        <when test="items == '주문취소완료'">
+						            WHERE HANDLING LIKE '주문취소 완료'
+						            ORDER BY ORDER_NO DESC
+						        </when>
+						        
+						        <when test="items == '상품준비중'">
+						            WHERE HANDLING LIKE '상품 준비중'
+						            ORDER BY ORDER_NO DESC
+						        </when>
+						        
+						        <when test="items == '주문취소'">
+						            WHERE HANDLING LIKE '주문취소'
+						            ORDER BY ORDER_NO DESC
+						        </when>
+						        
+						        <when test="items == '배송중'">
+						            WHERE HANDLING LIKE '배송중'
+						            ORDER BY ORDER_NO DESC
+						        </when>
+						        <when test="items == '결제대기중'">
+						            WHERE HANDLING LIKE '결제 대기중'
+						            ORDER BY ORDER_NO DESC
+						        </when>
+						        <when test="items == '배송완료'">
+						            WHERE HANDLING LIKE '배송완료'
+						            ORDER BY ORDER_NO DESC
+						        </when>							        
+						        <!-- 전체 검색이 아닐 경우 -->
+						        <otherwise>
+						            ORDER BY ORDER_NO DESC
+						        </otherwise>
+						    </choose>
+						
 				)
 			WHERE ROWNUM &lt;=#{endIndex}	
 			)
 		WHERE RNUM>=#{startIndex}		
 	</select>
 	
-
 	<!-- 회원 주문 조회  SQL -->
  	<select id="selectMemberOrderList" parameterType="hashmap" resultMap="orderCheck-resultmap">
 		SELECT <include refid="all-column"/>
@@ -159,13 +211,42 @@
 			FROM( 			
 						<include refid="select-orderCherk-sql"/>
 						WHERE MEMBER_ID = #{memberId}
-						ORDER BY ORDER_NO DESC
+						    <choose>
+							 	<when test="items == '1달'">
+								 <![CDATA[
+							 		AND to_char(ORDER_DATE,'YYYY-MM-DD') <=	to_char(SYSDATE,'YYYY-MM-DD') 
+									AND to_char(ORDER_DATE,'YYYY-MM-DD') >= to_char(add_months(SYSDATE,-1),'YYYY-MM-DD')
+								 ]]>
+						            ORDER BY ORDER_NO DESC
+						        </when>
+						        
+						        <when test="items == '3달'">
+								 <![CDATA[
+								 	AND to_char(ORDER_DATE,'YYYY-MM-DD') <=	to_char(SYSDATE,'YYYY-MM-DD') 
+									AND to_char(ORDER_DATE,'YYYY-MM-DD') >= to_char(add_months(SYSDATE,-3),'YYYY-MM-DD')
+								 ]]>								
+						            ORDER BY ORDER_NO DESC
+						        </when>
+						        
+						        <when test="items == '1년'">
+								 <![CDATA[						     
+							 		AND to_char(ORDER_DATE,'YYYY-MM-DD') <=	to_char(SYSDATE,'YYYY-MM-DD') 
+									AND to_char(ORDER_DATE,'YYYY-MM-DD') >= to_char(add_months(SYSDATE,-12),'YYYY-MM-DD')
+								 ]]>								
+						            ORDER BY ORDER_NO DESC
+						        </when>  
+						        <!-- 전체 검색이 아닐 경우 -->
+						        <otherwise>
+						            ORDER BY ORDER_NO DESC
+						        </otherwise>
+						     
+						    </choose>
 				)
 			WHERE ROWNUM &lt;=#{endIndex}	
 			)
 		WHERE RNUM>=#{startIndex}		
 	</select>	
-	
+		
 	<!-- 해당 주문 상제 정보  SQL -->
  	<select id="selectOrderProductList" parameterType="int" resultMap="orderProduct-resultmap">
 		<include refid="select-orderProduct-sql"/>
@@ -178,6 +259,12 @@
 		<include refid="select-orderCherk-sql"/>
 		WHERE MEMBER_ID = #{memberId}
 	</select>
+	
+	
+	
+	
+	
+	
 
 <!-- /////////////////////////////////////////////////////////////////////////////////////////////////  -->
 <!-- admin -->

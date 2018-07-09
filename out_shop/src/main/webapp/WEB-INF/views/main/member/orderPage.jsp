@@ -347,7 +347,7 @@ function getPostcodeAddress() {
 				<th>주문자*</th>
 				<td>
 					<div class="col-sm-5">
-						<input type="text" class="form-control" id="name" name="name" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
+						<input type="text" class="form-control" id="name" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
 					</div>
 				</td>
 			</tr>

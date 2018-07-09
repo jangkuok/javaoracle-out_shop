@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="ko-kr">
@@ -15,6 +16,23 @@
 }
 </style>
 <script type="text/javascript">
+<!-- 가격 "," 처리 추가  -->
+function commaNum(num) {  
+    var len, point, str;  
+
+    num = num + "";  
+    point = num.length % 3  
+    len = num.length;  
+
+    str = num.substring(0, point);  
+    while (point < len) {  
+        if (str != "") str += ",";  
+        str += num.substring(point, point + 3);  
+        point += 3;  
+    }  
+    return str;  
+} 
+
 //상품 선택하기
 $(document).ready(function() {
 	
@@ -65,7 +83,8 @@ $(document).ready(function() {
 		'<input class="textTrans" type="text" id="productName'+count+'" name="product" size="15" value="'+ name +'" readonly="">'+
 		'<input class="textTrans" type="text" id="productSize'+count+'" name="product" size="4" value="'+ size +'" readonly="">'+
 		'<input class="textTrans" type="text" id="productColor'+count+'" name="product" size="5" value="'+ color +'" readonly="">'+
-		'<input class="textTrans" type="text" id="productPrice'+count+'" name="product" size="7" value="'+ price +'" readonly="">'+
+		'<input class="textTrans" type="text" id="commaProductPrice'+count+'" name="" size="7" value="'+ commaNum(price) +'" readonly="">'+
+		'<input type="hidden" id="productPrice'+count+'" name="product" value="'+ price +'">'+		
 		'<input class="textTrans" type="button" id="close'+count+'" name="close" value="X"></h7>'+
 		'</td></tr>';
 		
@@ -77,6 +96,7 @@ $(document).ready(function() {
 			count++;
 			selectPrice = parseInt(selectPrice) +  parseInt(price);
 			$("#totalPrice").val(selectPrice);
+			$("#commaTotalPrice").val(commaNum($("#totalPrice").val()));
 		}
 	});
 
@@ -135,12 +155,13 @@ $(document).ready(function() {
 		$("#selectProductItems"+no).remove();
 		count--;
 		
-		if(index == 1){
+		if(count == 1){
 			$("#outerViewInfo").hide();
 		}
 		
 		selectPrice = parseInt(selectPrice) - parseInt(price);
 		$("#totalPrice").val(selectPrice);
+		$("#commaTotalPrice").val(commaNum($("#totalPrice").val()));
 	});
 
 	//상품 주문 
@@ -229,25 +250,6 @@ $(document).ready(function() {
 			alert("이미 추가한 상품입니다.");
 		</script>
 	</c:if>	
-	<!-- 관리자 로그인 할 경우 -->
-	<sec:authorize access="hasRole('ROLE_ADMIN')">   
-		<form id="updateProductForm" name="updateProductForm" action="${pageContext.request.contextPath}/admin/modifyOuterPage.do" method="post">
-			<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">
-			<input type="hidden" id="modify" name="modify" value="상품">	
-			<input type="submit" id="updateProduct" name="updateProduct" value="상품 수정">
-		</form>
-		<form id="updateSizeForm" name="updateSizeForm" action="${pageContext.request.contextPath}/admin/modifyOuterPage.do" method="post">
-			<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">
-			<input type="hidden" id="modify" name="modify" value="사이즈">		
-			<input type="submit" id="updateSize" name="updateSize" value="사이즈 수정">
-		</form>
-		<form id="updateImagesForm" name="updateImagesForm" action="${pageContext.request.contextPath}/admin/modifyOuterPage.do" method="post">
-			<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">	
-			<input type="hidden" id="modify" name="modify" value="이미지">	
-			<input type="submit" id="updateImages" name="updateImages" value="이미지 수정">
-		</form>
-	</sec:authorize>
-	
 	<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 		<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">
 		<input type="hidden" id="thumbnailName" name="thumbnailName" value="${outer.thumbnailName}">
@@ -260,14 +262,18 @@ $(document).ready(function() {
 			<div class="col-lg-6 mb-7">
 	          <div class="card h-100">
 	            <div class="card-body">
-	            	<div class="col-sm-5">
-	     				<h4><input class="textTrans" type="text" id="outerName" value="${outer.name}" readOnly="readOnly"></h4>
+	            	<div class="col-sm-12">
+	     				<h4><input class="textTrans form" type="text" id="outerName" value="${outer.name}" readOnly="readOnly"></h4>
 	     			</div>
 	     			<div class="col-sm-12">
 	     				<h6>${outer.content}</h6>
 	     			</div>
 	     			<div class="col-sm-12">
-	     				<h6><input class="textTrans" type="text" id="outerPrice" value="${outer.price}" size="4" readOnly="readOnly">won<br></h6>			
+	     				<h6>
+	     				<fmt:formatNumber value="${outer.price}" pattern="#,###.##"/>
+	     				<input class="textTrans" type="hidden" id="outerPrice" value="${outer.price}" size="4" readOnly="readOnly">
+	     				won<br>
+	     				</h6>			
 	     			</div>
 	     			<div class="col-sm-6">
 	     				<input type="hidden" id="sizeNo" value="">
@@ -295,13 +301,35 @@ $(document).ready(function() {
 	            </div>
 		            <div class="card-footer" style="text-align:right;">
 		            	
-		            	TOTAL &nbsp; <input class="textTrans" type="text" id="totalPrice" value="0" size="4" readOnly="readOnly"> won
+		            	TOTAL &nbsp; <input class="textTrans" type="text" id="commaTotalPrice" value="0" size="5" readOnly="readOnly"> won
+		            	<input type="hidden" id="totalPrice" value="0" size="4" readOnly="readOnly">
 		            	<sec:authorize access="hasRole('ROLE_USER')">
 							<input type="hidden" id="memberId" name="memberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
 							<input class="form-control" type="button" id="wishB" name="wishB" value="Wish List">
-						</sec:authorize>	
-		            	<input class="form-control btn btn-dark" type="button" id="buyB" name="buyB" value="Buy Now">		
-						<input class="form-control" type="button" id="cartB" name="cartB" value="Add To Cart">
+						</sec:authorize>
+						<sec:authorize access="!hasRole('ROLE_ADMIN')">	
+			            	<input class="form-control btn btn-dark" type="button" id="buyB" name="buyB" value="Buy Now">		
+							<input class="form-control" type="button" id="cartB" name="cartB" value="Add To Cart">
+						</sec:authorize>
+						
+							<!-- 관리자 로그인 할 경우 -->
+						<sec:authorize access="hasRole('ROLE_ADMIN')">   
+							<form id="updateProductForm" name="updateProductForm" action="${pageContext.request.contextPath}/admin/modifyOuterPage.do" method="post">
+								<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">
+								<input type="hidden" id="modify" name="modify" value="상품">	
+								<input class="form-control" type="submit" id="updateProduct" name="updateProduct" value="상품 수정">
+							</form>
+							<form id="updateSizeForm" name="updateSizeForm" action="${pageContext.request.contextPath}/admin/modifyOuterPage.do" method="post">
+								<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">
+								<input type="hidden" id="modify" name="modify" value="사이즈">		
+								<input class="form-control btn btn-dark" type="submit" id="updateSize" name="updateSize" value="사이즈 수정">
+							</form>
+							<form id="updateImagesForm" name="updateImagesForm" action="${pageContext.request.contextPath}/admin/modifyOuterPage.do" method="post">
+								<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">	
+								<input type="hidden" id="modify" name="modify" value="이미지">	
+								<input class="form-control" type="submit" id="updateImages" name="updateImages" value="이미지 수정">
+							</form>
+						</sec:authorize>
 		           	</div>
 	          	</div>
 	        </div>

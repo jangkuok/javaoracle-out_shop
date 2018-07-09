@@ -178,6 +178,10 @@
 				if(confirm('등록 하시겠습니까?')) { 
 					$('#imageAddTable').show();
 					$('#imageMinusButton').hide();
+					$('#sizePlusButton').hide();
+					$('#sizeMinusButton').hide();
+					$('#addSizeButton').hide();
+					
 			    }else { 
 			    	return;
 			   	}
@@ -227,127 +231,134 @@
 </script>
 </head>
 <body>
+<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<form id="outerVo" name="outerVo" enctype="multipart/form-data">
-
-	<table id="outerAdd" border="1" width="50%">
-		<tr>
-			<th width="20%">종류</th>
-			<td width="80%">
-				<select id="type" name="type">
-					<option value="선택하세요">선택하세요</option>
-					<option value="코트">코트</option>
-					<option value="자켓">자켓</option>
-					<option value="조끼">조끼</option>
-					<option value="패딩">패딩</option>
-					<option value="가디건">가디건</option>
-				</select>
-			</td>
-		</tr>
-		<tr> 
-			<th>상품이름</th>
-			<td>
-				<input type="text" name="name" id="name" value="${outerVo.name}"/>
-			</td>
-		</tr>
-		<tr>
-			<th>가격</th>
-			<td>
-				<input type="number" name="price" id="price" value="${outerVo.price}"/>
-			</td>
-		</tr>
-		<tr>
-			<th>사진 등록</th>
-			<td>
-				<input type="file" id="imageFile" name="imageFile" value="사진등록" accept=".jpg, .jpeg, .png"/>
-			</td>
-		</tr>
-		<tr>
-			<th>상품 소개</th>
-			<td>
-				<textarea name="content" id="content" cols="50" rows="5"></textarea>
-			</td>
-		</tr>
-	</table>
-	<div id="addB">	
-		<input type="button" id="addButton" name="addButton" value="등록">
-		<input type="reset" id="reset" name="reset" value="초기화">
-	</div>
-</form>
-</div>	
-<div id="sizeTable" name="sizeTable">
-<input type="text" id="outerNo" name="outerNo" value="">
-	<div style="">
-		<input type="button" id="sizePlusButton" value="+">
-		<input type="button" id="sizeMinusButton" value="-">
-	</div>
-	<table border="1" width="35%">
-		<thead>
-			<tr>
-				<th>사이즈</th>
-				<th>가슴</th>
-				<th>소매</th>
-				<th>어깨</th>
-				<th>길이</th>
-				<th>수량</th>
-				<th>색상</th>
-			</tr>
-		</thead>
-		<tbody id="sizeTable">
-			<tr>
-				<td>
-					<select id ="type_1" name="type">
-						<option value="선택하세요">선택하세요</option>
-						<option value="S">S</option>
-						<option value="M">M</option>
-						<option value="L">L</option>
-						<option value="XL">XL</option>
-						<option value="FREE">FREE</option>
-					</select><br>
-					<input type="hidden" id="typeHidden_1" name="productSize" value="">
-				</td>
-				<td>
-					<input type="number" id="chest1" name="productSize" size="3">
-				</td>
-				<td>
-					<input type="number" id="sleeve1" name="productSize" size="3">
-				</td>
-				<td>
-					<input type="number" id="shoulder1" name="productSize" size="3">
-				</td>
-				<td>
-					<input type="number" id="whole1" name="productSize" size="3">
-				</td>														
-				<td>
-					<input type="number" id="amount1" name="productSize" value="${outerVo.price}">
-				</td>
-				<td>
-					<select id ="color_1" name="color">
-						<option value="선택하세요">선택하세요</option>
-						<option style="background-color:black;color:white" value="블랙">블랙</option>
-						<option style="background-color:white" value="화이트">화이트</option>
-						<option style="background-color:red;color:white" value="레드">레드</option>
-						<option style="background-color:#08088A;color:white" value="네이비">네이비</option>
-						<option style="background-color:#2E2E2E;color:white" value="차콜">차콜</option>
-					</select>
-					<input type="hidden" id="colorHidden_1" name="productSize" value="">
-				</td>
-			</tr>
-		</tbody>
-	</table>
-	<input type="button" id="addSizeButton" name="addSizeButton" value="등록">
+<h1>상품 등록</h1><hr>
 </div>
-
+	<form id="outerVo" name="outerVo" enctype="multipart/form-data">
+		<table class="table table-hover" id="outerAdd">
+			<tr>
+				<th width="20%">종류</th>
+				<td width="80%">
+					<div class="col-sm-3">
+						<select class="form-control" id="type" name="type">
+							<option value="선택하세요">선택하세요</option>
+							<option value="코트">코트</option>
+							<option value="자켓">자켓</option>
+							<option value="조끼">조끼</option>
+							<option value="패딩">패딩</option>
+							<option value="가디건">가디건</option>
+						</select>
+					</div>
+				</td>
+			</tr>
+			<tr> 
+				<th>상품이름</th>
+				<td>
+					<div class="col-sm-10">
+						<input class="form-control" type="text" name="name" id="name" value="${outerVo.name}"/>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>가격</th>
+				<td>
+					<div class="col-sm-3">
+						<input class="form-control" type="number" name="price" id="price" value="${outerVo.price}"/>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>사진 등록</th>
+				<td>
+					<div class="col-sm-6">
+						<input type="file" id="imageFile" name="imageFile" value="사진등록" accept=".jpg, .jpeg, .png"/>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>상품 소개</th>
+				<td>
+					<div class="col-sm-10">
+						<textarea class="form-control" name="content" id="content" cols="50" rows="5"></textarea>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<div id="addB">	
+			<input class="btn btn-dark" type="button" id="addButton" name="addButton" value="등록">
+			<input class="btn" type="reset" id="reset" name="reset" value="초기화">
+		</div>
+	</form>
+	<div id="sizeTable" name="sizeTable">
+	<input type="hidden" id="outerNo" name="outerNo" value="">
+		<div>
+			<input class="btn" type="button" id="sizePlusButton" value="+">
+			<input class="btn" type="button" id="sizeMinusButton" value="-">
+		</div>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>사이즈</th>
+					<th>가슴</th>
+					<th>소매</th>
+					<th>어깨</th>
+					<th>길이</th>
+					<th>수량</th>
+					<th>색상</th>
+				</tr>
+			</thead>
+			<tbody id="sizeTable">
+				<tr>
+					<td>
+						<select id ="type_1" name="type">
+							<option value="선택하세요">선택하세요</option>
+							<option value="S">S</option>
+							<option value="M">M</option>
+							<option value="L">L</option>
+							<option value="XL">XL</option>
+							<option value="FREE">FREE</option>
+						</select><br>
+						<input type="hidden" id="typeHidden_1" name="productSize" value="">
+					</td>
+					<td>
+						<input type="number" id="chest1" name="productSize" size="3">
+					</td>
+					<td>
+						<input type="number" id="sleeve1" name="productSize" size="3">
+					</td>
+					<td>
+						<input type="number" id="shoulder1" name="productSize" size="3">
+					</td>
+					<td>
+						<input type="number" id="whole1" name="productSize" size="3">
+					</td>														
+					<td>
+						<input type="number" id="amount1" name="productSize" value="${outerVo.price}">
+					</td>
+					<td>
+						<select id ="color_1" name="color">
+							<option value="선택하세요">선택하세요</option>
+							<option style="background-color:black;color:white" value="블랙">블랙</option>
+							<option style="background-color:white" value="화이트">화이트</option>
+							<option style="background-color:red;color:white" value="레드">레드</option>
+							<option style="background-color:#08088A;color:white" value="네이비">네이비</option>
+							<option style="background-color:#2E2E2E;color:white" value="차콜">차콜</option>
+						</select>
+						<input type="hidden" id="colorHidden_1" name="productSize" value="">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<input class="btn btn-dark" type="button" id="addSizeButton" name="addSizeButton" value="등록">
+	</div>
 	<div id="imageAddTable" name="imageTable">
 		<form:form modelAttribute="outerPictureVo" id="outerPictureVo" name="outerPictureVo" 
 			action="${pageContext.request.contextPath}/admin/addOuterPicture.do" method="post" enctype="multipart/form-data">
-			<form:input path="outerNo" name="outerNo" value=""/>
-			
-				<table id="imageTable" border="1" width="35%">
-					<div>
-						<input type="button" id="imagePlusButton" value="+">
-						<input type="button" id="imageMinusButton" value="-">
-					</div>
+			<form:hidden path="outerNo" name="outerNo" value=""/>
+				<input class="btn" type="button" id="imagePlusButton" value="+">
+				<input class="btn" type="button" id="imageMinusButton" value="-">
+				<table class="table table-hover" id="imageTable">
 					<tbody id="imageTbody">
 						<tr>
 							<td>
@@ -361,9 +372,9 @@
 						</tr>
 					</tbody>
 				</table>
-				<input type="button" id="addPicture" name="addPicture" value="등록">
+				<input class="btn btn-dark" type="button" id="addPicture" name="addPicture" value="등록">
 		</form:form>
 	</div>
-
+</div>
 </body>
 </html>

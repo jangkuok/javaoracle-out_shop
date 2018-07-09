@@ -40,13 +40,13 @@ function loginCheck(){
     }
 </style>
 <body>
-<c:if test="${!empty requestScope.error}">
-		<script>
-			var msg = request.getAttribute("msg");	
+<c:if test="${!empty param.message}">
+		<input type="hidden" id="message" value="${param.message}">
+		<script> 
+			var msg = $('#message').val();	
 			alert(msg);
 		</script>
 </c:if>
-
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
 <h1>LOGIN</h1><hr>
@@ -55,7 +55,6 @@ function loginCheck(){
     <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-success">         
             <div class="panel-body">
-            
                 <form id="loginForm" name="loginForm" action="${pageContext.request.contextPath}/loginForm.do" method="post">
                     <div>
                     	<input type="text" class="form-control" id="loginId" name="loginId" placeholder="아이디" autofocus>

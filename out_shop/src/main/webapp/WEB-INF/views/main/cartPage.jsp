@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="ko-kr">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <title>장바구니</title>
 <script type="text/javascript">
 //카트 삭제
@@ -159,7 +160,8 @@ function orderProduct(){
 							<input class="textTrans" type="text" id="productSize${cartList.cartNo}" name="cartProduct" value="${cartList.productSize}" readOnly="readOnly">
 						</td>
 						<td>
-							<input class="textTrans" type="text" id="productPrice${cartList.cartNo}" name="cartProduct" value="${cartList.productPrice}" readOnly="readOnly">
+							<fmt:formatNumber value="${cartList.productPrice}" pattern="#,###.##"/>
+							<input type="hidden" id="productPrice${cartList.cartNo}" name="cartProduct" value="${cartList.productPrice}">
 						</td>
 					</tr>
 				</c:forEach>

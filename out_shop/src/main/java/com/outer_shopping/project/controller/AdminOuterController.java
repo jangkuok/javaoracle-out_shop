@@ -65,7 +65,9 @@ public class AdminOuterController {
 	}
 	
 	
-	
+	/**
+	 * 상품 등록 페이지 이동
+	 */
 	@RequestMapping(value = "/outerForm", method=RequestMethod.GET)
 	public String outerForm(Model model) {
 		
