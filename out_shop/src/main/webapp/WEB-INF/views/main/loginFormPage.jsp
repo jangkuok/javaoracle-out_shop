@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="ko-kr">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <title>Insert title here</title>
 </head>
 <script type="text/javascript">
@@ -55,6 +55,7 @@ function loginCheck(){
     <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-success">         
             <div class="panel-body">
+            
                 <form id="loginForm" name="loginForm" action="${pageContext.request.contextPath}/loginForm.do" method="post">
                     <div>
                     	<input type="text" class="form-control" id="loginId" name="loginId" placeholder="아이디" autofocus>
@@ -74,8 +75,7 @@ function loginCheck(){
 	                	<input type="button" class="form-control btn btn-dark" value="홈으로" onclick="location='${pageContext.request.contextPath}/.do'">
 	            	</div>
             	</div>
-            </div>
-            
+            </div>          
         </div>
     </div>
     </center>

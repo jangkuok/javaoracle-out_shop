@@ -2,6 +2,7 @@ package com.outer_shopping.project.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.outer_shopping.project.service.MemberService;
@@ -31,126 +33,132 @@ public class OrderController {
 	
 	@Autowired
 	private OrderProductService orderservice;
+	
 	/**
 	 * 상세페이지 -> 주문하기 page 이동
 	 */
 	@RequestMapping(value = "/orderPage.do", method = {RequestMethod.GET,RequestMethod.POST})
-	public String viewAndOrder(Model model,@RequestParam(value="productList[]",required=false) List<String> productList,
-			@RequestParam(value="loginId",required=false) String id) {
-
+	public String orderPage(Model model,@RequestParam Map<String, Object> map) {
+		
+		
 		List<ProductVo> list = new ArrayList<>();
 		
-		int no = 1;
-		
-		//세션에 상품이 없을 경우
-		for(int i = 0; i< productList.size(); i++) {			
+		for(int i = 1; i< map.size(); i++) {			
 			
 			ProductVo cart = new ProductVo();
 			
-			cart.setCartNo(no);
-			cart.setProductNo(Integer.parseInt(productList.get(i).toString()));		i++;
-			cart.setProductName(productList.get(i).toString());						i++;
-			cart.setProductColor(productList.get(i).toString());					i++;
-			cart.setProductSize(productList.get(i).toString());						i++;
-			cart.setProductPrice(productList.get(i).toString());					i++;
-			no++;
+			cart.setCartNo(Integer.parseInt(map.get("productInfo"+i).toString()));			i++;
+			cart.setProductNo(Integer.parseInt(map.get("productInfo"+i).toString())); 		i++;
+			cart.setThumbnailName((map.get("productInfo"+i).toString())); 					i++;
+			cart.setProductName(map.get("productInfo"+i).toString());						i++;
+			cart.setProductColor(map.get("productInfo"+i).toString());						i++;
+			cart.setProductSize(map.get("productInfo"+i).toString());						i++;
+			cart.setProductPrice(Integer.parseInt(map.get("productInfo"+i).toString()));	
 			
 			list.add(cart);
 		}	
 		
-		model.addAttribute("memberVo", memberService.viewMember(id));
-		model.addAttribute("orderNo", orderservice.getSeq()+1);
 		model.addAttribute("orderList", list);
 		
 		logger.info("############# 주문 페이지 이동 #############");
-		return "/member/orderPage";
+		return "member/orderPage";
 	}
 	
 	/**
 	 * 장바구니 -> 주문하기 page 이동
 	 */
 	@RequestMapping(value = "/orderPages.do", method = {RequestMethod.GET,RequestMethod.POST})
-	public String cartAndOrder(Model model,@RequestParam(value="productList[]",required=false) List<String> productList,
-			@RequestParam(value="loginId",required=false) String id) {
+	public String cartAndOrder(Model model, @RequestParam Map<String, Object> map) {
 
 		List<ProductVo> list = new ArrayList<>();
-		
-		System.out.println(productList);
 	
-		for(int i = 0; i< productList.size(); i++) {			
+		for(int i = 1; i< map.size(); i++) {			
 			
 			ProductVo cart = new ProductVo();
 			
-			cart.setCartNo(Integer.parseInt(productList.get(i).toString()));		i++;
-			cart.setProductNo(Integer.parseInt(productList.get(i).toString())); 	i++;
-			cart.setProductName(productList.get(i).toString());						i++;
-			cart.setProductColor(productList.get(i).toString());					i++;
-			cart.setProductSize(productList.get(i).toString());						i++;
-			cart.setProductPrice(productList.get(i).toString());
+			cart.setCartNo(Integer.parseInt(map.get("productInfo"+i).toString()));		    i++;
+			cart.setProductNo(Integer.parseInt(map.get("productInfo"+i).toString())); 	    i++;
+			cart.setThumbnailName((map.get("productInfo"+i).toString())); 					i++;
+			cart.setProductName(map.get("productInfo"+i).toString());						i++;
+			cart.setProductSize(map.get("productInfo"+i).toString());					    i++;
+			cart.setProductColor(map.get("productInfo"+i).toString());						i++;
+			cart.setProductPrice(Integer.parseInt(map.get("productInfo"+i).toString()));
 			
 			list.add(cart);
 		}	
 		
-		System.out.println(list);
 		
-		model.addAttribute("memberVo", memberService.viewMember(id));
-		model.addAttribute("orderNo", orderservice.getSeq()+1);
+		model.addAttribute("memberVo", memberService.viewMember(map.get("memberId").toString()));
 		model.addAttribute("orderList", list);
 		
 		logger.info("############# 주문 페이지 이동 #############");
-		return "/member/orderPage";
+		return "member/orderPage";
 	}
-	
-	
 	/**
 	 *	상품주문 
 	 */
 	@RequestMapping(value = "/orderProduct.do", method = {RequestMethod.GET,RequestMethod.POST})
-	public String orderProduct(Model model,@RequestParam(value="productList[]",required=false) List<String> productList,
-			@RequestParam(value="deliveryInfoList[]",required=false) List<String> deliveryInfoList,
-			@RequestParam(value="loginId",required=false) String id, @RequestParam(value="orderNo",required=false) int orderNo) {
+	public String orderProduct(Model model,@RequestParam Map<String, Object> map) {
 		
+		//주문에 관한 상품 등록
+		int productCount = Integer.parseInt(map.get("productCount").toString());
+		
+		//주문자 정보 저장
 		OrderCheckVo check = new OrderCheckVo();
+		check.setThumbnailName(map.get("productInfo3").toString());
 		
-		System.out.println(id);
+		if(productCount == 1) {
+			check.setOrderName(map.get("productInfo4").toString());
+		}else {
+			check.setOrderName(map.get("productInfo4").toString() + " 외" + (productCount - 1));
+		}
+		check.setMemberId(map.get("memberId").toString());
+		check.setAddress(map.get("deliveryInfoArr1").toString() + " " + map.get("deliveryInfoArr2").toString() + " " + map.get("deliveryInfoArr3").toString());
+		check.setPhoneNum(map.get("deliveryInfoArr4").toString());
+		check.setEmail(map.get("deliveryInfoArr5").toString());	
+		check.setTotalPrice(Integer.parseInt(map.get("deliveryInfoArr6").toString()));	
+		if(map.get("deliveryInfoArr7").toString().equals("")) {
+			check.setMessage("");
+		}else {
+			check.setMessage(map.get("deliveryInfoArr7").toString());
+		}
 		
-		//주문 정보 등록
-		check.setMemberId(id);
-		check.setAddress(deliveryInfoList.get(0) + ")" + deliveryInfoList.get(1) + " " + deliveryInfoList.get(2));
-		check.setPhoneNum(deliveryInfoList.get(3));
-		check.setEmail(deliveryInfoList.get(4));
-		check.setTotalPrice(Integer.parseInt(deliveryInfoList.get(5)));	
-		check.setMessage(deliveryInfoList.get(6));
-		
+
 		orderservice.addOrderCheck(check);
 		logger.info("############# 주문 정보 등록 #############");
 		
-		//주문에 관한 상품 등록
-		List<OrderProductVo> list = new ArrayList<>();
 		
-		for (int i = 1; i < productList.size(); i++) {
-			
-			System.out.println(i);
+		int count = Integer.parseInt(map.get("count").toString());
+		
+		List<OrderProductVo> list = new ArrayList<>();
+
+		for (int i = 2; i < count; i++) {
+
 			OrderProductVo product = new OrderProductVo();
-			
-			product.setOuterNo(Integer.parseInt(productList.get(i))); i++;
-			product.setProductName(productList.get(i)); i++;
-			product.setProductColor(productList.get(i)); i++;
-			product.setProductSize(productList.get(i)); i++;
-			product.setProductPrice(Integer.parseInt(productList.get(i)));i++;
-			product.setOrderNo(orderNo);
+
+			product.setOuterNo(Integer.parseInt(map.get("productInfo"+i).toString())); i++;
+			product.setThumbnailName(map.get("productInfo"+i).toString()); i++;
+			product.setProductName(map.get("productInfo"+i).toString()); i++;
+			product.setProductSize(map.get("productInfo"+i).toString()); i++;
+			product.setProductColor(map.get("productInfo"+i).toString()); i++;
+			product.setProductPrice(Integer.parseInt(map.get("productInfo"+i).toString()));i++;
+			product.setOrderNo(check.getOrderNo());
 			
 			list.add(product);
 		}
 		
+		
 		orderservice.addOrderProduct(list);
 		logger.info("############# 주문 상품 등록 #############");
-		
-		
+
+
 		logger.info("############# 상품 주문 완료 #############");
 		return "redirect:/member/orderSuccessPage.do";
 	}
 	
+	/**
+	 * 주문 성공 페이지
+	 */
 	@RequestMapping(value = "/orderSuccessPage.do", method = RequestMethod.GET)
 	public String createWishList() {
 		logger.info("############# 주문성공 페이지 이동 #############");

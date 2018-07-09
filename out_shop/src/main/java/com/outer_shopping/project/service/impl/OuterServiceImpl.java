@@ -1,12 +1,17 @@
 package com.outer_shopping.project.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.outer_shopping.project.dao.OuterDao;
 import com.outer_shopping.project.service.OuterService;
+import com.outer_shopping.project.util.PagingBean;
+import com.outer_shopping.project.vo.OrderCheckVo;
 import com.outer_shopping.project.vo.OuterVo;
 
 
@@ -75,6 +80,33 @@ public class OuterServiceImpl implements OuterService {
 		
 		return list;
 	}
+	
+	
+	/**
+	 * 카테고리별 아웃터 목록 
+	 */
+	@Override
+	public Map<String, Object> findItemsOuterList(String items, int page) {
+		
+		List<OuterVo> list = new ArrayList<>();
+		
+		HashMap<String, Object> map = new HashMap<>();
+		
+		try {
+			int totalCount = dao.selectOuterListCount();
+			PagingBean pageBean = new PagingBean(totalCount, page);
+			map.put("pageBean", pageBean);
+			list = dao.selectItemsOuterList(items, pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());
+			map.put("list", list);
+			
+		}catch (Exception e) {
+			System.out.println("findItemsOuterList(service) : ");
+			e.printStackTrace();
+		}	
+		
+		return map;
+	}
+
 
 	/**
 	 * 아웃터 상세 정보

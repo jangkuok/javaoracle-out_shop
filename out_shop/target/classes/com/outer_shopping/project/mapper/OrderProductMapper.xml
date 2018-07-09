@@ -7,31 +7,32 @@
 			+ order 삭제
 			+ order 조회
 	 -->
-	 
 	<sql id="all-column">
-	ORDER_NO, TOTAL_PRICE, HANDLING, MEMBER_ID, ADDRESS, PHONENUM, EMAIL, MESSAGE, ORDER_DATE
+	ORDER_NO, ORDER_THUMBNAIL_NAME, ORDER_NAME, TOTAL_PRICE, HANDLING, MEMBER_ID, ADDRESS, PHONENUM, EMAIL, MESSAGE, ORDER_DATE
 	</sql> 
 	
 	<!-- ORDER_CHECK 전체 조회 sql -->
 	<sql id="select-orderCherk-sql">
-		SELECT 	ORDER_NO, TOTAL_PRICE, HANDLING, MEMBER_ID, ADDRESS, PHONENUM, EMAIL, MESSAGE, ORDER_DATE
+		SELECT 	ORDER_NO, ORDER_THUMBNAIL_NAME, ORDER_NAME, TOTAL_PRICE, HANDLING, MEMBER_ID, ADDRESS, PHONENUM, EMAIL, MESSAGE, ORDER_DATE
 		FROM ORDER_CHECK
 	</sql>	 
 	
 	<!-- ORDER_PRODUCT 전체 조회 sql -->
 	<sql id="select-orderProduct-sql">
-		SELECT 	PRODUCT_NO, OUTER_NO, PRODUCT_NAME, PRODUCT_COLOR, PRODUCT_SIZE, PRODUCT_PRICE, ORDER_NO	
+		SELECT 	PRODUCT_NO, OUTER_NO, PRODUCT_THUMBNAIL_NAME, PRODUCT_NAME, PRODUCT_COLOR, PRODUCT_SIZE, PRODUCT_PRICE, ORDER_NO	
 		FROM ORDER_PRODUCT
 	</sql>	 	
 	
 	
 	<!-- ORDER_CHECK + ORDER_PRODUCT sql -->
 	<sql id="select-order-produck-sql">
-	SELECT		c.TOTAL_PRICE, c.HANDLING, 
+	SELECT		c.TOTAL_PRICE, c.ORDER_THUMBNAIL_NAME, 
+				c.ORDER_NAME, c.HANDLING, 
 				c.MEMBER_ID, c.ADDRESS,
 				c.PHONENUM, c.EMAIL,
 				c.MESSAGE, c.ORDER_DATE,
-				p.PRODUCT_NO, p.OUTER_NO, p.PRODUCT_NAME, 
+				p.PRODUCT_NO, p.OUTER_NO, 
+				p.PRODUCT_THUMBNAIL_NAME, p.PRODUCT_NAME, 
 				p.PRODUCT_COLOR, p.PRODUCT_SIZE, 
 				p.PRODUCT_PRICE, p.ORDER_NO			
 	FROM		ORDER_CHECK c, ORDER_PRODUCT p	
@@ -41,6 +42,8 @@
 	<!-- ORDER_CHECK resultMap -->
 	<resultMap id="orderCheck-resultmap" type="com.outer_shopping.project.vo.OrderCheckVo">
 		<id column="ORDER_NO" property="orderNo"/>
+		<result column="ORDER_THUMBNAIL_NAME" property="thumbnailName"/>
+		<result column="ORDER_NAME" property="orderName"/>
 		<result column="TOTAL_PRICE" property="totalPrice"/>
 		<result column="HANDLING" property="handing"/>
 		<result column="MEMBER_ID" property="memberId"/>
@@ -51,11 +54,11 @@
 		<result column="ORDER_DATE" property="orderDate"/>
 	</resultMap>
 	
-	
 	<!-- ORDER_PRODUCT resultMap -->
 	<resultMap id="orderProduct-resultmap" type="com.outer_shopping.project.vo.OrderProductVo">
 			<id column="PRODUCT_NO" property="productNo"/>
 			<result column="OUTER_NO" property="outerNo"/>
+			<result column="PRODUCT_THUMBNAIL_NAME" property="thumbnailName"/>
 			<result column="PRODUCT_NAME" property="productName"/>
 			<result column="PRODUCT_COLOR" property="productColor"/>
 			<result column="PRODUCT_SIZE" property="productSize"/>
@@ -71,6 +74,7 @@
 		<collection property="productList" ofType="com.outer_shopping.project.vo.OrderProductVo">
 			<id column="PRODUCT_NO" property="productNo"/>
 			<result column="OUTER_NO" property="outerNo"/>
+			<result column="PRODUCT_THUMBNAIL_NAME" property="thumbnailName"/>
 			<result column="PRODUCT_NAME" property="productName"/>
 			<result column="PRODUCT_COLOR" property="productColor"/>
 			<result column="PRODUCT_SIZE" property="productSize"/>
@@ -89,6 +93,8 @@
 		INSERT INTO ORDER_CHECK
 		VALUES(
 				#{orderNo},
+				#{thumbnailName},
+				#{orderName},
 				#{totalPrice},
 				'결제 대기중',
 				#{memberId},
@@ -109,6 +115,7 @@
 		VALUES(
 				#{productNo},
 				#{outerNo},
+				#{thumbnailName},
 				#{productName},
 				#{productColor},
 				#{productSize},
@@ -117,24 +124,46 @@
 			   )
 	</insert>
 	
-	<!-- 시퀀스 select -->
-	<select id="selectSequence" resultType="int">
-		select ORDER_NO.nextval from dual
+	<!-- 주문List 카운트  -->
+	<select id = "selectOrderListCount" resultType="_int">
+		SELECT COUNT(*) FROM ORDER_CHECK
 	</select>
 	
-
 	<!-- 주문 상태 수정 SQL -->
 	<update id="handingUpdateOrder" parameterType="hashmap">
 		UPDATE 	ORDER_CHECK 
 		SET		HANDLING = #{handing}
 		WHERE	ORDER_NO = #{orderNo}
 	</update>
+	
+	<!-- 전체 주문 조회  SQL -->
+ 	<select id="selectOrderList" parameterType="hashmap" resultMap="orderCheck-resultmap">
+		SELECT <include refid="all-column"/>
+		FROM(
+			SELECT ROWNUM RNUM, <include refid="all-column"/>
+			FROM( 			
+						<include refid="select-orderCherk-sql"/>
+						ORDER BY ORDER_NO DESC
+				)
+			WHERE ROWNUM &lt;=#{endIndex}	
+			)
+		WHERE RNUM>=#{startIndex}		
+	</select>
+	
 
-	<!-- 자신의 주문 조회  SQL -->
- 	<select id="selectMemberOrderList" parameterType="string" resultMap="orderCheck-resultmap">
-		<include refid="select-orderCherk-sql"/>
-		WHERE MEMBER_ID = #{memberId}
-		ORDER BY ORDER_NO DESC
+	<!-- 회원 주문 조회  SQL -->
+ 	<select id="selectMemberOrderList" parameterType="hashmap" resultMap="orderCheck-resultmap">
+		SELECT <include refid="all-column"/>
+		FROM(
+			SELECT ROWNUM RNUM, <include refid="all-column"/>
+			FROM( 			
+						<include refid="select-orderCherk-sql"/>
+						WHERE MEMBER_ID = #{memberId}
+						ORDER BY ORDER_NO DESC
+				)
+			WHERE ROWNUM &lt;=#{endIndex}	
+			)
+		WHERE RNUM>=#{startIndex}		
 	</select>	
 	
 	<!-- 해당 주문 상제 정보  SQL -->
@@ -143,7 +172,6 @@
 		WHERE ORDER_NO = #{orderNo}
 	</select>	
 	
-
 
 	<!-- 자신의 주문 조회 날짜  SQL -->
  	<select id="selectMemberOrderDateList" parameterType="string" resultMap="orderCheck-resultmap">
@@ -154,11 +182,6 @@
 <!-- /////////////////////////////////////////////////////////////////////////////////////////////////  -->
 <!-- admin -->
 
-	<!-- 전체 주문 조회 SQL -->
- 	<select id="selectOrderList" resultMap="orderCheck-resultmap">
-		<include refid="select-orderCherk-sql"/>
-	</select>	
-	
 	
 	<!-- 상품 List 조회 SQL -->
 <!-- 	<select id="selectWishList" parameterType="string" resultMap="outer-wishList-resultmap">

@@ -69,7 +69,7 @@
 		DELETE FROM WISHLIST WHERE WISH_NO = #{wishNo}
 	</delete>
 	
-	<!-- BOARD_Review 카운트  -->
+	<!-- 상품List 카운트  -->
 	<select id = "selectWishListCount" resultType="_int">
 		SELECT COUNT(*) FROM WISHLIST
 	</select>

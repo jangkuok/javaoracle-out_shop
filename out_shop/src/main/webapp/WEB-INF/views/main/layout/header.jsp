@@ -9,28 +9,35 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
+          	<!-- 회원 , 비회원일 경우 -->
           	<sec:authorize access="!hasRole('ROLE_ADMIN')">	 
           		<li class="nav-item">
-	              <a class="nav-link" href="#">Jacket</a>
+	              <a class="nav-link" href="${pageContext.request.contextPath}/.do">Home</a>
+	            </li>
+          		<li class="nav-item">
+	              <a class="nav-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?items=Outer">Outer</a>
+	            </li>
+          		<li class="nav-item">
+	              <a class="nav-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?items=Jacket">Jacket</a>
 	            </li>
 				<li class="nav-item">
-	              <a class="nav-link" href="#">Coat</a>
+	              <a class="nav-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?items=Coat">Coat</a>
 	            </li>
 	            <li class="nav-item">
-	              <a class="nav-link" href="#">Padding</a>
+	              <a class="nav-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?items=Padding">Padding</a>
 	            </li>
 	            <li class="nav-item">
-	              <a class="nav-link" href="#">Leather</a>
+	              <a class="nav-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?items=Vest">Vest</a>
 	            </li>
 	            <li class="nav-item">
-	              <a class="nav-link" href="#">Cardigan</a>
+	              <a class="nav-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?items=Cardigan">Cardigan</a>
 	            </li>
-	            <li class="nav-item">
-	              <a class="nav-link" href="#">Blouson</a>
-	            </li>	
 				<li class="nav-item">
 	              <a class="nav-link" href="#">Review</a> 
-	            </li>	    
+	            </li>
+	            <li class="nav-item">
+	              <a class="nav-link" href="${pageContext.request.contextPath}/outer/cartPage.do">Cart</a> 
+	            </li>	 	    
 	        </sec:authorize>
 	                 
             <!-- 비로그인일 경우 -->
@@ -40,19 +47,7 @@
 	            </li>
 	            <li class="nav-item">
 	              <a class="nav-link" href="${pageContext.request.contextPath}/joinPage.do">Join</a>
-	            </li>	           
-	              <%--
-	              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	                OTHER
-	              </a>
-	              
- 	              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
-	                	<a class="dropdown-item" href="${pageContext.request.contextPath}/joinPage.do">JOIN</a>
-					    <a class="dropdown-item" href="${pageContext.request.contextPath}/outer/cartPage.do">CART</a>
-					    <a class="dropdown-item" href="#">REVIEW</a>
-	              </div> 
-	              --%>
-	            </li>		
+	            </li>	           		
 			</sec:authorize>
 			
             <!-- 회원 로그인 할 경우 -->

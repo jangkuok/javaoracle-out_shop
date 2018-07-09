@@ -1,6 +1,7 @@
 package com.outer_shopping.project.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -51,14 +52,33 @@ public class HomeController {
 	
 		List<OuterVo> list = outerService.findOuterList();
 		
-		
-		System.out.println(list);
 		model.addAttribute("list",list);
 		
 		logger.info("############# 메인페이지 이동 #############");
 		
 		return "main/mainPage";
 	}
+	
+	/**
+	 * 카테로리별 아웃터 페이징
+	 */
+	@RequestMapping(value = "/kategorieOuterList.do", method = RequestMethod.GET)
+	public String kategorieOuterList(Model model,@RequestParam("items") String items,
+			@RequestParam(defaultValue="1") int page) {
+	
+		Map<String, Object> map = outerService.findItemsOuterList(items, page);
+		
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("items", items);
+		model.addAttribute("pageBean", map.get("pageBean"));
+		
+		
+		logger.info("############# "+ items +"페이지 이동 #############");
+		
+		return "kategorieOuterPage";
+	}
+	
 	
 	/**
 	 * 회원가입 페이지 이동

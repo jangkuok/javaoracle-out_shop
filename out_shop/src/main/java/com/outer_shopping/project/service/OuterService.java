@@ -1,6 +1,7 @@
 package com.outer_shopping.project.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.outer_shopping.project.vo.OuterVo;
 
@@ -25,13 +26,19 @@ public interface OuterService {
 	 */
 	void removeOuter(int outerNo);		
 	
-	
-
 	/**
 	 * 아웃터 목록
 	 * @param outer
 	 */
-	List<OuterVo> findOuterList();	
+	List<OuterVo> findOuterList();
+	
+	/**
+	 * 카테고리별 아웃터 목록
+	 * @param items
+	 * @param page
+	 * @return
+	 */
+	Map<String, Object> findItemsOuterList(String items, int page);
 	
 	/**
 	 * 아웃터 상세 정보

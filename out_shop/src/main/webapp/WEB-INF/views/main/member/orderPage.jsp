@@ -1,22 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="ko-kr">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <title>상품 주문</title>
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="http://cdn.rawgit.com/jmnote/jquery.nonajaxform/33a7/jquery.nonajaxform.min.js">
+
 <!-- daum 우편번호 서비스 외장 JS(Javascript) 파일 링크 -->
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	
 	var price = 0;
 	
+	var productListCount = $('#productListTable tbody tr').length;
+	
 	//상품금액
-	$('td[name="tdPrice"]').each(function(){
-		var no = $(this).text();  
+	$('input[name="price"]').each(function(){
+		var no = $(this).val();  
 		price = parseInt(price) + parseInt(no);
 		//상품가격
 		$("input[name='productPrice']").val(price);
@@ -41,11 +44,12 @@ $(document).ready(function() {
 	$("#totalPrice1").val(total);
 	$("#totalPrice2").val(total);
 	
+	//상품 삭제
 	$("#removeProduct").click(function() {
 		$("input[name='checkBox']:checked").each(function(){
 			 var no = $(this).val();		
 			 
-			 var price = $('#tdPrice'+no).text();
+			 var price = $('#productPrice'+no).val();
 			 
 			 //총 상품 가격
 			 var productPrice = $('#productPrice').val();
@@ -73,6 +77,7 @@ $(document).ready(function() {
 			 
 			 //해당 상품 삭제
 			 $("#trProduct"+no).remove();
+			 productListCount--;
 		}) ;	
 	});
 
@@ -84,42 +89,15 @@ $(document).ready(function() {
 
 	//상품 주문
 	$('#buyB').on('click',function(){
-		
-/* 		var productArr = []; 
-		
-		$("input[name='product']").each(function(){
-	    	productArr.push($(this).val());
-	    });
-*/
-
 		//상품정보 배열에 넣기
-		var rowData = [];
 		var productArr = []; 
+
+		$("input[name='cartProduct']").each(function(i){
+			productArr.push($(this).val());
+	    });
 		
-
-		//테이블 행의 모든 값 가져오기
-		$('#tbodyProduct tr').each(function(i){   			    	
-	    	var tr = $('#tbodyProduct tr').eq(i);
-	    	
-
-		    var td = tr.children();
-		    rowData.push(tr.text());
-		    
-		    var cartNo = td.eq(1).text();
-	        var productNo = td.eq(2).text();
-	        var productName = td.eq(3).text();
-	        var productColor = td.eq(4).text();
-	        var productSize = td.eq(5).text();
-	        var productPrice = td.eq(6).text();
-	        
-	        productArr.push(cartNo);
-	        productArr.push(productNo);
-	        productArr.push(productName);
-	        productArr.push(productColor);
-	        productArr.push(productSize);
-	        productArr.push(productPrice);
-
-		});
+		alert(productArr);
+		
 		//주문 정보 배열에 넣기
 		var deliveryInfoArr = []; 
 		
@@ -130,17 +108,44 @@ $(document).ready(function() {
 		
 		//메시지값 배열에 넣기
 		deliveryInfoArr.push($('#message').val());
-
-  		if(confirm('주문 하시겠습니까?')) { 
-			$.form({
-				"action": "${pageContext.request.contextPath}/member/orderProduct.do",
-				"type":"POST",
-				"data": {"productList" : productArr, "deliveryInfoList" : deliveryInfoArr, "loginId" : $('#id').val(), "orderNo" : $('#orderNo').val()},
-				"dataType":"text"
-			}).submit();
-	    }else { 
-	    	return;
-	   	}
+		
+		
+		var $form = $('<form></form>');
+		$form.attr('action', '${pageContext.request.contextPath}/member/orderProduct.do');
+		$form.attr('method', 'post');
+		$form.appendTo('body');
+		
+		var index = 1;
+		
+		//주문자 아이디
+		var memberId = '<input value="'+$('#memberId').val()+'" name="memberId" type="hidden">';
+		$form.append(memberId);
+			     
+		//상품
+		for (var i = 0; i < productArr.length; i++) {
+			var input = '<input value="'+productArr[i]+'" name="productInfo'+index+'" type="hidden">';
+			$form.append(input);
+			index++;
+		}
+		   
+		//상품 개수
+		var productCount = '<input value="'+productListCount+'" name="productCount" type="hidden">';
+		$form.append(productCount);
+		
+		//상품 input 개수
+		var count = '<input value="'+index+'" name="count" type="hidden">';
+		$form.append(count);
+				
+		var index2 = 1;
+		
+		//회원정보
+		for (var i = 0; i < deliveryInfoArr.length; i++) {
+			var input = '<input value="'+deliveryInfoArr[i]+'" name="deliveryInfoArr'+index2+'" type="hidden">';
+			$form.append(input);
+			index2++;
+		}
+		   
+		$form.submit();
 	});
 	
 });
@@ -197,87 +202,131 @@ function getPostcodeAddress() {
 }
 </script> 
 <style>
-.textTrans{
+.textTran{
 	background-color:transparent;
 	border:0 solid black;
 	text-align:right;
 }
+
+#addressMagin > div , #addressMagin2 > div{
+    	margin: 15px 0;
+    }
 </style>
    
 </head>
 <body>
-<%-- <jsp:include page="../include/loginForm.jsp" flush="false"/><br> --%>
-주문내역
+<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
+<div>
+<h1>주문내역</h1><hr>
+</div>
 	<div>
-		<table id="orderProduct" border="1" width="70%">
+		<table id="productListTable" class="table table-hover">
 			<thead>
 			<tr>
 				<th></th>
 				<th>번호</th>
-				<th>상품 번호</th>
-				<th>상품 이름</th>
-				<th>색상</th>
+				<th>이미지</th>
+				<th>이름</th>
 				<th>사이즈</th>
+				<th>색상</th>
 				<th>가격</th>
 			</tr>
 			</thead>
-			<tbody id="tbodyProduct">
+			<tbody>
 				<c:forEach var="orderList" items="${orderList}" varStatus="st">
 					<tr id="trProduct${orderList.cartNo}">
 						<td>
-							<input type="checkBox" id="checkBox" name="checkBox" value="${orderList.cartNo}">
+							<input type="checkBox" id="checkBox" name="checkBox" value="${st.count}">
 						</td>
-						<td>${orderList.cartNo}</td>
-						<td>${orderList.productNo}</td>
-						<td>${orderList.productName}</td>
-						<td>${orderList.productColor}</td>
-						<td>${orderList.productSize}</td>
-						<td id="tdPrice${orderList.cartNo}" name="tdPrice">${orderList.productPrice}</td>
+						<td>
+							<input class="textTrans" type="text" id="cartNo" name="cartProduct" size="2" value="${st.count}" readOnly="readOnly">
+						</td>
+						<td>
+							<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${orderList.productNo}">
+								<img src="<c:url value='/image/thumbnail/${orderList.thumbnailName}'/>"/>
+							</a>
+							<input type="hidden" id="productNo" name="cartProduct" value="${orderList.productNo}">
+							<input type="hidden" id="thumbnailName" name="cartProduct" value="${orderList.thumbnailName}">
+						</td>
+						<td>
+							<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${orderList.productNo}">
+								${orderList.productName}
+							</a>
+							<input type="hidden" id="productName" name="cartProduct" value="${orderList.productName}">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productColor" name="cartProduct" value="${orderList.productColor}" readOnly="readOnly">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productSize" name="cartProduct" value="${orderList.productSize}" readOnly="readOnly">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productPrice${st.count}" name="cartProduct" value="${orderList.productPrice}" readOnly="readOnly">
+							<input type="hidden" id="price" name="price" value="${orderList.productPrice}" readOnly="readOnly">
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 		<div>
-			<table border="1" width="70%">
+			<table class="table table-hover">
 				<tr>
 					<td colspan="7" >
-								상품금액<input class="textTrans" type="text" id="productPrice" name="productPrice" size="6" value="0"> +
-								배송비<input class="textTrans" type="text" id="deliveryPrice" name="deliveryPrice" size="6" value="0"> = 
-								합계 : <input class="textTrans" type="text" id="totalPrice1" name="totalPrice" size="8" value="0"><br>
+								상품금액<input class="textTran" type="text" id="productPrice" name="productPrice" size="6" value="0">
+								배송비<input class="textTran" type="text" id="deliveryPrice" name="deliveryPrice" size="6" value="0"> 
+								합계 : <input class="textTran" type="text" id="totalPrice1" name="totalPrice" size="8" value="0"><br>
 					</td>
 				</tr>
 			</table>
 		</div>
 	</div>
-<input type="button" id="removeProduct" name="removeProduct" value="상품삭제">
+<input type="button" class="btn btn-dark" id="removeProduct" name="removeProduct" value="상품삭제">
 <hr>	
 	<div>
 		주문정보
-		<table border="1" width="70%">
+		<table class="table table-hover">
 			<tr>
 				<th width="20%">주문자*</th>
 				<td width="80%">
-					<input type="text" id="" name="" value="${memberVo.name}">
+					<div class="col-sm-5">
+						<input class="form-control" type="text" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>주소*</th>
-				<td>
-					<input type="text" id="" name="" value="${memberVo.zipcode}" size="4"><br>
-					<input type="text" id="" name="" value="${memberVo.address}" size="70">  기본주소<br>
-					<input type="text" id="" name="" value="${memberVo.address2}" size="70"> 나머지주소
+				<td id="addressMagin">
+					<div class="col-sm-3">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.zipcode}">
+					</div>
+					<div class="col-sm-8" style="float:left;">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address}">
+					</div>
+					<div class="col-sm-2" style="float:left;">
+						기본주소
+					</div>
+					<div class="col-sm-8" style="float:left;">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address2}">
+					</div>
+					<div class="col-sm-2" style="float:left;">
+						나머지주소
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>휴대전화*</th>
 				<td>
-					<input type="text" id="" name="" value="${memberVo.phoneNum}">
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.phoneNum}">
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>이메일*</th>
 				<td>
-					<input type="text" id="" name="" value="${memberVo.email}">
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.email}">
+					</div>
 				</td>
 			</tr>
 		</table>
@@ -285,8 +334,8 @@ function getPostcodeAddress() {
 <hr>	
 	<div>
 		배송정보
-		<input type="hidden" id="orderNo" name="orderNo" value="${orderNo}">
-		<table border="1" width="70%">
+		<input type="hidden" id="memberId" name="memberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
+		<table class="table table-hover">
 			<tr>
 				<th width="20%">배송지 선택</th>
 				<td width="80%">
@@ -297,44 +346,68 @@ function getPostcodeAddress() {
 			<tr>
 				<th>주문자*</th>
 				<td>
-					<input type="text" id="name" name="name" value="${memberVo.name}">
+					<div class="col-sm-5">
+						<input type="text" class="form-control" id="name" name="name" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>주소*</th>
-				<td>
-					<input type="text" id="zipcode" name="deliveryInfo" value="${memberVo.zipcode}" size="4">
-					<input type="button" value="주소 검색" onClick="getPostcodeAddress()"><br>
-					<input type="text" id="address" name="deliveryInfo" value="${memberVo.address}" size="70"> 기본주소<br>
-					<input type="text" id="address2" name="deliveryInfo" value="${memberVo.address2}" size="70"> 나머지주소
+				<td id="addressMagin2">
+					<div class="col-sm-2" style="float:left;">
+						<input type="text" class="form-control" id="zipcode" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.zipcode}">
+					</div>
+					<div class="col-sm-3" style="float:left;">
+						<input class="btn btn-dark" type="button" value="주소 검색" onClick="getPostcodeAddress()">
+					</div>
+					<div class="col-sm-8" style="float:left;">
+						<input type="text" class="form-control" id="address" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address}"> 
+					</div>
+					<div class="col-sm-2" style="float:left;">
+						기본주소
+					</div>
+					<div class="col-sm-8" style="float:left;">
+						<input type="text" class="form-control" id="address2" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address2}"> 
+					</div>
+					<div class="col-sm-2" style="float:left;">
+						나머지주소
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>휴대전화*</th>
 				<td>
-					<input type="text" id="phoneNum" name="deliveryInfo" value="${memberVo.phoneNum}">
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="phoneNum" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.phoneNum}">
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>이메일*</th>
 				<td>
-					<input type="text" id="email" name="deliveryInfo" value="${memberVo.email}">
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="email" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.email}">
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>배송메세지</th>
 				<td>
-					<textarea id="message"></textarea>
+					<div class="col-sm-10">
+						<textarea class="form-control" id="message" name="message"></textarea>
+					</div>
 				</td>
 			</tr>
 		</table>
 	</div>
 	<div>
-		<table border="1" width="50%">
+		<table class="table table-hover">
 			<tr>
-				<th>결제 예정 금액</th>
-				<td>
-					<input class="textTrans" type="text" id="totalPrice2" name="deliveryInfo" value="0">
+				<th width="20%">결제 예정 금액</th>
+				<td width="80%">
+					<div class="col-sm-4">
+						<input class="textTrans" style="text-align:left;" type="text" id="totalPrice2" name="deliveryInfo" value="0">
+					</div>
 				</td>
 			</tr>
 		</table>
@@ -344,6 +417,7 @@ function getPostcodeAddress() {
 <input type="radio" name="" value="" /> 카드 결제
 <input type="radio" name="" value="" /> 무통장 입금
 <input type="radio" name="" value="" /> 핸드폰 결제<br>
-<input type="button" id="buyB" value="결제하기">
+<input class="btn btn-dark" type="button" id="buyB" value="결제하기">
+</div>
 </body>
 </html>

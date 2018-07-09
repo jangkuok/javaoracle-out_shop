@@ -6,16 +6,18 @@ public class ProductVo implements Serializable{
 	
 	private int cartNo;
 	private int productNo;
+	private String thumbnailName;
 	private String productName;
 	private String productColor;
 	private String productSize;
-	private String productPrice;
+	private int productPrice;
 	
 	public ProductVo() {}
 
-	public ProductVo(int cartNo, int productNo, String productName, String productColor, String productSize,
-			String productPrice) {
+	public ProductVo(int cartNo, String thumbnailName, int productNo, String productName, String productColor,
+			String productSize, int productPrice) {
 		this.cartNo = cartNo;
+		this.thumbnailName = thumbnailName;
 		this.productNo = productNo;
 		this.productName = productName;
 		this.productColor = productColor;
@@ -25,9 +27,9 @@ public class ProductVo implements Serializable{
 
 	@Override
 	public String toString() {
-		return "CartVo [cartNo=" + cartNo + ", productNo=" + productNo + ", productName=" + productName
-				+ ", productColor=" + productColor + ", productSize=" + productSize + ", productPrice=" + productPrice
-				+ "]";
+		return "ProductVo [cartNo=" + cartNo + ", thumbnailName=" + thumbnailName + ", productNo=" + productNo
+				+ ", productName=" + productName + ", productColor=" + productColor + ", productSize=" + productSize
+				+ ", productPrice=" + productPrice + "]";
 	}
 
 	public int getCartNo() {
@@ -36,6 +38,14 @@ public class ProductVo implements Serializable{
 
 	public void setCartNo(int cartNo) {
 		this.cartNo = cartNo;
+	}
+
+	public String getThumbnailName() {
+		return thumbnailName;
+	}
+
+	public void setThumbnailName(String thumbnailName) {
+		this.thumbnailName = thumbnailName;
 	}
 
 	public int getProductNo() {
@@ -70,11 +80,11 @@ public class ProductVo implements Serializable{
 		this.productSize = productSize;
 	}
 
-	public String getProductPrice() {
+	public int getProductPrice() {
 		return productPrice;
 	}
 
-	public void setProductPrice(String productPrice) {
+	public void setProductPrice(int productPrice) {
 		this.productPrice = productPrice;
 	}
 
@@ -86,59 +96,51 @@ public class ProductVo implements Serializable{
 		result = prime * result + ((productColor == null) ? 0 : productColor.hashCode());
 		result = prime * result + ((productName == null) ? 0 : productName.hashCode());
 		result = prime * result + productNo;
-		result = prime * result + ((productPrice == null) ? 0 : productPrice.hashCode());
+		result = prime * result + productPrice;
 		result = prime * result + ((productSize == null) ? 0 : productSize.hashCode());
+		result = prime * result + ((thumbnailName == null) ? 0 : thumbnailName.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (!(obj instanceof ProductVo)) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		ProductVo other = (ProductVo) obj;
-		if (cartNo != other.cartNo) {
+		if (cartNo != other.cartNo)
 			return false;
-		}
 		if (productColor == null) {
-			if (other.productColor != null) {
+			if (other.productColor != null)
 				return false;
-			}
-		} else if (!productColor.equals(other.productColor)) {
+		} else if (!productColor.equals(other.productColor))
 			return false;
-		}
 		if (productName == null) {
-			if (other.productName != null) {
+			if (other.productName != null)
 				return false;
-			}
-		} else if (!productName.equals(other.productName)) {
+		} else if (!productName.equals(other.productName))
 			return false;
-		}
-		if (productNo != other.productNo) {
+		if (productNo != other.productNo)
 			return false;
-		}
-		if (productPrice == null) {
-			if (other.productPrice != null) {
-				return false;
-			}
-		} else if (!productPrice.equals(other.productPrice)) {
+		if (productPrice != other.productPrice)
 			return false;
-		}
 		if (productSize == null) {
-			if (other.productSize != null) {
+			if (other.productSize != null)
 				return false;
-			}
-		} else if (!productSize.equals(other.productSize)) {
+		} else if (!productSize.equals(other.productSize))
 			return false;
-		}
+		if (thumbnailName == null) {
+			if (other.thumbnailName != null)
+				return false;
+		} else if (!thumbnailName.equals(other.thumbnailName))
+			return false;
 		return true;
 	}
 
+
+	
 	
 }

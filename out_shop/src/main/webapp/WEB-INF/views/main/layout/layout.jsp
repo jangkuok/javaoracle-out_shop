@@ -12,10 +12,17 @@
 <link href="${pageContext.request.contextPath}/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <!-- Custom styles for this template -->
 <link href="${pageContext.request.contextPath}/bootstrap/css/modern-business.css" rel="stylesheet">
-
+<!-- jQurey -->
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<style>
+.textTrans{
+	background-color:transparent;
+	border:0 solid black;
+}
+</style>
 </head>
 <body>
-   <tiles:insertAttribute name="header" />
+    <tiles:insertAttribute name="header" />
 
 	<tiles:insertAttribute name="content"/>
 

@@ -19,11 +19,6 @@ public interface OrderProductDao {
 	 */
 	void insertOrderProduct(OrderProductVo product);
 	
-	/**
-	 * 주문 시퀀스 찾기
-	 * @return
-	 */
-	int selectSeq();
 	
 	/**
 	 * 주문 상태 수정
@@ -32,11 +27,25 @@ public interface OrderProductDao {
 	void handingUpdateOrder(int orderNo,String handing);
 	
 	/**
+	 * 전체 리스트 카운트
+	 * @return
+	 */
+	int selectOrderListCount();
+	
+	/**
+	 * 전체 주문 목록
+	 * @param startIndex
+	 * @param endIndex
+	 * @return
+	 */
+	List<OrderCheckVo> selectOrderList(int startIndex, int endIndex);
+	
+	/**
 	 * 해당 회원 주문 목록
 	 * @param memberId
 	 * @return
 	 */
-	List<OrderCheckVo> selectMemberOrderList(String memberId); 
+	List<OrderCheckVo> selectMemberOrderList(String memberId,int startIndex, int endIndex); 
 	
 	/**
 	 * 주문 관련 상품 목록 

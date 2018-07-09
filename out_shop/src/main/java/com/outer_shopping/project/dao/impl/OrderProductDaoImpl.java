@@ -50,13 +50,6 @@ public class OrderProductDaoImpl implements OrderProductDao {
 		}	
 	}
 
-	/**
-	 * 시퀀스 찾기
-	 */
-	@Override
-	public int selectSeq() {
-		return session.selectOne(makeSqlId("selectSequence"));
-	}
 
 	/**
 	 * 주문 상태 수정
@@ -76,17 +69,63 @@ public class OrderProductDaoImpl implements OrderProductDao {
 		}	
 		
 	}
+		
+	/**
+	 * 전체 리스트 카운트
+	 */
+	@Override
+	public int selectOrderListCount() {
+		
+		int count = 0;
+		
+		try {
+			count = session.selectOne(makeSqlId("selectOrderListCount"));
+		}catch (Exception e) {
+			System.out.println("selectOrderListCount(dao) : ");
+			e.printStackTrace();
+		}
 	
+		return count;
+	}
+
+	/**
+	 * 전체 주문 목록
+	 */
+	@Override
+	public List<OrderCheckVo> selectOrderList(int startIndex, int endIndex) {
+		List<OrderCheckVo> list = new ArrayList<>();
+		
+		try {
+			Map<String, Object> input = new HashMap<String, Object>();
+			input.put("startIndex",startIndex);
+			input.put("endIndex",endIndex);
+		
+			
+			list = session.selectList(makeSqlId("selectMemberOrderList"), input);
+		}catch (Exception e) {
+			System.out.println("selectMemberOrderList(dao) : ");
+			e.printStackTrace();
+		}	
+		
+		return list;
+	}
+
 	/**
 	 * 해당 회원 주문 목록
 	 */
 	@Override
-	public List<OrderCheckVo> selectMemberOrderList(String memberId) {
+	public List<OrderCheckVo> selectMemberOrderList(String memberId, int startIndex, int endIndex) {
 		
 		List<OrderCheckVo> list = new ArrayList<>();
 		
 		try {
-			list = session.selectList(makeSqlId("selectMemberOrderList"), memberId);
+			Map<String, Object> input = new HashMap<String, Object>();
+			input.put("memberId",memberId);
+			input.put("startIndex",startIndex);
+			input.put("endIndex",endIndex);
+		
+			
+			list = session.selectList(makeSqlId("selectMemberOrderList"), input);
 		}catch (Exception e) {
 			System.out.println("selectMemberOrderList(dao) : ");
 			e.printStackTrace();

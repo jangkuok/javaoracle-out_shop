@@ -6,42 +6,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>장바구니</title>
-<%-- 
-<!-- bootstrap CSS : 3.3.7 -->
-<link rel="stylesheet" 
-	  href="<c:url value='/js/bootstrap/3.3.7/css/bootstrap.min.css/' />">
-
-<!-- jQuery : 3.2.1 -->
-<script src="<c:url value='/js/jQuery/3.2.1/jquery-3.2.1.min.js' />"></script>
-
-<!-- bootstrap JS : 3.3.7 -->
-<script src="<c:url value='/js/bootstrap/3.3.7/js/bootstrap.min.js' />"></script> --%>
-
-<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-<!-- form -->
-<script src="http://cdn.rawgit.com/jmnote/jquery.nonajaxform/33a7/jquery.nonajaxform.min.js"></script>
 <script type="text/javascript">
 //카트 삭제
 $(document).ready(function() {
 	
 	$("#removeCart").click(function() {
-		if ( $("input[name='checkBox']:checked").size() == 0) {
+		if ( $("input[name='checkBox']:checked").length == 0) {
 		      alert("삭제할 상품을 선택하세요.");
 		      return;
 		}
 		else{
-			var rowData = [];
 			var checkArr = []; 
 			var checkbox = $("input[name='checkBox']:checked");
 			
 			//테이블 행의 모든 값 가져오기
-			checkbox.each(function(i){   			    	
-		    	var tr = checkbox.parent().parent().eq(i);
-			    var td = tr.children();
-			    rowData.push(tr.text());
-			    
-			    var cartNo = td.eq(1).text();
-
+			checkbox.each(function(i){  
+				var cartNo = $(this).val();
 		        checkArr.push(cartNo);
 		    });
 
@@ -66,7 +46,7 @@ function orderProduct(){
 		
 		var loginId = $('#id').val();
 		
-		if ( $("input[name='checkBox']:checked").size() == 0) {
+		if ( $("input[name='checkBox']:checked").length == 0) {
 		      alert("주문할 상품을 선택하세요.");
 		      return;
 		}
@@ -78,37 +58,46 @@ function orderProduct(){
 		   	}		
 		}else{
 			
-			var rowData = [];
 			var checkArr = []; 
 			var checkbox = $("input[name='checkBox']:checked");
-			
-			//테이블 행의 모든 값 가져오기
-			checkbox.each(function(i){   			    	
-		    	var tr = checkbox.parent().parent().eq(i);
-			    var td = tr.children();
-			    rowData.push(tr.text());
-			    
-			    var cartNo = td.eq(1).text();
-		        var productNo = td.eq(2).text();
-		        var productName = td.eq(3).text();
-		        var productColor = td.eq(4).text();
-		        var productSize = td.eq(5).text();
-		        var productPrice = td.eq(6).text();
+
+			$("input[name='checkBox']:checked").each(function(){
+				var cartNo = $('#cartNo'+$(this).val()).val();
+		        var productNo = $('#productNo'+$(this).val()).val();
+		        var thumbnailName = $('#thumbnailName'+$(this).val()).val();
+		        var productName = $('#productName'+$(this).val()).val();
+		        var productColor = $('#productColor'+$(this).val()).val();
+		        var productSize = $('#productSize'+$(this).val()).val();
+		        var productPrice = $('#productPrice'+$(this).val()).val();
 		        
 		        checkArr.push(cartNo);
 		        checkArr.push(productNo);
-		        checkArr.push(productName);
+		        checkArr.push(thumbnailName);		        
+		        checkArr.push(productName);	        
 		        checkArr.push(productColor);
 		        checkArr.push(productSize);
 		        checkArr.push(productPrice);
-			});	
+		    });
 			
-			$.form({
-				"action": "${pageContext.request.contextPath}/member/orderPages.do",
-				"type":"POST",
-				"data": {"productList" : checkArr, "loginId" : loginId},
-				"dataType":"text"
-			}).submit();
+			alert(checkArr);
+		    
+		    var $form = $('<form></form>');
+		    $form.attr('action', '${pageContext.request.contextPath}/member/orderPages.do');
+		    $form.attr('method', 'post');
+		    $form.appendTo('body');
+		    
+		    var index = 1;
+		    
+		    var input = '<input value="'+loginId+'" name="memberId" type="hidden">';
+		    $form.append(input);
+		    
+		    for (var i = 0; i < checkArr.length; i++) {
+		    	var input = '<input value="'+checkArr[i]+'" name="productInfo'+index+'" type="hidden">';
+		    	$form.append(input);
+		    	index++;
+			}
+		    
+		    $form.submit();
 		}
 	});
 };
@@ -116,15 +105,25 @@ function orderProduct(){
 </script>
 </head>
 <body>
-<%-- <jsp:include page="include/loginForm.jsp" flush="false"/><br> --%>
-<input type="hidden" id="count" name="count" value="${sessionScope.size()}">
+<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
+<div>
+<h1>CART</h1><hr>
+</div>
+<c:if test="${empty sessionScope.cart}">
+	<center>
+		<div>
+			장바구니에 상품이 없습니다.
+		</div>
+	</center>
+</c:if>
 <c:if test="${not empty sessionScope.cart}">
-		<table border="1" width="50%">
+<input type="hidden" id="count" name="count" value="${sessionScope.size()}">
+		<table class="table table-hover">
 			<thead>
 			<tr>
 				<th></th>
 				<th>번호</th>
-				<th>상품 번호</th>
+				<th>이미지</th>
 				<th>이름</th>
 				<th>색상</th>
 				<th>사이즈</th>
@@ -135,21 +134,40 @@ function orderProduct(){
 				<c:forEach var="cartList" items="${sessionScope.cart}" varStatus="st">
 					<tr>
 						<td>
-							<input type="checkBox" id="checkBox" name="checkBox">
+							<input type="checkBox" id="checkBox" name="checkBox" value="${cartList.cartNo}">
 						</td>
-						<td>${cartList.cartNo}</td>
-						<td>${cartList.productNo}</td>
-						<td>${cartList.productName}</td>
-						<td>${cartList.productColor}</td>
-						<td>${cartList.productSize}</td>
-						<td>${cartList.productPrice}</td>
+						<td>
+							<input class="textTrans" type="text" id="cartNo${cartList.cartNo}" name="cartProduct" size="2" value="${cartList.cartNo}" readOnly="readOnly">
+						</td>
+						<td>
+							<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${cartList.productNo}">
+								<img src="<c:url value='/image/thumbnail/${cartList.thumbnailName}'/>"/>
+							</a>
+							<input type="hidden" id="productNo${cartList.cartNo}" name="cartProduct" value="${cartList.productNo}">
+							<input type="hidden" id="thumbnailName${cartList.cartNo}" name="cartProduct" value="${cartList.thumbnailName}">
+						</td>
+						<td>
+							<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${cartList.productNo}">
+								${cartList.productName}
+							</a>
+							<input type="hidden" id="productName${cartList.cartNo}" name="cartProduct" value="${cartList.productName}">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productColor${cartList.cartNo}" name="cartProduct" value="${cartList.productColor}" readOnly="readOnly">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productSize${cartList.cartNo}" name="cartProduct" value="${cartList.productSize}" readOnly="readOnly">
+						</td>
+						<td>
+							<input class="textTrans" type="text" id="productPrice${cartList.cartNo}" name="cartProduct" value="${cartList.productPrice}" readOnly="readOnly">
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
-		
+		<input class="btn" type="button" id="removeCart" name="removeCart" value="상품삭제">
+		<input class="btn btn-dark" type="button" id="buyB" name="buyB" value="상품주문" onclick="orderProduct();">
 </c:if>
-	<input type="button" id="removeCart" name="removeCart" value="상품삭제">
-	<input type="button" id="buyB" name="buyB" value="상품주문" onclick="orderProduct();">
+</div>
 </body>
 </html>

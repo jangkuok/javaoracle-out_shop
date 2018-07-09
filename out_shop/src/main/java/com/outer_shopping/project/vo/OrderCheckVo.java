@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 public class OrderCheckVo implements Serializable{
 	
 	private int orderNo;
+	private String thumbnailName;
+	private String orderName;
 	private int totalPrice;
 	private String handing = "결제 대기중";
 	private String memberId;
@@ -25,9 +27,11 @@ public class OrderCheckVo implements Serializable{
 	public OrderCheckVo() {}
 
 
-	public OrderCheckVo(int orderNo, int totalPrice, String handing, String memberId, String address, String phoneNum,
-			String email, String message, Date orderDate) {
+	public OrderCheckVo(int orderNo, String thumbnailName, String orderName, int totalPrice, String handing,
+			String memberId, String address, String phoneNum, String email, String message, Date orderDate) {
 		this.orderNo = orderNo;
+		this.thumbnailName = thumbnailName;
+		this.orderName = orderName;
 		this.totalPrice = totalPrice;
 		this.handing = handing;
 		this.memberId = memberId;
@@ -39,9 +43,12 @@ public class OrderCheckVo implements Serializable{
 	}
 
 
-	public OrderCheckVo(int orderNo, int totalPrice, String handing, String memberId, String address, String phoneNum,
-			String email, String message, Date orderDate, List<OrderProductVo> productList) {
+	public OrderCheckVo(int orderNo, String thumbnailName, String orderName, int totalPrice, String handing,
+			String memberId, String address, String phoneNum, String email, String message, Date orderDate,
+			List<OrderProductVo> productList) {
 		this.orderNo = orderNo;
+		this.thumbnailName = thumbnailName;
+		this.orderName = orderName;
 		this.totalPrice = totalPrice;
 		this.handing = handing;
 		this.memberId = memberId;
@@ -56,9 +63,10 @@ public class OrderCheckVo implements Serializable{
 
 	@Override
 	public String toString() {
-		return "OrderCheckVo [orderNo=" + orderNo + ", totalPrice=" + totalPrice + ", handing=" + handing
-				+ ", memberId=" + memberId + ", address=" + address + ", phoneNum=" + phoneNum + ", email=" + email
-				+ ", message=" + message + ", orderDate=" + orderDate + ", productList=" + productList + "]";
+		return "OrderCheckVo [orderNo=" + orderNo + ", thumbnailName=" + thumbnailName + ", orderName=" + orderName
+				+ ", totalPrice=" + totalPrice + ", handing=" + handing + ", memberId=" + memberId + ", address="
+				+ address + ", phoneNum=" + phoneNum + ", email=" + email + ", message=" + message + ", orderDate="
+				+ orderDate + ", productList=" + productList + "]";
 	}
 
 
@@ -69,6 +77,26 @@ public class OrderCheckVo implements Serializable{
 
 	public void setOrderNo(int orderNo) {
 		this.orderNo = orderNo;
+	}
+
+
+	public String getThumbnailName() {
+		return thumbnailName;
+	}
+
+
+	public void setThumbnailName(String thumbnailName) {
+		this.thumbnailName = thumbnailName;
+	}
+
+
+	public String getOrderName() {
+		return orderName;
+	}
+
+
+	public void setOrderName(String orderName) {
+		this.orderName = orderName;
 	}
 
 
@@ -172,9 +200,11 @@ public class OrderCheckVo implements Serializable{
 		result = prime * result + ((memberId == null) ? 0 : memberId.hashCode());
 		result = prime * result + ((message == null) ? 0 : message.hashCode());
 		result = prime * result + ((orderDate == null) ? 0 : orderDate.hashCode());
+		result = prime * result + ((orderName == null) ? 0 : orderName.hashCode());
 		result = prime * result + orderNo;
 		result = prime * result + ((phoneNum == null) ? 0 : phoneNum.hashCode());
 		result = prime * result + ((productList == null) ? 0 : productList.hashCode());
+		result = prime * result + ((thumbnailName == null) ? 0 : thumbnailName.hashCode());
 		result = prime * result + totalPrice;
 		return result;
 	}
@@ -182,81 +212,70 @@ public class OrderCheckVo implements Serializable{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (!(obj instanceof OrderCheckVo)) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		OrderCheckVo other = (OrderCheckVo) obj;
 		if (address == null) {
-			if (other.address != null) {
+			if (other.address != null)
 				return false;
-			}
-		} else if (!address.equals(other.address)) {
+		} else if (!address.equals(other.address))
 			return false;
-		}
 		if (email == null) {
-			if (other.email != null) {
+			if (other.email != null)
 				return false;
-			}
-		} else if (!email.equals(other.email)) {
+		} else if (!email.equals(other.email))
 			return false;
-		}
 		if (handing == null) {
-			if (other.handing != null) {
+			if (other.handing != null)
 				return false;
-			}
-		} else if (!handing.equals(other.handing)) {
+		} else if (!handing.equals(other.handing))
 			return false;
-		}
 		if (memberId == null) {
-			if (other.memberId != null) {
+			if (other.memberId != null)
 				return false;
-			}
-		} else if (!memberId.equals(other.memberId)) {
+		} else if (!memberId.equals(other.memberId))
 			return false;
-		}
 		if (message == null) {
-			if (other.message != null) {
+			if (other.message != null)
 				return false;
-			}
-		} else if (!message.equals(other.message)) {
+		} else if (!message.equals(other.message))
 			return false;
-		}
 		if (orderDate == null) {
-			if (other.orderDate != null) {
+			if (other.orderDate != null)
 				return false;
-			}
-		} else if (!orderDate.equals(other.orderDate)) {
+		} else if (!orderDate.equals(other.orderDate))
 			return false;
-		}
-		if (orderNo != other.orderNo) {
+		if (orderName == null) {
+			if (other.orderName != null)
+				return false;
+		} else if (!orderName.equals(other.orderName))
 			return false;
-		}
+		if (orderNo != other.orderNo)
+			return false;
 		if (phoneNum == null) {
-			if (other.phoneNum != null) {
+			if (other.phoneNum != null)
 				return false;
-			}
-		} else if (!phoneNum.equals(other.phoneNum)) {
+		} else if (!phoneNum.equals(other.phoneNum))
 			return false;
-		}
 		if (productList == null) {
-			if (other.productList != null) {
+			if (other.productList != null)
 				return false;
-			}
-		} else if (!productList.equals(other.productList)) {
+		} else if (!productList.equals(other.productList))
 			return false;
-		}
-		if (totalPrice != other.totalPrice) {
+		if (thumbnailName == null) {
+			if (other.thumbnailName != null)
+				return false;
+		} else if (!thumbnailName.equals(other.thumbnailName))
 			return false;
-		}
+		if (totalPrice != other.totalPrice)
+			return false;
 		return true;
 	}
 
-
+	
 		
 }
