@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.outer_shopping.project.dao.ReviewDao;
+import com.outer_shopping.project.service.ReviewService;
 import com.outer_shopping.project.service.WishListSerice;
 import com.outer_shopping.project.vo.WishListVo;
 
@@ -25,6 +27,7 @@ public class WishListServiceJUnitTest {
 
 	@Autowired
 	private WishListSerice service;
+	
 	
  	/**
  	 * 관심상품 등록 TEST

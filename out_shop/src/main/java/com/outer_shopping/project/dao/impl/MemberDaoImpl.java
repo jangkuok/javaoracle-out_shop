@@ -67,20 +67,6 @@ public class MemberDaoImpl implements MemberDao {
 			System.out.println("insertMember(dao) : ");
 			e.printStackTrace();
 		}
-		/*
-		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-			
-			@Override
-			protected void doInTransactionWithoutResult(TransactionStatus status) {
-				try {
-
-					session.insert(makeSqlId("insertMember"),member);
-				} catch (Exception e) {
-					System.out.println("insertMember : ");
-				}
-				
-			}
-		});*/
 	}
 
 	/**
@@ -96,6 +82,20 @@ public class MemberDaoImpl implements MemberDao {
 		}
 	}
 	
+	
+	/**
+	 * 회원 주소 수정
+	 */
+	@Override
+	public void updateMemberAddress(MemberVo member) {
+		try {
+			session.update(makeSqlId("updateMemberAddress"),member);
+		} catch (Exception e) {
+			System.out.println("updateMemberAddress(dao) : ");
+			e.printStackTrace();
+		}		
+	}
+
 	/**
 	 * 회원정보 삭제
 	 */

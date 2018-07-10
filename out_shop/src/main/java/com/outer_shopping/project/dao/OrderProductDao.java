@@ -38,14 +38,14 @@ public interface OrderProductDao {
 	 * @param endIndex
 	 * @return
 	 */
-	List<OrderCheckVo> selectOrderList(int startIndex, int endIndex);
+	List<OrderCheckVo> selectOrderList(String items, int startIndex, int endIndex);
 	
 	/**
 	 * 해당 회원 주문 목록
-	 * @param memberId
+	 * @param memberId, items, startIndex, endIndex
 	 * @return
 	 */
-	List<OrderCheckVo> selectMemberOrderList(String memberId,int startIndex, int endIndex); 
+	List<OrderCheckVo> selectMemberOrderList(String memberId, String items, int startIndex, int endIndex); 
 	
 	/**
 	 * 주문 관련 상품 목록 

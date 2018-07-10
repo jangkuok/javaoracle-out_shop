@@ -22,7 +22,8 @@ public class LoginFailHandler implements AuthenticationFailureHandler{
 		
 		request.setAttribute("error",errorMessage);
 		
-		response.sendRedirect(request.getContextPath()+"/?"+errorMessage);
+		response.sendRedirect(request.getContextPath() + "/loginFormPage.do"+"?message="+errorMessage);
+
 	}
 	
 }

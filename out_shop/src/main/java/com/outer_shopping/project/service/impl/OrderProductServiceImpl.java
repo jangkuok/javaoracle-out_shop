@@ -67,7 +67,7 @@ public class OrderProductServiceImpl implements OrderProductService {
 	 * 전체 주문 목록
 	 */
 	@Override
-	public Map<String, Object> getOrderList(int page) {
+	public Map<String, Object> getOrderList(String items, int page) {
 		List<OrderCheckVo> list = new ArrayList<>();
 		
 		HashMap<String, Object> map = new HashMap<>();
@@ -76,7 +76,7 @@ public class OrderProductServiceImpl implements OrderProductService {
 			int totalCount = dao.selectOrderListCount();
 			PagingBean pageBean = new PagingBean(totalCount, page);
 			map.put("pageBean", pageBean);
-			list = dao.selectOrderList(pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());
+			list = dao.selectOrderList(items,pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());
 			map.put("list", list);
 			
 		}catch (Exception e) {
@@ -91,7 +91,7 @@ public class OrderProductServiceImpl implements OrderProductService {
 	 * 회원별 주문 목록
 	 */
 	@Override
-	public Map<String, Object> getMemberOrderList(String memberId,int page) {
+	public Map<String, Object> getMemberOrderList(String memberId, String items, int page) {
 		
 		List<OrderCheckVo> list = new ArrayList<>();
 		
@@ -101,7 +101,7 @@ public class OrderProductServiceImpl implements OrderProductService {
 			int totalCount = dao.selectOrderListCount();
 			PagingBean pageBean = new PagingBean(totalCount, page);
 			map.put("pageBean", pageBean);
-			list = dao.selectMemberOrderList(memberId,pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());
+			list = dao.selectMemberOrderList(memberId, items, pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());
 			map.put("list", list);
 			
 		}catch (Exception e) {

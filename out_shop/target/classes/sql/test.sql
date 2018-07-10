@@ -122,4 +122,8 @@ FROM OUTER_TB
 WHERE OUTER_TYPE LIKE '자켓'
 ORDER BY OUTER_DATE DESC
 
+	select *
+	from ORDER_CHECK
+	WHERE to_char(ORDER_DATE,'yyyy-mm-dd') <=	to_char(sysdate,'yyyy-mm-dd') 
+	AND to_char(ORDER_DATE,'yyyy-mm-dd') >= to_char(add_months(sysdate,-1),'yyyy-mm-dd')
 	

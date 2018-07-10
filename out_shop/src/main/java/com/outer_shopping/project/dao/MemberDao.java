@@ -36,6 +36,12 @@ public interface MemberDao {
 	 */
 	void updateMember(MemberVo member);
 	
+	/**
+	 * 회원 정보 주소 갱신(수정)
+	 * @param member
+	 */
+	void updateMemberAddress(MemberVo member);
+	
 
 	/**
 	 * 개별 회원정보 삭제

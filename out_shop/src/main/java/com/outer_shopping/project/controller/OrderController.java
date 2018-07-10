@@ -58,6 +58,7 @@ public class OrderController {
 			list.add(cart);
 		}	
 		
+		model.addAttribute("memberVo", memberService.viewMember(map.get("memberId").toString()));
 		model.addAttribute("orderList", list);
 		
 		logger.info("############# 주문 페이지 이동 #############");
@@ -105,6 +106,8 @@ public class OrderController {
 		
 		//주문자 정보 저장
 		OrderCheckVo check = new OrderCheckVo();
+		
+		check.setMemberName(map.get("deliveryInfoArr1").toString());
 		check.setThumbnailName(map.get("productInfo3").toString());
 		
 		if(productCount == 1) {
@@ -113,14 +116,14 @@ public class OrderController {
 			check.setOrderName(map.get("productInfo4").toString() + " 외" + (productCount - 1));
 		}
 		check.setMemberId(map.get("memberId").toString());
-		check.setAddress(map.get("deliveryInfoArr1").toString() + " " + map.get("deliveryInfoArr2").toString() + " " + map.get("deliveryInfoArr3").toString());
-		check.setPhoneNum(map.get("deliveryInfoArr4").toString());
-		check.setEmail(map.get("deliveryInfoArr5").toString());	
-		check.setTotalPrice(Integer.parseInt(map.get("deliveryInfoArr6").toString()));	
-		if(map.get("deliveryInfoArr7").toString().equals("")) {
+		check.setAddress(map.get("deliveryInfoArr2").toString() + " " + map.get("deliveryInfoArr3").toString() + " " + map.get("deliveryInfoArr4").toString());
+		check.setPhoneNum(map.get("deliveryInfoArr5").toString());
+		check.setEmail(map.get("deliveryInfoArr6").toString());	
+		check.setTotalPrice(Integer.parseInt(map.get("deliveryInfoArr7").toString()));	
+		if(map.get("deliveryInfoArr8").toString().equals("")) {
 			check.setMessage("");
 		}else {
-			check.setMessage(map.get("deliveryInfoArr7").toString());
+			check.setMessage(map.get("deliveryInfoArr8").toString());
 		}
 		
 
@@ -135,7 +138,6 @@ public class OrderController {
 		for (int i = 2; i < count; i++) {
 
 			OrderProductVo product = new OrderProductVo();
-
 			product.setOuterNo(Integer.parseInt(map.get("productInfo"+i).toString())); i++;
 			product.setThumbnailName(map.get("productInfo"+i).toString()); i++;
 			product.setProductName(map.get("productInfo"+i).toString()); i++;

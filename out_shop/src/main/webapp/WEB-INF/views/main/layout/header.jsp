@@ -33,7 +33,7 @@
 	              <a class="nav-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?items=Cardigan">Cardigan</a>
 	            </li>
 				<li class="nav-item">
-	              <a class="nav-link" href="#">Review</a> 
+	              <a class="nav-link" href="${pageContext.request.contextPath}/reviewPage.do">Review</a> 
 	            </li>
 	            <li class="nav-item">
 	              <a class="nav-link" href="${pageContext.request.contextPath}/outer/cartPage.do">Cart</a> 
@@ -64,13 +64,16 @@
             <!-- 관리자 로그인 할 경우 -->
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<li class="nav-item">
+	               <a class="nav-link" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=전체보기">주문관리</a>
+	            </li>
+				<li class="nav-item">
 	               <a class="nav-link" href="${pageContext.request.contextPath}/admin/outerForm.do">상품등록</a>
 	            </li>
 	            <li class="nav-item">
 	              <a class="nav-link" href="#">게시판 관리</a>
 	            </li>			
 	            <li class="nav-item">
-	              <a class="nav-link" href="${pageContext.request.contextPath}/logoutButton.do">Logout</a>
+	              <a class="nav-link" href="${pageContext.request.contextPath}/logoutButton.do">로그아웃</a>
 	            </li>	
 			</sec:authorize>       
           </ul>

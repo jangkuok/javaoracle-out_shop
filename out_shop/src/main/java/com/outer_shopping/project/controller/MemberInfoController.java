@@ -104,6 +104,29 @@ public class MemberInfoController {
 			
 		return mv;
 	}	
+	
+	/**
+	 * 회원주소 수정하기
+	 */
+	@RequestMapping(value = "/modifyAddress.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String modifyAddress(Model model,@RequestParam(value="memberId",required=false) String memberId,
+			@RequestParam(value="zipcode",required=false) String zipcode,
+			@RequestParam(value="address",required=false) String address,
+			@RequestParam(value="address2",required=false) String address2) {
+	
+		MemberVo member = new MemberVo();
+		
+		member.setId(memberId);
+		member.setZipcode(zipcode);
+		member.setAddress(address);
+		member.setAddress2(address2);
+		
+		service.modifyMemberAddress(member);
+			
+		return "변경완료";
+	}
+	
 	/**
 	 * 회원정보 삭제
 	 */

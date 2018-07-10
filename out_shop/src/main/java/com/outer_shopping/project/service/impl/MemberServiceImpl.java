@@ -79,6 +79,18 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
+	/**
+	 * 회원 주소 정보 수정
+	 */
+	@Override
+	public void modifyMemberAddress(MemberVo memberVo) {
+		try {
+			dao.updateMemberAddress(memberVo);
+		} catch (Exception e) {
+			System.out.println("modifyMemberAddress(service) : ");
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * 회원 탈퇴

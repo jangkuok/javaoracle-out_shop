@@ -96,8 +96,6 @@ $(document).ready(function() {
 			productArr.push($(this).val());
 	    });
 		
-		alert(productArr);
-		
 		//주문 정보 배열에 넣기
 		var deliveryInfoArr = []; 
 		
@@ -145,12 +143,26 @@ $(document).ready(function() {
 			index2++;
 		}
 		   
-		$form.submit();
+		$('input[name="deliveryInfo"]').each(function(){
+			var input = $(this).val();
+			if(input == ""){
+				alert("정보를 입력하시오");
+				return;		
+			}
+		});
+		
+		if(productListCount == '0'){
+			alert("상품이 없습니다.");
+			return;
+		}else{
+			$form.submit();	
+		}
+		
 	});
 	
 });
 // 도로명 주소 검색
-function getPostcodeAddress() {
+function getPostcodeAddress(i) {
     new daum.Postcode({
         oncomplete: function(data) {
             // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
@@ -192,13 +204,42 @@ function getPostcodeAddress() {
 
             // 3단계 : 해당 필드들에 정보 입력
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            document.getElementById('zipcode').value = data.zonecode; //5자리 새우편번호 사용
-            document.getElementById('address').value = fullAddr;
+            document.getElementById('zipcode'+i).value = data.zonecode; //5자리 새우편번호 사용
+            document.getElementById('address'+i).value = fullAddr;
 
             // 커서를 상세주소 필드로 이동한다.
-            document.getElementById('address2').focus();
+            document.getElementById('address2'+i).focus();
+            
+
+            if(i == '1'){
+            	 document.getElementById('zipcode2').value = data.zonecode;
+                 document.getElementById('address2').value = fullAddr;
+                 document.getElementById('address21').value = "";
+                 document.getElementById('address22').value = "";
+            }
         }
     }).open();
+    
+    $('#address21').blur(function(){
+	   	 if(confirm('변경사항된 주소을 저장 하겠습니까?')) { 
+	         $.ajax
+	 		({		
+	 			"url":"${pageContext.request.contextPath}/member/modifyAddress.do", 
+	 			"type":"POST",
+	 			"data":{"memberId":$('#memberId').val(),"zipcode":$("#zipcode1").val(),"address":$("#address1").val(),"address2":$("#address21").val()},
+	 			"dataType":"json",
+	 			"success":function(data)
+	 			{
+	 				document.getElementById('address22').value = document.getElementById('address21').value;
+	 				if(data = "변경완료"){
+	 					alert("주소가 변경 되었습니다.");	
+	 				}
+	 			}			
+	 		});
+	     }else { 
+	     	return;
+	     }
+    });
 }
 </script> 
 <style>
@@ -289,24 +330,36 @@ function getPostcodeAddress() {
 				<th width="20%">주문자*</th>
 				<td width="80%">
 					<div class="col-sm-5">
-						<input class="form-control" type="text" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
+						<input class="form-control" type="text" id="" name="" value="${memberVo.name}">
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>주소*</th>
 				<td id="addressMagin">
-					<div class="col-sm-3">
-						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.zipcode}">
+					<div class="row">
+						<div class="col-sm-2" style="float:left;">
+							<input type="text" class="form-control" id="zipcode1" name="" value="${memberVo.zipcode}" readOnly="readOnly">
+						</div>
+						<c:if test="${memberVo.zipcode == null}">
+							<div class="col-sm-3" style="float:left;">
+								<input class="btn btn-dark" type="button" value="주소 검색" onClick="getPostcodeAddress('1')">
+							</div>
+						</c:if>
+						<c:if test="${memberVo.zipcode != null }">
+							<div class="col-sm-3" style="float:left;">
+								<input class="btn btn-dark" type="button" value="주소 변경" onClick="getPostcodeAddress('1')">
+							</div>
+						</c:if>
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address}">
+						<input type="text" class="form-control" id="address1" name="" value="${memberVo.address}" readOnly="readOnly"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						기본주소
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address2}">
+						<input type="text" class="form-control" id="address21" name="" value="${memberVo.address2}"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						나머지주소
@@ -317,7 +370,7 @@ function getPostcodeAddress() {
 				<th>휴대전화*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.phoneNum}">
+						<input type="text" class="form-control" id="" name="" value="${memberVo.phoneNum}">
 					</div>
 				</td>
 			</tr>
@@ -325,7 +378,7 @@ function getPostcodeAddress() {
 				<th>이메일*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.email}">
+						<input type="text" class="form-control" id="" name="" value="${memberVo.email}">
 					</div>
 				</td>
 			</tr>
@@ -334,7 +387,7 @@ function getPostcodeAddress() {
 <hr>	
 	<div>
 		배송정보
-		<input type="hidden" id="memberId" name="memberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
+		<input type="hidden" id="memberId" name="memberId" value="${memberVo.id}">
 		<table class="table table-hover">
 			<tr>
 				<th width="20%">배송지 선택</th>
@@ -347,7 +400,7 @@ function getPostcodeAddress() {
 				<th>주문자*</th>
 				<td>
 					<div class="col-sm-5">
-						<input type="text" class="form-control" id="name" name="name" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
+						<input type="text" class="form-control" id="name" name="deliveryInfo" value="${memberVo.name}">
 					</div>
 				</td>
 			</tr>
@@ -355,19 +408,19 @@ function getPostcodeAddress() {
 				<th>주소*</th>
 				<td id="addressMagin2">
 					<div class="col-sm-2" style="float:left;">
-						<input type="text" class="form-control" id="zipcode" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.zipcode}">
+						<input type="text" class="form-control" id="zipcode2" name="deliveryInfo" value="${memberVo.zipcode}" readOnly="readOnly">
 					</div>
 					<div class="col-sm-3" style="float:left;">
-						<input class="btn btn-dark" type="button" value="주소 검색" onClick="getPostcodeAddress()">
+						<input class="btn btn-dark" type="button" value="주소 검색" onClick="getPostcodeAddress('2')">
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address}"> 
+						<input type="text" class="form-control" id="address2" name="deliveryInfo" value="${memberVo.address}" readOnly="readOnly"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						기본주소
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address2" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address2}"> 
+						<input type="text" class="form-control" id="address22" name="deliveryInfo" value="${memberVo.address2}"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						나머지주소
@@ -378,7 +431,7 @@ function getPostcodeAddress() {
 				<th>휴대전화*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="phoneNum" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.phoneNum}">
+						<input type="text" class="form-control" id="phoneNum" name="deliveryInfo" value="${memberVo.phoneNum}">
 					</div>
 				</td>
 			</tr>
@@ -386,7 +439,7 @@ function getPostcodeAddress() {
 				<th>이메일*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="email" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.email}">
+						<input type="text" class="form-control" id="email" name="deliveryInfo" value="${memberVo.email}">
 					</div>
 				</td>
 			</tr>

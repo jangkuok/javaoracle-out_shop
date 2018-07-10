@@ -21,6 +21,7 @@
 					login-processing-url="/loginForm.do"
 					username-parameter="loginId"
 					password-parameter="loginPw"
+					
 					authentication-failure-handler-ref="loginFailHandler"/> 
 					
 		<!-- 로그아웃관련설정 -->		

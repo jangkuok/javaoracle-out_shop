@@ -30,17 +30,17 @@ public interface OrderProductService {
 	
 	/**
 	 * 전체 주문 목록	 
-	 * @param page
+	 * @param items, page
 	 * @return
 	 */
-	Map<String, Object> getOrderList(int page);
+	Map<String, Object> getOrderList(String items, int page);
 	
 	/**
 	 * 해당 회원 주문 목록
 	 * @param memberId, page
 	 * @return
 	 */
-	Map<String, Object> getMemberOrderList(String memberIdm,int page); 
+	Map<String, Object> getMemberOrderList(String memberId, String items, int page); 
 	
 	/**
 	 * 주문 관련 상품 목록 

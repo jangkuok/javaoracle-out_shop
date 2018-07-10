@@ -92,18 +92,19 @@ public class OrderProductDaoImpl implements OrderProductDao {
 	 * 전체 주문 목록
 	 */
 	@Override
-	public List<OrderCheckVo> selectOrderList(int startIndex, int endIndex) {
+	public List<OrderCheckVo> selectOrderList(String items, int startIndex, int endIndex) {
 		List<OrderCheckVo> list = new ArrayList<>();
 		
 		try {
 			Map<String, Object> input = new HashMap<String, Object>();
+			input.put("items",items);
 			input.put("startIndex",startIndex);
 			input.put("endIndex",endIndex);
 		
 			
-			list = session.selectList(makeSqlId("selectMemberOrderList"), input);
+			list = session.selectList(makeSqlId("selectOrderList"), input);
 		}catch (Exception e) {
-			System.out.println("selectMemberOrderList(dao) : ");
+			System.out.println("selectOrderList(dao) : ");
 			e.printStackTrace();
 		}	
 		
@@ -114,13 +115,14 @@ public class OrderProductDaoImpl implements OrderProductDao {
 	 * 해당 회원 주문 목록
 	 */
 	@Override
-	public List<OrderCheckVo> selectMemberOrderList(String memberId, int startIndex, int endIndex) {
+	public List<OrderCheckVo> selectMemberOrderList(String memberId, String items, int startIndex, int endIndex) {
 		
 		List<OrderCheckVo> list = new ArrayList<>();
 		
 		try {
 			Map<String, Object> input = new HashMap<String, Object>();
 			input.put("memberId",memberId);
+			input.put("items",items);
 			input.put("startIndex",startIndex);
 			input.put("endIndex",endIndex);
 		

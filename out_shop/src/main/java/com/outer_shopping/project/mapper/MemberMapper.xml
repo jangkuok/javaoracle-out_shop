@@ -68,13 +68,7 @@
 		<include refid="select-member-sql"/>
 		WHERE MEMBER_ID=#{id} AND PW=#{pw}
 	</select>
-	
-	<!-- 회원 정보 SQL -->
-	<select id="selectMember" parameterType="String" resultMap="member-resultmap">
-		<include refid="select-member-sql"/>
-		WHERE MEMBER_ID=#{value}
-	</select>
-	
+
 	<!-- 회원 수정 SQL -->
 	<update id="updateMember" parameterType="com.outer_shopping.project.vo.MemberVo">
 		UPDATE 	MEMBER 
@@ -91,8 +85,26 @@
 		WHERE	MEMBER_ID = #{id}
 	</update>
 	
+	<!-- 회원 주소 수정 SQL -->
+	<update id="updateMemberAddress" parameterType="com.outer_shopping.project.vo.MemberVo">
+		UPDATE 	MEMBER 
+		SET		ZIPCODE = #{zipcode},
+				ADDRESS = #{address},
+				ADDRESS2 = #{address2}
+		WHERE	MEMBER_ID = #{id}
+	</update>
+	
+	
 	<!-- 회원 탈퇴 SQL -->
 	<delete id="deleteMember" parameterType="String">
 		DELETE FROM MEMBER WHERE MEMBER_ID = #{id}
 	</delete>
+	
+	<!-- 회원 정보 SQL -->
+	<select id="selectMember" parameterType="String" resultMap="member-resultmap">
+		<include refid="select-member-sql"/>
+		WHERE MEMBER_ID=#{value}
+	</select>
+	
+	
 </mapper>

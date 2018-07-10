@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 public class OrderCheckVo implements Serializable{
 	
 	private int orderNo;
+	private String memberName;
 	private String thumbnailName;
 	private String orderName;
 	private int totalPrice;
@@ -27,9 +28,11 @@ public class OrderCheckVo implements Serializable{
 	public OrderCheckVo() {}
 
 
-	public OrderCheckVo(int orderNo, String thumbnailName, String orderName, int totalPrice, String handing,
-			String memberId, String address, String phoneNum, String email, String message, Date orderDate) {
+	public OrderCheckVo(int orderNo, String memberName, String thumbnailName, String orderName, int totalPrice,
+			String handing, String memberId, String address, String phoneNum, String email, String message,
+			Date orderDate) {
 		this.orderNo = orderNo;
+		this.memberName = memberName;
 		this.thumbnailName = thumbnailName;
 		this.orderName = orderName;
 		this.totalPrice = totalPrice;
@@ -43,10 +46,11 @@ public class OrderCheckVo implements Serializable{
 	}
 
 
-	public OrderCheckVo(int orderNo, String thumbnailName, String orderName, int totalPrice, String handing,
-			String memberId, String address, String phoneNum, String email, String message, Date orderDate,
-			List<OrderProductVo> productList) {
+	public OrderCheckVo(int orderNo, String memberName, String thumbnailName, String orderName, int totalPrice,
+			String handing, String memberId, String address, String phoneNum, String email, String message,
+			Date orderDate, List<OrderProductVo> productList) {
 		this.orderNo = orderNo;
+		this.memberName = memberName;
 		this.thumbnailName = thumbnailName;
 		this.orderName = orderName;
 		this.totalPrice = totalPrice;
@@ -63,10 +67,10 @@ public class OrderCheckVo implements Serializable{
 
 	@Override
 	public String toString() {
-		return "OrderCheckVo [orderNo=" + orderNo + ", thumbnailName=" + thumbnailName + ", orderName=" + orderName
-				+ ", totalPrice=" + totalPrice + ", handing=" + handing + ", memberId=" + memberId + ", address="
-				+ address + ", phoneNum=" + phoneNum + ", email=" + email + ", message=" + message + ", orderDate="
-				+ orderDate + ", productList=" + productList + "]";
+		return "OrderCheckVo [orderNo=" + orderNo + ", memberName=" + memberName + ", thumbnailName=" + thumbnailName
+				+ ", orderName=" + orderName + ", totalPrice=" + totalPrice + ", handing=" + handing + ", memberId="
+				+ memberId + ", address=" + address + ", phoneNum=" + phoneNum + ", email=" + email + ", message="
+				+ message + ", orderDate=" + orderDate + ", productList=" + productList + "]";
 	}
 
 
@@ -77,6 +81,16 @@ public class OrderCheckVo implements Serializable{
 
 	public void setOrderNo(int orderNo) {
 		this.orderNo = orderNo;
+	}
+
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
 	}
 
 
@@ -198,6 +212,7 @@ public class OrderCheckVo implements Serializable{
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((handing == null) ? 0 : handing.hashCode());
 		result = prime * result + ((memberId == null) ? 0 : memberId.hashCode());
+		result = prime * result + ((memberName == null) ? 0 : memberName.hashCode());
 		result = prime * result + ((message == null) ? 0 : message.hashCode());
 		result = prime * result + ((orderDate == null) ? 0 : orderDate.hashCode());
 		result = prime * result + ((orderName == null) ? 0 : orderName.hashCode());
@@ -239,6 +254,11 @@ public class OrderCheckVo implements Serializable{
 				return false;
 		} else if (!memberId.equals(other.memberId))
 			return false;
+		if (memberName == null) {
+			if (other.memberName != null)
+				return false;
+		} else if (!memberName.equals(other.memberName))
+			return false;
 		if (message == null) {
 			if (other.message != null)
 				return false;
@@ -276,6 +296,8 @@ public class OrderCheckVo implements Serializable{
 		return true;
 	}
 
+
+	
 	
 		
 }

@@ -19,6 +19,11 @@
 	background-color:transparent;
 	border:0 solid black;
 }
+  .my-hr3 {
+    border: 0;
+    height: 3px;
+    background: #ccc;
+  }
 </style>
 </head>
 <body>
@@ -30,6 +35,8 @@
 <!-- Bootstrap core JavaScript -->
 <script src="${pageContext.request.contextPath}/bootstrap/vendor/jquery/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
 
 </body>
 </html>
