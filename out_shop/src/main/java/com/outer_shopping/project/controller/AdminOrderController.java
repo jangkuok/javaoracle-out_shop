@@ -68,7 +68,7 @@ public class AdminOrderController {
 	 */
 	@RequestMapping(value = "/haningUpdateOrder.do", method = RequestMethod.POST)
 	public String haningUpdateOrder(Model model,@RequestParam("orderNo") int orderNo,
-			@RequestParam(value="items",defaultValue="all") String items,
+			@RequestParam(value="items") String items,
 			@RequestParam(value="handing") String handing, @RequestParam(defaultValue="1") int page) {
 		
 		orderService.handingUpdateOrder(orderNo,handing);

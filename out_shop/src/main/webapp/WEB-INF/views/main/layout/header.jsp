@@ -33,7 +33,7 @@
 	              <a class="nav-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?items=Cardigan">Cardigan</a>
 	            </li>
 				<li class="nav-item">
-	              <a class="nav-link" href="#">Review</a> 
+	              <a class="nav-link" href="${pageContext.request.contextPath}/reviewPage.do">Review</a> 
 	            </li>
 	            <li class="nav-item">
 	              <a class="nav-link" href="${pageContext.request.contextPath}/outer/cartPage.do">Cart</a> 

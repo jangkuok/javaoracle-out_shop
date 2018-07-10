@@ -59,14 +59,14 @@
    		<session-timeout>10</session-timeout>
 	</session-config>
 
-	<error-page>
+<!-- 	<error-page>
 		<error-code>403</error-code>
 		<location>/</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
 		<location>/</location>
-	</error-page>
+	</error-page> -->
    
    	<!-- Security Filter -->
 	<filter>

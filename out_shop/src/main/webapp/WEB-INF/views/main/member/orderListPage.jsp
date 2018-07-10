@@ -15,13 +15,13 @@
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 
 <script type="text/javascript">
-//상품 선택하기
 $(document).ready(function() {
-	 // 게시글 팝업(modal) 보기 
+	// 상세보기 
     $("input[id^=orderProductList_]").click(function (e) {
        
         var orderNo = e.target.id.substring(17); 
         
+        var orderHidden = $('#orderSuccessHidden').val();
      
         $.ajax ({
             "url" : "${pageContext.request.contextPath}/member/productListSearch.do",
@@ -30,14 +30,49 @@ $(document).ready(function() {
             "dataType":"json",
             "success" : function (data) {
             	 $.each(data,function(index,item){
-            		 var product = '<tr id="modalTr"><td>'+ item.outerNo + '</td>'+
-            		 '<td><a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo='+item.outerNo+'">'+
-            		 '<img src="<c:url value="/image/thumbnail/'+item.thumbnailName+'"/>"/></a></td>'+
-            		 '<td><a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo='+item.outerNo+'">'+ 
-            		 item.productName + '</a></td>'+
-            		 '<td>'+ item.productSize + '</td>'+
-            		 '<td>'+ item.productColor + '</td>'+
-            		 '<td>'+ item.productPrice + '</td></tr>'
+           			 var product = '<tr id="modalTr"><td>'+ item.outerNo + '</td>'+
+               		 '<td><a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo='+item.outerNo+'">'+
+               		 '<img src="<c:url value="/image/thumbnail/'+item.thumbnailName+'"/>"/></a></td>'+
+               		 '<td><a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo='+item.outerNo+'">'+ 
+               		 item.productName + '</a></td>'+
+               		 '<td>'+ item.productSize + '</td>'+
+               		 '<td>'+ item.productColor + '</td>'+
+               		 '<td>'+ item.productPrice + '</td></tr>'
+
+            		 $('.modal-body tbody').append(product);
+            	 });
+            }                  
+        });
+
+        $('input[id^=orderProductList_]').on('click',function(){
+        	$('tr#modalTr').remove();
+        });
+    });
+    
+	// 리뷰 작성 
+    $("input[id^=reviewList_]").click(function (e) {
+       
+        var orderNo = e.target.id.substring(11); 
+        
+        var orderHidden = $('#orderSuccessHidden').val();
+     
+        $.ajax ({
+            "url" : "${pageContext.request.contextPath}/member/productListSearch.do",
+            "type" : "POST",
+            "data":{ "orderNo" : orderNo},
+            "dataType":"json",
+            "success" : function (data) {
+            	 $.each(data,function(index,item){
+           			 var product = '<tr id="modalTr"><td>'+ item.outerNo + '</td>'+
+               		 '<td><a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo='+item.outerNo+'">'+
+               		 '<img src="<c:url value="/image/thumbnail/'+item.thumbnailName+'"/>"/></a></td>'+
+               		 '<td><a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo='+item.outerNo+'">'+ 
+               		 item.productName + '</a><br>'+
+               		 '<a href="${pageContext.request.contextPath}/member/addReviewPage.do?outerNo='+item.outerNo+'&outerName='+item.productName+'" class="btn btn-dark">리뷰 등록</a>'+
+               		 '</td>'+
+               		 '<td>'+ item.productSize + '</td>'+
+               		 '<td>'+ item.productColor + '</td>'+
+               		 '<td>'+ item.productPrice + '</td></tr>'
 
             		 $('.modal-body tbody').append(product);
             	 });
@@ -137,7 +172,11 @@ function returnOrder(i){
 					<td>
 						${orderList.orderName}<br>
 						<input type="button" id="orderProductList_${orderList.orderNo}" class="btn" 
-							data-toggle="modal" data-target="#myModal" value="상세보기">					
+							data-toggle="modal" data-target="#myModal" value="상세보기">
+						<c:if test="${orderList.handing == '배송완료' || orderList.handing == '주문완료'}">		
+							<input type="button" id="reviewList_${orderList.orderNo}" class="btn btn-dark" 
+									data-toggle="modal" data-target="#myModal" value="리뷰 작성">	
+						</c:if>							
 						
 					</td>
 					<td>
@@ -150,14 +189,16 @@ function returnOrder(i){
 								<form id="cancelForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do" method="post" style="margin-bottom:1px;">
 									<input type="hidden" id="handing" name="handing" value="주문취소">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">
+									<input type="hidden" id="items" name="items" value="${param.items}">
 									<input type="hidden" id="memberId" name="memberId" value="${orderList.memberId}">
 									<input type="button" class="btn btn-dark" value="주문취소" onclick="cancelOrder(${orderList.orderNo})">
 								</form>
 						</c:if>
 						<c:if test="${orderList.handing == '결제 대기중'}">
-								<form id="payForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do" method="post">
+								<form id="payForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do?" method="post" style="margin-bottom:1px;">
 									<input type="hidden" id="handing" name="handing" value="결제완료">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">
+									<input type="hidden" id="items" name="items" value="${param.items}">
 									<input type="hidden" id="memberId" name="memberId" value="${orderList.memberId}">
 									<input type="button" class="btn btn-dark" value="결제하기" onclick="payment(${orderList.orderNo})">
 								</form>
@@ -166,17 +207,19 @@ function returnOrder(i){
 								<form id="successOrderForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do" method="post" style="margin-bottom:1px;">
 									<input type="hidden" id="handing" name="handing" value="주문완료">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">
+									<input type="hidden" id="items" name="items" value="${param.items}">
 									<input type="hidden" id="memberId" name="memberId" value="${orderList.memberId}">
 									<input type="button" class="btn btn-dark" value="주문완료" onclick="successOrder(${orderList.orderNo})">
 								</form>
 								
-								<form id="returnOrderForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do" method="post">
+								<form id="returnOrderForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do" method="post" style="margin-bottom:1px;">
 									<input type="hidden" id="handing" name="handing" value="반품중">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">
+									<input type="hidden" id="items" name="items" value="${param.items}">
 									<input type="hidden" id="memberId" name="memberId" value="${orderList.memberId}">
 									<input type="button" class="btn btn-dark" value="반품하기" onclick="returnOrder(${orderList.orderNo})">
 								</form>
-						</c:if>					
+						</c:if>								
 					</td>
 				</tr>
 			</c:forEach>

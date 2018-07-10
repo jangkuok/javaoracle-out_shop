@@ -19,6 +19,11 @@
 	background-color:transparent;
 	border:0 solid black;
 }
+  .my-hr3 {
+    border: 0;
+    height: 3px;
+    background: #ccc;
+  }
 </style>
 </head>
 <body>

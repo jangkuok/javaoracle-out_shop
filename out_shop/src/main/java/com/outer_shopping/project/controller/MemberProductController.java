@@ -1,34 +1,26 @@
 package com.outer_shopping.project.controller;
 
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.outer_shopping.project.service.AuthorityService;
 import com.outer_shopping.project.service.MemberService;
 import com.outer_shopping.project.service.OrderProductService;
 import com.outer_shopping.project.service.WishListSerice;
-import com.outer_shopping.project.vo.AuthorityVo;
-import com.outer_shopping.project.vo.MemberVo;
-import com.outer_shopping.project.vo.OrderCheckVo;
 import com.outer_shopping.project.vo.OrderProductVo;
-import com.outer_shopping.project.vo.WishListVo;
+
 
 @Controller
 @RequestMapping("/member")

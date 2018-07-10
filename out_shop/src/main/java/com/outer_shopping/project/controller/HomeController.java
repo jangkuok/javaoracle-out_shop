@@ -1,5 +1,6 @@
 package com.outer_shopping.project.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +22,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.outer_shopping.project.service.AuthorityService;
 import com.outer_shopping.project.service.MemberService;
 import com.outer_shopping.project.service.OuterService;
+import com.outer_shopping.project.service.ReviewService;
 import com.outer_shopping.project.vo.AuthorityVo;
 import com.outer_shopping.project.vo.MemberVo;
 import com.outer_shopping.project.vo.OuterVo;
+import com.outer_shopping.project.vo.ReviewVo;
 
 /**
  * Handles requests for the application home page.
@@ -41,6 +44,9 @@ public class HomeController {
 	
 	@Autowired
 	private OuterService outerService;
+	
+	@Autowired
+	private ReviewService reviewService;
 	
 	/**
 	 * 메인페이지
@@ -158,5 +164,24 @@ public class HomeController {
 		logger.info("############# 로그인 페이지 이동 #############");
 		
 		return "loginFormPage";
+	}
+	
+	/**
+	 * 리뷰 페이지 이동 
+	 */
+	@RequestMapping(value="/reviewPage.do", method = RequestMethod.GET)
+	public String myPage(Model model,@RequestParam(defaultValue="1") int page) {
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map  = reviewService.getListReview(page);
+		
+		model.addAttribute("list", map.get("list"));
+		
+		model.addAttribute("pageBean", map.get("pageBean"));
+	 
+		logger.info("############# 리뷰 페이지 이동 #############");
+		
+		return "reviewListPage";
 	}
 }

@@ -63,7 +63,7 @@ public class WishListDaoImpl implements WishListDao {
 	@Override
 	public List<WishListVo> selectWishList(String memberId,int startIndex, int endIndex) {
 		
-		 List<WishListVo> list = null;
+		List<WishListVo> list = null;
 		
 		try {			
 			Map<String, Object> input = new HashMap<String, Object>();

@@ -183,38 +183,6 @@ function join_button(){
 		<input type="button" class="btn btn-dark" id="joinButton" name="joinButton" value="가입" onclick="join_button();">
 		<input type="reset" class="btn" id="reset" name="reset" value="초기화">	
 		</form:form>	
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-<%-- 			아이디 : 	<form:input name="id" path="id" size="25" value="${memberForm.id}"/>
-						<input type="button" id="joinIdCheck" name="joinIdCheck" value="중복확인">
-						<form:errors path="id" cssClass="errMsg" /><br>
-			비밀번호 :  <form:password name="pw" path="pw" size="25" maxlength="20"/>
-						<form:errors path="pw" cssClass="errMsg" /><br>
-			이름 : 		<form:input name="name" path="name" size="25" maxlength="15"/>	
-						<form:errors path="name" cssClass="errMsg" value="${memberForm.name}"/><br>
-			핸드폰번호 : <form:input name="phoneNum" path="phoneNum" size="25" maxlength="11"/>
-						<form:errors path="phoneNum" cssClass="errMsg"/><br>
-			이메일 : 	<form:input name="email" path="email" size="25"/>
-						<form:errors name="email" path="email" cssClass="errMsg" value="${memberForm.email}"/><br>
-			성별 :		<form:radiobutton name="sex" path="sex" value="남자" label="남자"/>
-						<form:radiobutton name="sex" path="sex" value="여자" label="여자"/><br>
-			<form:hidden name="zipcode" path="zipcode" value=""/>	
-			<form:hidden name="address" path="address" value=""/>
-			<form:hidden name="address2" path="address2" value=""/>				
-			<form:hidden name="grade" path="grade" value="브론즈"/>	
-			<form:hidden name="enabled" path="enabled" value="1"/>	
-		<input type="button" id="joinButton" name="joinButton" value="가입" onclick="join_button();">
-		<input type="reset" id="reset" name="reset" value="초기화"> 
---%>
-	
 </div>
 </body>
 </html>
