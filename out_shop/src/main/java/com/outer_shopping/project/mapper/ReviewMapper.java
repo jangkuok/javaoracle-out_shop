@@ -15,6 +15,8 @@ public interface ReviewMapper {
     
     int selectReivewListCount();
     
+    ReviewVo selectReviewNo(int reviewNo);
+    
     List<ReviewVo> selectListReview(Map<String, Object> map);
     
     List<ReviewVo> selectMemberReview(Map<String, Object> map);

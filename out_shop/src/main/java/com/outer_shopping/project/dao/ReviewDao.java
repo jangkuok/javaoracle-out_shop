@@ -16,6 +16,8 @@ public interface ReviewDao {
     
     int selectReivewListCount();
     
+    ReviewVo selectReviewNo(int reviewNo);
+    
     List<ReviewVo> selectListReview(int startIndex,int endIndex);
     
     List<ReviewVo> selectMemberReview(String memberId, int startIndex, int endIndex);

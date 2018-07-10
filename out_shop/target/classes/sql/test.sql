@@ -127,3 +127,13 @@ ORDER BY OUTER_DATE DESC
 	WHERE to_char(ORDER_DATE,'yyyy-mm-dd') <=	to_char(sysdate,'yyyy-mm-dd') 
 	AND to_char(ORDER_DATE,'yyyy-mm-dd') >= to_char(add_months(sysdate,-1),'yyyy-mm-dd')
 	
+	SELECT  	r.REVIEW_NO, r.REVIEW_SUBJECT,	
+					r.REVIEW_CONTENT, r.PICTURE_NAME, 
+					r.THUMBNAIL_NAME, r.STAR, 
+					r.REVIEW_DATE, r.MEMBER_ID,
+					o.OUTER_TYPE, o.OUTER_NAME, 
+					o.OUTER_CONTENT, o.OUTER_PRICE, 
+					o.OUTER_DATE, o.OUTER_THUMBNAIL_NAME, o.OUTER_IMAGENAME
+		FROM		REVIEW r, OUTER_TB o 	
+		WHERE		r.OUTER_NO = o.OUTER_NO(+)
+		AND 		r.REVIEW_NO = 9

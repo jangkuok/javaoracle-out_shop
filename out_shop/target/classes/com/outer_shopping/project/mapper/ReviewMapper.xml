@@ -25,7 +25,20 @@
 				REVIEW_DATE, MEMBER_ID, 
 				OUTER_NO
 		FROM REVIEW
-	</sql>	 
+	</sql>	
+	
+	<!-- 리뷰 + 아웃터 select sql -->
+	<sql id="select-review-outer-sql">
+		SELECT  	r.REVIEW_NO, r.REVIEW_SUBJECT,	
+					r.REVIEW_CONTENT, r.PICTURE_NAME, 
+					r.THUMBNAIL_NAME, r.STAR, 
+					r.REVIEW_DATE, r.MEMBER_ID,
+					o.OUTER_NO,	o.OUTER_TYPE, o.OUTER_NAME, 
+					o.OUTER_CONTENT, o.OUTER_PRICE, 
+					o.OUTER_DATE, o.OUTER_THUMBNAIL_NAME, o.OUTER_IMAGENAME
+		FROM		REVIEW r, OUTER_TB o 	
+		WHERE		r.OUTER_NO = o.OUTER_NO(+)
+	</sql> 
 	
 	
 	<!-- 리뷰 resultMap -->
@@ -39,6 +52,20 @@
 		<result column="REVIEW_DATE" property="reviewDate"/>
 		<result column="MEMBER_ID" property="memberId"/>
 		<result column="OUTER_NO" property="outerNo"/>
+	</resultMap>
+	
+	<!-- 리뷰 + 아웃터 resultMap -->
+	<resultMap type="com.outer_shopping.project.vo.ReviewVo" id="review-outer-resultmap" extends="review-resultmap" >
+		<association property="outer" javaType="com.outer_shopping.project.vo.OuterVo">
+			<id column="OUTER_NO" property="outerNo"/>
+			<result column="OUTER_TYPE" property="type"/>
+			<result column="OUTER_NAME" property="name"/>
+			<result column="OUTER_CONTENT" property="content"/>
+			<result column="OUTER_PRICE" property="price"/>
+			<result column="OUTER_DATE" property="insertDate"/>
+			<result column="OUTER_THUMBNAIL_NAME" property="thumbnailName"/>
+			<result column="OUTER_IMAGENAME" property="imageName"/>
+		</association>
 	</resultMap>
 	
 	
@@ -78,7 +105,7 @@
 	</update>
 	
 	<!-- 리뷰 삭제 SQL -->
-	<delete id="deleteReview" parameterType="int">
+	<delete id="deleteReview" parameterType="_int">
 		DELETE FROM REVIEW WHERE REVIEW_NO = #{reviewNo}
 	</delete>
 	
@@ -101,6 +128,12 @@
 		WHERE RNUM>=#{startIndex}
 	</select>
 	
+	
+	<!-- 아이디  글 보기 SQL -->
+ 	<select id="selectReviewNo" parameterType="_int" resultMap="review-outer-resultmap">			
+		<include refid="select-review-outer-sql"/>
+		AND r.REVIEW_NO = #{reviewNo}		
+	</select>
 	
 	<!-- 회원별 자신의 글 보기 SQL -->
 	<select id="selectMemberReview" parameterType="hashmap" resultMap="review-resultmap">
