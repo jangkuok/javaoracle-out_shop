@@ -48,84 +48,42 @@ public class ReviewController {
 	@RequestMapping(value="/addReviewPage.do", method = RequestMethod.GET)
 	public String addReviewPage(Model model) {
 		
-		if(!model.containsAttribute("reviewVo")) 
-			model.addAttribute("reviewVo", new ReviewVo());
-		
 		logger.info("############# 리뷰 등록 페이지 이동 #############");
 		
 		return "member/addReviewPage";
 	}
 	
-	
-	
-	@RequestMapping(value = "/test.do", method = RequestMethod.POST)
-	@ResponseBody
-	/*public String test(@RequestParam Map<String, Object> map,Model model) {*/
-	public String test(@Valid @ModelAttribute("reviewVo") ReviewVo reviewVo, Model model,BindingResult rs) {
-		System.out.println("=============================================");	
-		/*System.out.println(map.get("subject").toString());
-		System.out.println(map.get("outerNo").toString());
-		System.out.println(map.get("imageFile"));
-		System.out.println(map.get("star").toString());
-		System.out.println(map.get("content").toString());*/
-		
-/*		for(Entry<String,Object> entry : map.entrySet()) {
-			System.out.println(entry.getKey() + " = " + entry.getValue());
-		}*/
-		
-		if(rs.hasErrors()) {
-			System.out.println("####################");
-			System.out.println(rs.getAllErrors().toString());
-		}
-		
-		
-		System.out.println(reviewVo);
-		return "완료";
-	}
-	
-	
 	/**
 	 * 리뷰 작성
 	 */
 	@RequestMapping(value = "/addMemberReview.do", method = RequestMethod.POST)
-    public String addMemberReview(Model model, @ModelAttribute("reviewVo") ReviewVo reviewVo,
+    public String addMemberReview(Model model, @RequestParam("subject") String subject,
+    		@RequestParam("outerNo") int outerNo, @RequestParam("imageFile") MultipartFile imageFile,
+    		@RequestParam("star") int star,	@RequestParam("content") String content, @RequestParam("memberId") String memberId,
     		RedirectAttributes ra){
-		System.out.println("=============================================");	
-		System.out.println(reviewVo);
 		
-		/*if(reviewVo.getPictureName() != null) {
-	        reviewVo.setPictureName("");
-	        reviewVo.setThumbnailName("");
-	        
-	        reviewService.createReview(reviewVo);
-	        
-	        logger.info("############# 리뷰등록 완료 #############");
-			
-		 
-			logger.info("############# 리뷰 페이지 이동 #############");
-			
-			return "redirect:/member/reviewSuccessPage.do";
-		}
-
-		MultipartFile file = reviewVo.getImageFile(); // 업로드 파일
-		
-		
+		ReviewVo review = new ReviewVo();
 		FileOutputStream fos = null;
 		
+		if(imageFile.getOriginalFilename().isEmpty()|| imageFile == null) {
+						
+			review.setPictureName("");
+			review.setThumbnailName("");
+		}		
 		// 업로드 파일 처리
-		if (!reviewVo.getImageFile().isEmpty() && file != null) {
+		else if(!imageFile.getOriginalFilename().isEmpty() && imageFile != null) {
 			
-			String fileName = file.getOriginalFilename();
+			String fileName = imageFile.getOriginalFilename();
 			 
 			String newFileName ="";
             try{
-            	byte[] bytes = file.getBytes();
+            	byte[] bytes = imageFile.getBytes();
             	
             	newFileName = System.currentTimeMillis()+"."+fileName.substring(fileName.lastIndexOf(".")+1);
     
             	File outFileName =  new File(uploadDirResource.getPath() + newFileName);
               
-            	reviewVo.setPictureName(newFileName);
+            	review.setPictureName(newFileName);
                 
               	fos = new FileOutputStream(outFileName);
               
@@ -137,7 +95,7 @@ public class ReviewController {
 	            String thumbPathFileName = "thumb_"
 	           		 				  + newFileName.split("\\.")[0]
 	   		 						  +".png";
-	            reviewVo.setThumbnailName(thumbPathFileName);
+	            review.setThumbnailName(thumbPathFileName);
 	            
 	            // 썸네일 200*100 크기의 썸네일 작성
 	            File thumbnail = new File(thumbPathFileName); 
@@ -145,7 +103,7 @@ public class ReviewController {
 	            Thumbnails.of(outFileName)
 	         	 		   .size(200, 100)
 	 	 				   .outputFormat("png")
-	         	 		   .toFile(thumbPath + thumbnail);
+	         	 		   .toFile(thumbPath + thumbnail);	            	            
             }catch(IOException e) {
             	
             	logger.info("############# 이미지 등록 에러 #############");
@@ -160,28 +118,128 @@ public class ReviewController {
             }
             logger.info("############# 이미지 등록 #############");
 		}
-
-		reviewService.createReview(reviewVo);
 		
-		ra.addAttribute("zzzz", "zzzzz");*/
+		review.setSubject(subject);
+		review.setStar(star);
+		review.setContent(content);
+		review.setMemberId(memberId);
+		review.setOuterNo(outerNo);
+		
+        reviewService.createReview(review);
+        
+        
+        ReviewVo re = reviewService.getReviewNo(review.getReviewNo());
+        
+        ra.addAttribute("review", re);
         
         logger.info("############# 리뷰등록 완료 #############");
 		
 		logger.info("############# 리뷰 페이지 이동 #############");
         
-        return "member/reviewSuccessPage";
+        return "redirect:/member/reviewSuccessPage.do";
 	}
 	
 	/**
 	 * 리뷰  작성 성공 패이지
 	 */
-	@RequestMapping(value = "/reviewSuccessPage.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/reviewSuccessPage.do", method = {RequestMethod.GET,RequestMethod.POST})
     public String reviewSuccessPage(Model model){
 	   				 
 		logger.info("############# 리뷰 페이지 이동 #############");
 		
 		return "member/reviewSuccessPage";
 	
+	}
+	
+	
+	/**
+	 * 리뷰 수정 페이지 이동
+	 */
+	@RequestMapping(value="/modifyReviewPage.do", method = RequestMethod.GET)
+	public String modifyReviewPage(Model model,@RequestParam("reviewNo") int reviewNo) {
+		
+		model.addAttribute("reviewVo", reviewService.getReviewNo(reviewNo));
+		
+		logger.info("############# 리뷰 수정 페이지 이동 #############");
+		
+		return "member/modifyReviewPage";
+	}
+	
+	/**
+	 * 아웃터 수정
+	 */
+	@RequestMapping(value = "/modifyMemberReview", method = RequestMethod.POST)
+    public String modifyMemberReview(Model model,@ModelAttribute("reviewVo") ReviewVo review,
+    		RedirectAttributes ra){
+		
+		MultipartFile file = review.getImageFile(); // 업로드 파일
+			
+		FileOutputStream fos = null;
+		
+		if(review.getImageFile().isEmpty() || file == null) {						
+			review.setPictureName("");
+			review.setThumbnailName("");	
+			
+			reviewService.modifyReview(review);
+		}	
+		else if(review.getPictureName() != null) {
+			reviewService.modifyReview(review);
+		}
+		// 업로드 파일 처리
+		else if(!review.getImageFile().isEmpty() && file != null) {
+			
+			String fileName = file.getOriginalFilename();
+			 
+			String newFileName ="";
+            try{
+            	byte[] bytes = file.getBytes();
+            	
+            	newFileName = System.currentTimeMillis()+"."+fileName.substring(fileName.lastIndexOf(".")+1);
+    
+            	File outFileName =  new File(uploadDirResource.getPath() + newFileName);
+              
+            	review.setPictureName(newFileName);
+                
+              	fos = new FileOutputStream(outFileName);
+              
+              	fos.write(bytes);
+                  
+              	// 썸네일(thumbnail) path : PNG 형식으로 저장	               
+	          
+	            String thumbPath = uploadDirResource.getPath() + "thumbnail/";
+	            String thumbPathFileName = "thumb_"
+	           		 				  + newFileName.split("\\.")[0]
+	   		 						  +".png";
+	            review.setThumbnailName(thumbPathFileName);
+	            
+	            // 썸네일 200*100 크기의 썸네일 작성
+	            File thumbnail = new File(thumbPathFileName); 
+
+	            Thumbnails.of(outFileName)
+	         	 		   .size(200, 100)
+	 	 				   .outputFormat("png")
+	         	 		   .toFile(thumbPath + thumbnail);
+	            
+	            reviewService.modifyReview(review);
+            }catch(IOException e) {          	
+            	logger.info("############# 이미지 등록 에러 #############");
+                e.printStackTrace();
+                
+            }finally{           	
+                  try{    
+                     if (fos !=null) fos.close();
+                  }catch (IOException e) {
+                     e.printStackTrace();
+                  }
+            }
+            logger.info("############# 이미지 등록 #############");
+		}
+
+		//ra.addAttribute("outerNo",reviewService.getReviewNo(review.getReviewNo()));
+		logger.info("############# 리뷰수정 등록 #############");
+		
+		//return "redirect:/outer/outerView.do";
+		return "redirect:/.do";
 	}
 	
 	/**

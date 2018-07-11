@@ -67,6 +67,21 @@ public class ReviewDaoImpl implements ReviewDao {
 		
 		return count;
 	}
+	
+	@Override
+	public ReviewVo selectReviewNo(int reviewNo) {
+		ReviewVo review = new ReviewVo();
+		
+		try {
+			review = session.getMapper(ReviewMapper.class).selectReviewNo(reviewNo);
+		}catch (Exception e) {
+
+			System.out.println("selectReviewNo(dao) : ");
+			e.printStackTrace();
+		}	
+		
+		return review;
+	}
 
 	@Override
 	public List<ReviewVo> selectListReview(int startIndex, int endIndex) {

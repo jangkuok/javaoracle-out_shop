@@ -41,6 +41,10 @@
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
 	 	<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/> 	 	
 	</bean>
+	
+	
+	
+	
 
 	<!-- Fileupload : 파일 관리자 id(multipartResolver)는 가급적 그대로 사용할 것! -->
 	<bean id="multipartResolver"

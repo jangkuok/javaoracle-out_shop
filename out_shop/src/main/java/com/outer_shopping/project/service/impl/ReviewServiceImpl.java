@@ -49,6 +49,20 @@ public class ReviewServiceImpl implements ReviewService {
 		}
 		
 	}
+	
+	@Override
+	public ReviewVo getReviewNo(int reviewNo) {
+		ReviewVo review = new ReviewVo();
+		
+		try {
+			review = reviewDao.selectReviewNo(reviewNo);
+		}catch (Exception e) {
+			System.out.println("getReviewNo(service) : ");
+			e.printStackTrace();
+		}
+		
+		return review;
+	}
 
 	@Override
 	public Map<String, Object> getListReview(int page) {

@@ -14,6 +14,8 @@ public interface ReviewService {
     
     void removeReview(int reviewNo);
     
+    ReviewVo getReviewNo(int reviewNo);
+    
     Map<String, Object> getListReview(int page);
     
     Map<String, Object> getMemberReview(String memberId,int page);

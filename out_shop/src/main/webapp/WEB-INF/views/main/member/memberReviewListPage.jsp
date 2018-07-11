@@ -22,7 +22,25 @@
 	</c:if>	
 	<c:if test="${not empty list}">
 		<c:forEach var="reviewList" items="${list}" varStatus="st" >
-			${reviewList.reviewNo}
+		  <div class="row">
+		  	<div class="col-lg-1">
+	          <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${reviewList.outerNo}">
+            	<img class="card-img-top" src="<c:url value='/image/1530592840356.jpg'/>" alt="">
+           	  </a>
+	        </div>	              
+	        <div class="col-lg-9">
+	          <h2>★★★★★</h2>
+	          <p>${reviewList.reviewDate}</p>
+	          <p>${reviewList.content}</p>
+	          <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${reviewList.outerNo}" class="btn btn-primary" >상품 상세보기</a>
+	          <a href="${pageContext.request.contextPath}/member/modifyReviewPage.do?reviewNo=${reviewList.reviewNo}" class="btn btn-primary">수정하기</a>
+	        </div>
+	        <div class="col-lg-2">
+	          <p>아이디 : ${reviewList.memberId}</p>
+	          <img class="card-img-top" src="<c:url value='/image/1530592840356.jpg'/>" alt="">
+	        </div>
+	      </div>
+	      <hr>
 		</c:forEach>
 	</c:if>
 </div>
