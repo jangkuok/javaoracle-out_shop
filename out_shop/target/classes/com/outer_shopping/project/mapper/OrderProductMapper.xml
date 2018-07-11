@@ -261,9 +261,22 @@
 	</select>
 	
 	
+	<!-- 주문량 상위 TOP3 리스트 조회  SQL -->
+ 	<select id="selectTop3List" resultMap="orderProduct-resultmap">
+		<include refid="select-orderProduct-sql"/>		
+			WHERE ROWNUM <![CDATA[ < ]]>= 3		
+	</select>	
 	
-	
-	
+	<select id="selectMonthProduct" resultType="java.util.HashMap">
+			SELECT 	SUM(p.PRODUCT_PRICE) MONTH_PRICE, p.PRODUCT_NAME PRODUCT_NAME
+			FROM 	ORDER_CHECK c, ORDER_PRODUCT p
+			WHERE   c.ORDER_NO = p.ORDER_NO 
+			AND		(c.HANDLING = '주문완료' OR c.HANDLING = '배송완료')	
+			AND		to_char(c.ORDER_DATE,'YYYY-MM-DD') <![CDATA[<=]]> to_char(SYSDATE,'YYYY-MM-DD')
+			AND		ROWNUM  <![CDATA[<=]]> 20
+			GROUP BY p.PRODUCT_NAME
+			ORDER BY MONTH_PRICE DESC
+	</select> 
 	
 
 <!-- /////////////////////////////////////////////////////////////////////////////////////////////////  -->

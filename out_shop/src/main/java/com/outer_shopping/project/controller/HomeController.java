@@ -1,5 +1,6 @@
 package com.outer_shopping.project.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.outer_shopping.project.service.AuthorityService;
 import com.outer_shopping.project.service.MemberService;
+import com.outer_shopping.project.service.OrderProductService;
 import com.outer_shopping.project.service.OuterService;
 import com.outer_shopping.project.service.ReviewService;
 import com.outer_shopping.project.vo.AuthorityVo;
 import com.outer_shopping.project.vo.MemberVo;
+import com.outer_shopping.project.vo.OrderProductVo;
 import com.outer_shopping.project.vo.OuterVo;
-import com.outer_shopping.project.vo.ReviewVo;
 
 /**
  * Handles requests for the application home page.
@@ -48,6 +50,8 @@ public class HomeController {
 	@Autowired
 	private ReviewService reviewService;
 	
+	@Autowired
+	private OrderProductService orderProductService;
 	/**
 	 * 메인페이지
 	 */
@@ -57,6 +61,19 @@ public class HomeController {
 		List<OuterVo> list = outerService.findOuterList();
 		
 		model.addAttribute("list",list);
+		
+		List<OrderProductVo> orderList = orderProductService.getOrderTopThreeList();
+		
+		List<Object> topList = new ArrayList<>();
+		
+		for (int i = 0; i < orderList.size(); i++) {
+			OuterVo outer = new OuterVo();
+			outer = outerService.getOuter(orderList.get(i).getOuterNo());
+			
+			topList.add(outer);
+		}
+		
+		model.addAttribute("top",topList);
 		
 		logger.info("############# 메인페이지 이동 #############");
 		

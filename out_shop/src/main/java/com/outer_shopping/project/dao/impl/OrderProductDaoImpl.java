@@ -152,6 +152,39 @@ public class OrderProductDaoImpl implements OrderProductDao {
 		}	
 		
 		return list;
+	}
+
+
+	@Override
+	public List<OrderProductVo> selectTopThreeList() {
+		
+		List<OrderProductVo> list = new ArrayList<>();
+		
+		try {
+			list = session.selectList(makeSqlId("selectTop3List"));
+		}catch (Exception e) {
+			System.out.println("selectTopThreeList(dao) : ");
+			e.printStackTrace();
+		}	
+		
+		return list;
+	}
+
+
+	@Override
+	public List<Map<String, Object>> selectMonthProduct() {
+		
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		try {
+
+			list = session.selectList(makeSqlId("selectMonthProduct"));
+		}catch (Exception e) {
+			System.out.println("selectMonthProduct(dao) : ");
+			e.printStackTrace();
+		}	
+		
+		return list;
 	}	
 	
 	

@@ -129,10 +129,34 @@ public class OrderProductServiceImpl implements OrderProductService {
 		return list;
 	}
 
+	@Override
+	public List<OrderProductVo> getOrderTopThreeList() {
+		
+		List<OrderProductVo> list = new ArrayList<>();
+		
+		try {
+			list = dao.selectTopThreeList();
+		}catch (Exception e) {
+			System.out.println("getOrderTopThreeList(service) : ");
+			e.printStackTrace();
+		}	
+		
+		return list;
+	}
 
+	@Override
+	public List<Map<String, Object>> getMonthProduct() {
+		
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		try {
+			list = dao.selectMonthProduct();
+		}catch (Exception e) {
+			System.out.println("getMonthProduct(service) : ");
+			e.printStackTrace();
+		}	
+		
+		return list;
+	}
 
-
-
-	
-	
 }

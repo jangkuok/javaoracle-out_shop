@@ -73,10 +73,28 @@
  </header>
  
     <div class="container">
-      <h1 class="my-4">BEST3</h1>
-
+      <h1 class="my-4">BEST3</h1><hr>
+	      <div class="row">
+	      <c:forEach var="outer" items="${top}" varStatus="st">
+	        <div class="col-lg-4 col-sm-6 portfolio-item">
+	          <div class="card h-100">
+	            <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">
+	            	<img class="card-img-top" src="<c:url value='/image/${outer.imageName}'/>" alt="">
+	            </a>
+	            <div class="card-body">
+	              <h4 class="card-title">
+	                <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
+	              </h4>
+	              <p class="card-text">
+	              	<h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>
+	              </p>
+	            </div>
+	          </div>
+	        </div>
+	        </c:forEach>
+	      </div>		
       <!-- Marketing Icons Section -->
-      <div class="row">
+<!--       <div class="row">
         <div class="col-lg-4 mb-4">
           <div class="card h-100">
             <h4 class="card-header">Card Title</h4>
@@ -110,13 +128,13 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- /.row -->
 
       <!-- 품목소개 -->
-      <h2>NEW ARRIVALS</h2>
+      <h2>NEW ARRIVALS</h2><hr>
 
-      <div class="row">
+      <div class="row" style="margin-bottom:15px;">
       <c:forEach var="outer" items="${list}" varStatus="st">
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">

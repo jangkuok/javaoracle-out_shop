@@ -12,17 +12,32 @@
 <div>
 <h1>REVIEW WRTIE</h1><hr>
 </div>
-<%-- 	<div class="row">
+	${param.review}
+ 	<div class="row">
   	   <div class="col-lg-1">
          <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${param.review.outerNo}">
           	<img class="card-img-top" src="<c:url value='/image/${param.review.outer.imageName}.jpg'/>" alt="">
          	  </a>
        </div>	              
        <div class="col-lg-9">
-         <h2>★★★★★</h2>
+       	 <c:if test="${param.review.star == 1}">
+       		<h2>★☆☆☆☆</h2>
+         </c:if>
+       	 <c:if test="${param.review.star == 2}">
+       		<h2>★★☆☆☆</h2>
+       	 </c:if>
+       	 <c:if test="${param.review.star == 3}">
+       		<h2>★★★☆☆</h2>
+       	 </c:if>
+       	 <c:if test="${param.review.star == 4}">
+       		<h2>★★★★☆</h2>
+       	 </c:if>
+       	 <c:if test="${param.review.star == 5}">
+       		<h2>★★★★★</h2>
+       	 </c:if> 
          <p>${param.review.reviewDate}</p>
          <p>${param.review.content}</p>
-         <a class="btn" href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${param.review.outerNo}">상품 상세보기</a>
+         <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${param.review.outerNo}" class="btn btn-primary" >상품 상세보기</a>
        </div>
        <div class="col-lg-2">
          <p>아이디 : ${param.review.memberId}</p>
@@ -31,7 +46,6 @@
          </c:if>
        </div>
 	 </div>
- --%>
 </div>
 </body>
 </html>

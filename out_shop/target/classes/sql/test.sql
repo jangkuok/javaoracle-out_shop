@@ -137,3 +137,36 @@ ORDER BY OUTER_DATE DESC
 		FROM		REVIEW r, OUTER_TB o 	
 		WHERE		r.OUTER_NO = o.OUTER_NO(+)
 		AND 		r.REVIEW_NO = 9
+		
+		
+		
+	SELECT OUTER_NO, COUNT(*)
+	FROM ORDER_PRODUCT
+	GROUP BY OUTER_NO
+	
+	SELECT *
+	FROM ORDER_PRODUCT
+	WHERE ROWNUM  <= 3
+	
+	
+	--상품별 한달 판매량
+	SELECT 	SUM(p.PRODUCT_PRICE) MONTH_PRICE, p.PRODUCT_NAME PRODUCT_NAME
+	FROM 	ORDER_CHECK c, ORDER_PRODUCT p
+	WHERE   c.ORDER_NO = p.ORDER_NO 
+	AND		(c.HANDLING = '주문완료' OR c.HANDLING = '배송완료')	
+	AND		to_char(c.ORDER_DATE,'yyyy-mm-dd') <= to_char(SYSDATE,'yyyy-mm-dd')
+	AND		ROWNUM  <= 20
+	GROUP BY p.PRODUCT_NAME
+	ORDER BY MONTH_PRICE DESC
+	
+	--한달 총 판매량
+	SELECT 	SUM(TOTAL_PRICE) MONTH_PRICE
+	FROM 	ORDER_CHECK 
+	WHERE	(HANDLING = '주문완료' OR 	HANDLING = '배송완료')
+	AND		to_char(ORDER_DATE,'yyyy-mm-dd') <= to_char(SYSDATE,'yyyy-mm-dd') 
+	
+	
+	
+	
+	AND to_char(ORDER_DATE,'yyyy-mm-dd') >= to_char(add_months(sysdate,-1),'yyyy-mm-dd')
+
