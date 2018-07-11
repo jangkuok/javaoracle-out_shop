@@ -127,10 +127,18 @@ public class ReviewController {
 		
         reviewService.createReview(review);
         
+        ReviewVo reviewInfo = reviewService.getReviewNo(review.getReviewNo());
+
+        try {
+        	 ra.addFlashAttribute("review", reviewInfo);
+        	 
+		} catch (Exception e) {
+			System.out.println("############################################################");
+			e.printStackTrace();
+		}
         
-        ReviewVo re = reviewService.getReviewNo(review.getReviewNo());
         
-        ra.addAttribute("review", re);
+       
         
         logger.info("############# 리뷰등록 완료 #############");
 		
@@ -166,7 +174,7 @@ public class ReviewController {
 	}
 	
 	/**
-	 * 아웃터 수정
+	 * 리뷰 수정
 	 */
 	@RequestMapping(value = "/modifyMemberReview", method = RequestMethod.POST)
     public String modifyMemberReview(Model model,@ModelAttribute("reviewVo") ReviewVo review,
@@ -241,6 +249,32 @@ public class ReviewController {
 		//return "redirect:/outer/outerView.do";
 		return "redirect:/.do";
 	}
+	
+	/**
+	 * 리뷰 삭제 이동
+	 */
+	@RequestMapping(value="/removeMemberReview.do", method = RequestMethod.GET)
+	public String removeMemberReview(Model model,@RequestParam("reviewNo") int reviewNo,
+			@RequestParam(defaultValue="1") int page) {		
+		reviewService.removeReview(reviewNo);
+		
+		logger.info("############# 리뷰 삭제 완료 #############");
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map  = reviewService.getListReview(page);
+		
+		model.addAttribute("list", map.get("list"));
+		
+		model.addAttribute("pageBean", map.get("pageBean"));
+	 
+		logger.info("############# 리뷰 페이지 이동 #############");
+		
+		return "reviewListPage";
+	}
+	
+	
+	
 	
 	/**
 	 * 회원별 리뷰 목록

@@ -7,7 +7,53 @@
 <head>
 <meta charset="utf-8">
 <title>REVIEW</title>
-<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
+//리뷰 수정
+$(document).ready(function() {
+	$('a[name="modifyButton"]').hide();
+	
+	var member = $('#loginMemberId').val();
+
+	$('input[name="reviewNo"]').each(function(){
+		
+		var no = $(this).val();
+
+		var writer = $('#writeMemberId_'+ no).val();
+	
+ 		if(member != ''){
+			if(member == writer){
+				$('#modifyButton_'+no).show();
+			}			
+		}
+	});
+	
+	//리뷰 삭제
+	$('a[name="removeButton"]').hide();
+	
+	var member = $('#loginMemberId').val();
+
+	$('input[name="reviewNo"]').each(function(){
+		
+		var no = $(this).val();
+
+		var writer = $('#writeMemberId_'+ no).val();
+	
+ 		if(member != ''){
+			if(member == writer){
+				$('#removeButton_'+no).show();
+			}			
+		}
+ 		
+ 		$("#removeButton_"+no).click(function() {
+			if(confirm('게시물을 삭제 하시겠습니까?')) { 
+				
+		    }else { 
+		    	return false;
+		   	}	
+ 		});
+	});
+});
+</script>
 </head>
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
@@ -22,22 +68,41 @@
 	</center>
 	</c:if>	
 	<c:if test="${not empty list}">
+		<input type="hidden" id="loginMemberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
 		<c:forEach var="reviewList" items="${list}" varStatus="st" >
 		  <div class="row">
 		  	<div class="col-lg-1">
 	          <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${reviewList.outerNo}">
-            	<img class="card-img-top" src="<c:url value='/image/1530592840356.jpg'/>" alt="">
+            	<img class="card-img-top" src="<c:url value='/image/${reviewList.outer.imageName}'/>" alt="">
            	  </a>
 	        </div>	              
 	        <div class="col-lg-9">
-	          <h2>★★★★★</h2>
-	          <p>${reviewList.reviewDate}</p>
+	        	<c:if test="${reviewList.star == 1}">
+	        		<h2>★☆☆☆☆</h2>
+	        	</c:if>
+	        	<c:if test="${reviewList.star == 2}">
+	        		<h2>★★☆☆☆</h2>
+	        	</c:if>
+	        	<c:if test="${reviewList.star == 3}">
+	        		<h2>★★★☆☆</h2>
+	        	</c:if>
+	        	<c:if test="${reviewList.star == 4}">
+	        		<h2>★★★★☆</h2>
+	        	</c:if>
+	        	<c:if test="${reviewList.star == 5}">
+	        		<h2>★★★★★</h2>
+	        	</c:if>          
+	          <h5>${reviewList.subject} (${reviewList.reviewDate})</h5>
 	          <p>${reviewList.content}</p>
-	          <a class="btn" href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${reviewList.outerNo}">상품 상세보기</a>
+	          <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${reviewList.outerNo}" class="btn btn-primary" >상품 상세보기</a>
+	          <input type="hidden" id="reviewNo_${reviewList.reviewNo}" name="reviewNo" value="${reviewList.reviewNo}">
+	          <input type="hidden" id="writeMemberId_${reviewList.reviewNo}" name="writeMemberId" value="${reviewList.memberId}">
+	          <a id="modifyButton_${reviewList.reviewNo}" name="modifyButton" href="${pageContext.request.contextPath}/member/modifyReviewPage.do?reviewNo=${reviewList.reviewNo}" class="btn btn-primary">수정하기</a>
+	          <a id="removeButton_${reviewList.reviewNo}" name="removeButton" href="${pageContext.request.contextPath}/member/removeMemberReview.do?reviewNo=${reviewList.reviewNo}" class="btn btn-primary">삭제하기</a>
 	        </div>
 	        <div class="col-lg-2">
 	          <p>아이디 : ${reviewList.memberId}</p>
-	          <img class="card-img-top" src="<c:url value='/image/1530592840356.jpg'/>" alt="">
+	          <img class="card-img-top" src="<c:url value='/image/${reviewList.pictureName}'/>" alt="">
 	        </div>
 	      </div>
 	      <hr>

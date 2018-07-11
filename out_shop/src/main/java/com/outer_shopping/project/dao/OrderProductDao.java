@@ -2,6 +2,7 @@ package com.outer_shopping.project.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.outer_shopping.project.vo.OrderCheckVo;
 import com.outer_shopping.project.vo.OrderProductVo;
@@ -53,4 +54,10 @@ public interface OrderProductDao {
 	 * @return
 	 */
 	List<OrderProductVo> selectOrderProductList(int orderId);
+	
+	
+	List<OrderProductVo> selectTopThreeList();
+	
+	List<Map<String, Object>> selectMonthProduct();
+	
 }

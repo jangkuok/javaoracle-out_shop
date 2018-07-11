@@ -72,6 +72,9 @@
 	            <li class="nav-item">
 	              <a class="nav-link" href="#">게시판 관리</a>
 	            </li>			
+				<li class="nav-item">
+	               <a class="nav-link" href="${pageContext.request.contextPath}/admin/saleProductGraph.do">판매량 확인</a>
+	            </li>	            
 	            <li class="nav-item">
 	              <a class="nav-link" href="${pageContext.request.contextPath}/logoutButton.do">로그아웃</a>
 	            </li>	

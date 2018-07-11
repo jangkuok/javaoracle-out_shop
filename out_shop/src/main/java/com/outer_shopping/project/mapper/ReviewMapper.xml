@@ -40,6 +40,28 @@
 		WHERE		r.OUTER_NO = o.OUTER_NO(+)
 	</sql> 
 	
+	<sql id="list-column">
+		REVIEW_NO, REVIEW_SUBJECT,	
+		REVIEW_CONTENT, PICTURE_NAME, 
+		THUMBNAIL_NAME, STAR, 
+		REVIEW_DATE, MEMBER_ID,	
+		OUTER_NO,OUTER_NAME, 
+		OUTER_IMAGENAME
+	</sql> 
+	
+	<!-- 리뷰 + 아웃터 select sql -->
+	<sql id="select-review-outer-list-sql">
+		SELECT  	r.REVIEW_NO, r.REVIEW_SUBJECT,	
+					r.REVIEW_CONTENT, r.PICTURE_NAME, 
+					r.THUMBNAIL_NAME, r.STAR, 
+					r.REVIEW_DATE, r.MEMBER_ID,
+					r.OUTER_NO,	o.OUTER_NAME,
+					o.OUTER_IMAGENAME
+		FROM		REVIEW r, OUTER_TB o 	
+		WHERE		r.OUTER_NO = o.OUTER_NO(+)
+	</sql> 	
+	
+	
 	
 	<!-- 리뷰 resultMap -->
 	<resultMap id="review-resultmap" type="com.outer_shopping.project.vo.ReviewVo">
@@ -115,12 +137,12 @@
 	</select>
 		
 	<!-- 리뷰 List 조회 SQL -->
-	<select id="selectListReview" parameterType="hashmap" resultMap="review-resultmap">	
-		SELECT <include refid="all-column"/>
+	<select id="selectListReview" parameterType="hashmap" resultMap="review-outer-resultmap">	
+		SELECT <include refid="list-column"/>
 		FROM(
-			SELECT ROWNUM RNUM, <include refid="all-column"/>
+			SELECT ROWNUM RNUM, <include refid="list-column"/>
 			FROM( 			
-						<include refid="select-reviewList-sql"/>
+						<include refid="select-review-outer-list-sql"/>
                         ORDER BY REVIEW_NO DESC 
 				)
 			WHERE ROWNUM &lt;=#{endIndex}	
@@ -134,21 +156,21 @@
 		<include refid="select-review-outer-sql"/>
 		AND r.REVIEW_NO = #{reviewNo}		
 	</select>
-	
+
+	 
 	<!-- 회원별 자신의 글 보기 SQL -->
-	<select id="selectMemberReview" parameterType="hashmap" resultMap="review-resultmap">
-		SELECT <include refid="all-column"/>
+	<select id="selectMemberReview" parameterType="hashmap" resultMap="review-outer-resultmap">
+		SELECT <include refid="list-column"/>
 		FROM(
-			SELECT ROWNUM RNUM, <include refid="all-column"/>
+			SELECT ROWNUM RNUM, <include refid="list-column"/>
 			FROM( 			
-						<include refid="select-reviewList-sql"/>
-						WHERE MEMBER_ID = #{memberId}
+						<include refid="select-review-outer-list-sql"/>
+						AND   r.MEMBER_ID = #{memberId}
                         ORDER BY REVIEW_NO DESC 
 				)
 			WHERE ROWNUM &lt;=#{endIndex}	
 			)
 		WHERE RNUM>=#{startIndex}
 	</select>
-
 
 </mapper>
