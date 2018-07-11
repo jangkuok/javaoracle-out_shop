@@ -159,4 +159,19 @@ public class OrderProductServiceImpl implements OrderProductService {
 		return list;
 	}
 
+	@Override
+	public List<Map<String, Object>> getYearProduct() {
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		try {
+			list = dao.selectYearProduct();
+		}catch (Exception e) {
+			System.out.println("getMonthProduct(service) : ");
+			e.printStackTrace();
+		}	
+		
+		return list;
+	}
+
+	
 }

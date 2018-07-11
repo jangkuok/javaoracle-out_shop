@@ -60,4 +60,6 @@ public interface OrderProductDao {
 	
 	List<Map<String, Object>> selectMonthProduct();
 	
+	List<Map<String, Object>> selectYearProduct();
+	
 }

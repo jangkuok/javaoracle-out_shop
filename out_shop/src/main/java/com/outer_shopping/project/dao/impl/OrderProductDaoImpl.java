@@ -185,6 +185,22 @@ public class OrderProductDaoImpl implements OrderProductDao {
 		}	
 		
 		return list;
+	}
+
+
+	@Override
+	public List<Map<String, Object>> selectYearProduct() {
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		try {
+
+			list = session.selectList(makeSqlId("selectYearProduct"));
+		}catch (Exception e) {
+			System.out.println("selectYearProduct(dao) : ");
+			e.printStackTrace();
+		}	
+		
+		return list;
 	}	
 	
 	

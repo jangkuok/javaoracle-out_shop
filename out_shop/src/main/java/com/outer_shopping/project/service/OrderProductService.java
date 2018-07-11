@@ -52,4 +52,6 @@ public interface OrderProductService {
 	List<OrderProductVo> getOrderTopThreeList();
 	
 	List<Map<String, Object>> getMonthProduct();
+	
+	List<Map<String, Object>> getYearProduct();
 }

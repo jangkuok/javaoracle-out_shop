@@ -268,33 +268,35 @@
 	</select>	
 	
 	<select id="selectMonthProduct" resultType="java.util.HashMap">
-			SELECT 	SUM(p.PRODUCT_PRICE) MONTH_PRICE, p.PRODUCT_NAME PRODUCT_NAME
+			SELECT 	COUNT(*) SALE_COUNT, p.PRODUCT_NAME PRODUCT_NAME
 			FROM 	ORDER_CHECK c, ORDER_PRODUCT p
 			WHERE   c.ORDER_NO = p.ORDER_NO 
 			AND		(c.HANDLING = '주문완료' OR c.HANDLING = '배송완료')	
 			AND		to_char(c.ORDER_DATE,'YYYY-MM-DD') <![CDATA[<=]]> to_char(SYSDATE,'YYYY-MM-DD')
 			AND		ROWNUM  <![CDATA[<=]]> 20
 			GROUP BY p.PRODUCT_NAME
-			ORDER BY MONTH_PRICE DESC
+			ORDER BY SALE_COUNT DESC
 	</select> 
 	
-
-<!-- /////////////////////////////////////////////////////////////////////////////////////////////////  -->
-<!-- admin -->
-
-	
-	<!-- 상품 List 조회 SQL -->
-<!-- 	<select id="selectWishList" parameterType="string" resultMap="outer-wishList-resultmap">
-		<include refid="select-wishList-outer-sql"/>
-		AND w.MEMBER_ID = #{memberId}
-	</select> -->
-	
-	<!-- 상품 등록 중복확인 SQL -->
-<!-- 	<select id="selectWishListOverlapped" parameterType="hashmap" resultMap="wishList-resultmap">
-		<include refid="select-wishList-sql"/>
-		WHERE MEMBER_ID = #{memberId}
-		AND OUTER_NO = #{outerNo}
-	</select> -->
-
-
+	<select id="selectYearProduct" resultType="java.util.HashMap">
+		SELECT YYYY, SUM("01") AS "01월", SUM("02") AS "02월", SUM("03") AS "03월", SUM("04") AS "04월", SUM("05") AS "05월", SUM("06") AS "06월",
+		SUM("07") AS "07월", SUM("08") AS "08월", SUM("09") AS "09월", SUM("10") AS "10월", SUM("11") AS "11월", SUM("12") AS "12월"
+		FROM(
+		        SELECT TO_CHAR(ORDER_DATE,'YYYY') AS YYYY, TO_CHAR(ORDER_DATE,'MM') AS MM, TO_CHAR(ORDER_DATE,'DD') AS DD
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '01', TOTAL_PRICE, 0) AS "01"
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '02', TOTAL_PRICE, 0) AS "02"
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '03', TOTAL_PRICE, 0) AS "03"
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '04', TOTAL_PRICE, 0) AS "04"
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '05', TOTAL_PRICE, 0) AS "05"
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '06', TOTAL_PRICE, 0) AS "06"
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '07', TOTAL_PRICE, 0) AS "07"
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '08', TOTAL_PRICE, 0) AS "08"
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '09', TOTAL_PRICE, 0) AS "09"
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '10', TOTAL_PRICE, 0) AS "10"
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '11', TOTAL_PRICE, 0) AS "11"
+		        , DECODE(TO_CHAR(ORDER_DATE,'MM'), '12', TOTAL_PRICE, 0) AS "12"
+		        FROM ORDER_CHECK
+		        ORDER BY DD
+		)GROUP BY YYYY
+	</select> 
 </mapper>
