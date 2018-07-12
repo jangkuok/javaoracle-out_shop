@@ -92,7 +92,7 @@ public class AdminOrderController {
 	}
 	
 	/**
-	 * 판매량 그래프
+	 * 상품별 월 판매수량 그래프
 	 */
 	@RequestMapping(value = "/saleProductGraph.do", method = {RequestMethod.GET,RequestMethod.POST})
 	public String saleProductGraph(Model model) throws REngineException, REXPMismatchException  {
@@ -100,8 +100,22 @@ public class AdminOrderController {
 		
 		List<Map<String, Object>> list = orderService.getMonthProduct();
 		
-		System.out.println(list);
+		//판매개수
+		String count = "";
 		
+		//상품이름
+		String name = "";
+		
+		for (int i = 0; i < list.size(); i++) {
+			
+			if(i == list.size()-1) {
+				count= count + "" + list.get(i).get("SALE_COUNT").toString() + "";
+				name = name + "'" + list.get(i).get("PRODUCT_NAME").toString() + "'";
+			}else {
+				count= count + "" + list.get(i).get("SALE_COUNT").toString() + ",";
+				name = name + "'" + list.get(i).get("PRODUCT_NAME").toString() + "',";
+			}			
+		}
 		
 		RConnection connection = null;
 		
@@ -113,35 +127,104 @@ public class AdminOrderController {
         
         if( file.exists() ){
             if(file.delete()){
-                System.out.println("파일삭제 성공");
+                logger.info("############# 파일삭제 성공 #############");
             }else{
-                System.out.println("파일삭제 실패");
+            	logger.info("############# 파일삭제 실패 #############");
             }
         }else{
-            System.out.println("파일이 존재하지 않습니다.");
+        	logger.info("############# 파일이 존재하지 않습니다. #############");
         }
 		
 		try {
 	        connection = new RConnection();
 	        connection.eval("library(ggplot2)");
 	        connection.eval("require(ggplot2)");
-	        connection.eval("name <- c('제닉스','제닉스2','g950','g340')");
-	        connection.eval("count <- c(100,33,21,87)");
-	        connection.eval("pp <- data.frame(이름=name,판매수입=count)");
-	        connection.eval("pp$pos <- pp$판매수입>=mean(pp$판매수입)");
+	        connection.eval("name <- c("+name+")");
+	        connection.eval("count <- c("+count+")");
+	        connection.eval("pp <- data.frame(상품이름=name,판매개수=count)");
+	        connection.eval("pp$pos <- pp$판매개수>=mean(pp$판매개수)");
 	        connection.eval("png(filename='D://DEV/fileUpLoad/image/graph/"+fileName+"',width=800,height=600)");
-	        connection.parseAndEval("print(ggplot(pp, aes(x = 이름, y = 판매수입, fill = pos)) + geom_col(size = .25) + scale_fill_manual(values = c('#F7756B', '#00BEFF')) +labs(fill='평균 이상'))");
+	        connection.parseAndEval("print(ggplot(pp, aes(x = 상품이름, y = 판매개수, fill = pos)) + geom_col(size = .25) + scale_fill_manual(values = c('#F7756B', '#00BEFF')) +labs(fill='평균 이상'))");
 	        connection.parseAndEval("print(dev.off());");
 	        connection.close(); 
 	        
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("R 그래프 오류 : ");
+			e.getStackTrace();
 		}
 		
-		System.out.println(fileName);
 		model.addAttribute("graph", fileName);
 
 		return "admin/saleProductPage";
 
 	}	
+	
+	
+	/**
+	 * 월별 판매익 그래프
+	 */
+	@RequestMapping(value = "/saleMonthProductGraph.do", method = {RequestMethod.GET,RequestMethod.POST})
+	public String saleMonthProductGraph(Model model) throws REngineException, REXPMismatchException  {
+		
+		List<Map<String, Object>> list = orderService.getYearProduct();
+		
+		//월
+		String month = "'01월','02월','03월','04월','05월','06월','07월','08월','09월','10월','11월','12월'";
+		
+		//판매가격
+		String price = "";
+	
+		for (int i = 1; i <= 12; i++) {
+			
+			if(i >= 10 && i < 12) {
+				price = price + list.get(0).get(i+"월").toString()+ ",";
+			}else if(i == 12) {
+				price = price + list.get(0).get(i+"월").toString();
+			}else {
+				price = price + list.get(0).get("0"+i+"월").toString() + ",";
+			}			
+		}
+		
+		RConnection connection = null;
+		
+		String fileName = "salesMonthGraph.png";
+		
+		String path = "D:\\DEV\\fileUpLoad\\image\\graph";
+		
+        File file = new File(path + "/"+fileName);
+        
+        if( file.exists() ){
+            if(file.delete()){
+                logger.info("############# 파일삭제 성공 #############");
+            }else{
+            	logger.info("############# 파일삭제 실패 #############");
+            }
+        }else{
+        	logger.info("############# 파일이 존재하지 않습니다. #############");
+        }
+		
+		try {
+	        connection = new RConnection();
+	        connection.eval("library(ggplot2)");
+	        connection.eval("require(ggplot2)");
+	        connection.eval("name <- c("+month+")");
+	        connection.eval("count <- c("+price+")");
+	        connection.eval("pp <- data.frame(월=name,총판매익=count)");
+	        connection.eval("pp$pos <- pp$총판매익>=mean(pp$총판매익)");
+	        connection.eval("png(filename='D://DEV/fileUpLoad/image/graph/"+fileName+"',width=800,height=600)");
+	        connection.parseAndEval("print(ggplot(pp, aes(x = 월, y = 총판매익, fill = pos)) + geom_col(size = .25) + scale_fill_manual(values = c('#F7756B', '#00BEFF')) +labs(fill='평균 이상'))");
+	        connection.parseAndEval("print(dev.off());");
+	        connection.close(); 
+	        
+		} catch (Exception e) {
+			System.out.println("R 그래프 오류 : ");
+			e.getStackTrace();
+		}
+		
+		model.addAttribute("graph", fileName);
+
+		return "admin/saleProductPage";
+
+	}
+	
 }
