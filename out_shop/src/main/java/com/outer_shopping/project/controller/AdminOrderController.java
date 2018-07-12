@@ -110,12 +110,14 @@ public class AdminOrderController {
 			
 			if(i == list.size()-1) {
 				count= count + "" + list.get(i).get("SALE_COUNT").toString() + "";
-				name = name + "'" + list.get(i).get("PRODUCT_NAME").toString() + "'";
+				name = name + "\"" + list.get(i).get("PRODUCT_NAME").toString() + "\"";
 			}else {
 				count= count + "" + list.get(i).get("SALE_COUNT").toString() + ",";
-				name = name + "'" + list.get(i).get("PRODUCT_NAME").toString() + "',";
+				name = name + "\"" + list.get(i).get("PRODUCT_NAME").toString() + "\",";
 			}			
 		}
+		System.out.println(count);
+		System.out.println(name);
 		
 		RConnection connection = null;
 		
@@ -137,7 +139,7 @@ public class AdminOrderController {
 		
 		try {
 	        connection = new RConnection();
-	        connection.eval("library(ggplot2)");
+/*	        connection.eval("library(ggplot2)");
 	        connection.eval("require(ggplot2)");
 	        connection.eval("name <- c("+name+")");
 	        connection.eval("count <- c("+count+")");
@@ -146,11 +148,26 @@ public class AdminOrderController {
 	        connection.eval("png(filename='D://DEV/fileUpLoad/image/graph/"+fileName+"',width=800,height=600)");
 	        connection.parseAndEval("print(ggplot(pp, aes(x = 상품이름, y = 판매개수, fill = pos)) + geom_col(size = .25) + scale_fill_manual(values = c('#F7756B', '#00BEFF')) +labs(fill='평균 이상'))");
 	        connection.parseAndEval("print(dev.off());");
-	        connection.close(); 
+	        connection.close(); */
+	        connection.eval("library(Rserve)");
+	        connection.eval("library(ggplot2)");	        
+	        connection.eval("require(ggplot2)");	        
+	        connection.eval("name <- c("+name+")");	        
+	        connection.eval("count <- c("+count+")");        
+	        connection.eval("pp <- data.frame(상품이름=name,판매개수=count)");	        
+	        connection.eval("png(filename='D://DEV/fileUpLoad/image/graph/"+fileName+"',width=1000,height=800)");
+	        connection.eval("print(ggplot(pp,aes(x = 상품이름, y = 판매개수, fill=상품이름))+"+
+	        		"geom_bar(stat = \"identity\")+"+
+	        		"geom_text(aes(label = 판매개수), vjust = 0.2)+"+
+	        		"ggtitle(\"상품별 판매수\")+" + 
+	        		"theme(axis.text.x=element_text(size=15))+"+
+	        		"theme(axis.text.y=element_text(size=15))+coord_flip())");	        
+	        connection.eval("print(dev.off())");
+	        connection.close();
 	        
 		} catch (Exception e) {
 			System.out.println("R 그래프 오류 : ");
-			e.getStackTrace();
+			e.printStackTrace();
 		}
 		
 		model.addAttribute("graph", fileName);
@@ -169,8 +186,7 @@ public class AdminOrderController {
 		List<Map<String, Object>> list = orderService.getYearProduct();
 		
 		//월
-		String month = "'01월','02월','03월','04월','05월','06월','07월','08월','09월','10월','11월','12월'";
-		
+		String month = "\"01월\",\"02월\",\"03월\",\"04월\",\"05월\",\"06월\",\"07월\",\"08월\",\"09월\",\"10월\",\"11월\",\"12월\"";
 		//판매가격
 		String price = "";
 	
@@ -184,6 +200,9 @@ public class AdminOrderController {
 				price = price + list.get(0).get("0"+i+"월").toString() + ",";
 			}			
 		}
+		
+		System.out.println(month);
+		System.out.println(price);		
 		
 		RConnection connection = null;
 		
@@ -205,7 +224,7 @@ public class AdminOrderController {
 		
 		try {
 	        connection = new RConnection();
-	        connection.eval("library(ggplot2)");
+/*	        connection.eval("library(ggplot2)");
 	        connection.eval("require(ggplot2)");
 	        connection.eval("name <- c("+month+")");
 	        connection.eval("count <- c("+price+")");
@@ -215,10 +234,27 @@ public class AdminOrderController {
 	        connection.parseAndEval("print(ggplot(pp, aes(x = 월, y = 총판매익, fill = pos)) + geom_col(size = .25) + scale_fill_manual(values = c('#F7756B', '#00BEFF')) +labs(fill='평균 이상'))");
 	        connection.parseAndEval("print(dev.off());");
 	        connection.close(); 
-	        
+*/	     
+	        connection.eval("library(Rserve)");
+	        connection.eval("library(ggplot2)");	        
+	        connection.eval("require(ggplot2)");	        
+	        connection.eval("name <- c("+month+")");	        
+	        connection.eval("count <- c("+price+")");	        
+	        connection.eval("fcount <- format(count, big.mark = \",\", scientific = FALSE)");	        
+	        connection.eval("pp <- data.frame(월=name,총판매익=count)");	        
+	        connection.eval("png(filename='D://DEV/fileUpLoad/image/graph/"+fileName+"',width=1000,height=800)");
+	        connection.eval("print(ggplot(pp,aes(x = 월, y = 총판매익, fill=월))+"+
+	        		"scale_y_continuous(labels = function(총판매익) format(총판매익, big.mark = \",\", scientific = FALSE))+"+
+	        		"geom_bar(stat = \"identity\")+"+
+	        		"ggtitle(\"월별판매액\")+" +
+	        		"geom_text(aes(label = fcount), vjust = -0.2)+"+
+	        		"theme(axis.text.x=element_text(size=15))+"+
+	        		"theme(axis.text.y=element_text(size=15)))");	        
+	        connection.eval("print(dev.off())");
+	        connection.close(); 	        
 		} catch (Exception e) {
 			System.out.println("R 그래프 오류 : ");
-			e.getStackTrace();
+			e.printStackTrace();
 		}
 		
 		model.addAttribute("graph", fileName);
