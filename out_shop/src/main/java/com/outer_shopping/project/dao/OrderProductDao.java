@@ -32,6 +32,22 @@ public interface OrderProductDao {
 	 * @return
 	 */
 	int selectOrderListCount();
+
+	/**
+	 * 상태별 리스트 카운트
+	 * @param handing
+	 * @return
+	 */
+	int selectOrderHandingListCount(String handing);
+	
+	
+	/**
+	 * 회원별 리스트 카운트
+	 * @param memberId
+	 * @param items
+	 * @return
+	 */
+	int selectOrderMemberIdDateListCount(String memberId, String items);
 	
 	/**
 	 * 전체 주문 목록

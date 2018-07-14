@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.outer_shopping.project.dao.ReviewDao;
 import com.outer_shopping.project.mapper.ReviewMapper;
+import com.outer_shopping.project.vo.OuterVo;
 import com.outer_shopping.project.vo.ReviewVo;
 
 
@@ -27,8 +28,6 @@ public class ReviewDaoImpl implements ReviewDao {
 			System.out.println("insertReview(dao) : ");
 			e.printStackTrace();
 		}
-        
-		
 	}
 
 	@Override
@@ -66,6 +65,38 @@ public class ReviewDaoImpl implements ReviewDao {
 		}
 		
 		return count;
+	}
+	
+	
+	@Override
+	public int selectReivewMemberIdListCount(String memberId) {
+		int count = 0;
+		
+		try {
+			count = session.getMapper(ReviewMapper.class).selectReivewMemberIdListCount(memberId);
+		}catch (Exception e) {
+			System.out.println("selectReivewMemberIdListCount(dao) : ");
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+	
+
+	@Override
+	public Map<String, Object> selectReviewStarAvg(int outerNo) {
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		try {
+			map = session.getMapper(ReviewMapper.class).selectReviewStarAvg(outerNo);
+		}catch (Exception e) {
+
+			System.out.println("selectReviewNo(dao) : ");
+			e.printStackTrace();
+		}
+		
+		return map;
 	}
 	
 	@Override
@@ -119,5 +150,27 @@ public class ReviewDaoImpl implements ReviewDao {
 		}
 		return list;
 	}
+
+	@Override
+	public List<OuterVo> selectOuterNoReview(int outerNo, int startIndex, int endIndex) {
+		List<OuterVo> list = null;
+		
+		try {			
+			Map<String, Object> input = new HashMap<String, Object>();
+			input.put("outerNo",outerNo);
+			input.put("startIndex",startIndex);
+			input.put("endIndex",endIndex);
+		
+			list = session.selectList("com.outer_shopping.project.mapper.OuterMapper.selectOuterNoReview", input);
+		}catch (Exception e) {
+			System.out.println("selectOuterReview(dao) : ");
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+
 	
 }
+

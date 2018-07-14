@@ -144,6 +144,13 @@
 		SELECT COUNT(*) FROM ORDER_CHECK
 	</select>
 	
+	<!-- 주문 상태별 List 카운트  -->
+	<select id = "selectOrderHandingListCount" parameterType="String" resultType="_int">
+		SELECT COUNT(*) 
+		FROM ORDER_CHECK
+		WHERE HANDLING = #{handing}
+	</select>
+	
 	<!-- 주문 상태 수정 SQL -->
 	<update id="handingUpdateOrder" parameterType="hashmap">
 		UPDATE 	ORDER_CHECK 
@@ -201,6 +208,45 @@
 			WHERE ROWNUM &lt;=#{endIndex}	
 			)
 		WHERE RNUM>=#{startIndex}		
+	</select>
+
+
+
+	
+	<!-- 회원 주문 List 카운트  -->
+	<select id = "selectOrderMemberIdDateListCount" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*) 
+		FROM ORDER_CHECK
+		WHERE MEMBER_ID = #{memberId}
+	    <choose>
+		 	<when test="items == '1달'">
+			 <![CDATA[
+		 		AND to_char(ORDER_DATE,'YYYY-MM-DD') <=	to_char(SYSDATE,'YYYY-MM-DD') 
+				AND to_char(ORDER_DATE,'YYYY-MM-DD') >= to_char(add_months(SYSDATE,-1),'YYYY-MM-DD')
+			 ]]>
+	            ORDER BY ORDER_NO DESC
+	        </when>
+	        
+	        <when test="items == '3달'">
+			 <![CDATA[
+			 	AND to_char(ORDER_DATE,'YYYY-MM-DD') <=	to_char(SYSDATE,'YYYY-MM-DD') 
+				AND to_char(ORDER_DATE,'YYYY-MM-DD') >= to_char(add_months(SYSDATE,-3),'YYYY-MM-DD')
+			 ]]>								
+	            ORDER BY ORDER_NO DESC
+	        </when>
+	        
+	        <when test="items == '1년'">
+			 <![CDATA[						     
+		 		AND to_char(ORDER_DATE,'YYYY-MM-DD') <=	to_char(SYSDATE,'YYYY-MM-DD') 
+				AND to_char(ORDER_DATE,'YYYY-MM-DD') >= to_char(add_months(SYSDATE,-12),'YYYY-MM-DD')
+			 ]]>								
+	            ORDER BY ORDER_NO DESC
+	        </when>  
+	        <!-- 전체 검색이 아닐 경우 -->
+	        <otherwise>
+	            ORDER BY ORDER_NO DESC
+	        </otherwise>	     
+	    </choose>
 	</select>
 	
 	<!-- 회원 주문 조회  SQL -->

@@ -29,7 +29,10 @@ $(document).ready(function() {
             "data":{ "orderNo" : orderNo},
             "dataType":"json",
             "success" : function (data) {
+            	 $('tr#modalTr').remove();
+            	
             	 $.each(data,function(index,item){
+            		 
            			 var product = '<tr id="modalTr"><td>'+ item.outerNo + '</td>'+
                		 '<td><a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo='+item.outerNo+'">'+
                		 '<img src="<c:url value="/image/thumbnail/'+item.thumbnailName+'"/>"/></a></td>'+
@@ -42,10 +45,6 @@ $(document).ready(function() {
             		 $('.modal-body tbody').append(product);
             	 });
             }                  
-        });
-
-        $('input[id^=orderProductList_]').on('click',function(){
-        	$('tr#modalTr').remove();
         });
     });
     
@@ -62,6 +61,8 @@ $(document).ready(function() {
             "data":{ "orderNo" : orderNo},
             "dataType":"json",
             "success" : function (data) {
+            	 $('tr#modalTr').remove();
+            	
             	 $.each(data,function(index,item){
            			 var product = '<tr id="modalTr"><td>'+ item.outerNo + '</td>'+
                		 '<td><a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo='+item.outerNo+'">'+
@@ -77,10 +78,6 @@ $(document).ready(function() {
             		 $('.modal-body tbody').append(product);
             	 });
             }                  
-        });
-
-        $('input[id^=orderProductList_]').on('click',function(){
-        	$('tr#modalTr').remove();
         });
     });
 });

@@ -99,7 +99,7 @@ public class OrderController {
 	 *	상품주문 
 	 */
 	@RequestMapping(value = "/orderProduct.do", method = {RequestMethod.GET,RequestMethod.POST})
-	public String orderProduct(Model model,@RequestParam Map<String, Object> map) {
+	public String orderProduct(Model model,@RequestParam Map<String, Object> map,RedirectAttributes ra) {
 		
 		//주문에 관한 상품 등록
 		int productCount = Integer.parseInt(map.get("productCount").toString());
@@ -151,6 +151,10 @@ public class OrderController {
 		
 		
 		orderservice.addOrderProduct(list);
+		
+		ra.addFlashAttribute("productList", list);	
+		ra.addFlashAttribute("order", check);
+
 		logger.info("############# 주문 상품 등록 #############");
 
 

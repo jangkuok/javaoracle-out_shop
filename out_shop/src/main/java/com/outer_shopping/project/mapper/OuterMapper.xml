@@ -89,6 +89,24 @@
 		</collection>
 	</resultMap>
 	
+	
+	<!-- 아웃터 + 리뷰 resultMap -->
+	<resultMap type="com.outer_shopping.project.vo.OuterVo" id="outer-review-resultmap" extends="outer-resultmap" >
+		<collection property="reviewList" ofType="com.outer_shopping.project.vo.ReviewVo">
+			<id column="REVIEW_NO" property="reviewNo"/>
+			<result column="REVIEW_SUBJECT" property="subject"/>
+			<result column="REVIEW_CONTENT" property="content"/>
+			<result column="PICTURE_NAME" property="pictureName"/>
+			<result column="THUMBNAIL_NAME" property="thumbnailName"/>
+			<result column="STAR" property="star"/>
+			<result column="REVIEW_DATE" property="reviewDate"/>
+			<result column="MEMBER_ID" property="memberId"/>
+			<result column="OUTER_NO" property="outerNo"/>
+		</collection>
+	</resultMap>	
+	
+	
+	
 	<!-- 등록 SQL -->
 	<insert id="insertOuter" parameterType="com.outer_shopping.project.vo.OuterVo">
 		<selectKey resultType="int" keyProperty="outerNo" order="BEFORE">
@@ -180,13 +198,44 @@
 			)
 			WHERE RNUM>=#{startIndex}
 	</select>	 
-	 
-	 
-	 
+	  
 	<!-- 상품 상세정보 확인 SQL -->
 	<select id="selectOuterId" parameterType="int" resultMap="outer-size-picture-resultmap">
 		<include refid="select-Outer-size-picture-sql"/>
 		AND o.OUTER_NO = #{outerNo}
 	</select>
-
+	
+	
+	
+	<sql id="outer-review-list-column">
+		REVIEW_NO, REVIEW_SUBJECT,	
+		REVIEW_CONTENT, PICTURE_NAME, 
+		THUMBNAIL_NAME, STAR, 
+		REVIEW_DATE, MEMBER_ID,	
+		OUTER_NO,OUTER_NAME, 
+		OUTER_IMAGENAME
+	</sql>
+	
+	<!-- 상품별 리뷰 보기 SQL -->
+	<select id="selectOuterNoReview" parameterType="hashmap" resultMap="outer-review-resultmap">
+		SELECT <include refid="outer-review-list-column"/>
+		FROM(
+			SELECT ROWNUM RNUM, <include refid="outer-review-list-column"/>
+			FROM( 			
+						SELECT  	r.REVIEW_NO, r.REVIEW_SUBJECT,	
+									r.REVIEW_CONTENT, r.PICTURE_NAME, 
+									r.THUMBNAIL_NAME, r.STAR, 
+									r.REVIEW_DATE, r.MEMBER_ID,
+									r.OUTER_NO,	o.OUTER_NAME,
+									o.OUTER_IMAGENAME
+						FROM		REVIEW r, OUTER_TB o 	
+						WHERE		r.OUTER_NO = o.OUTER_NO(+)
+						AND   r.OUTER_NO = #{outerNo}
+                        ORDER BY REVIEW_NO DESC 
+				)
+			WHERE ROWNUM &lt;=#{endIndex}	
+			)
+		WHERE RNUM>=#{startIndex}
+	</select>
+	
 </mapper>

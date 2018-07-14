@@ -73,8 +73,18 @@ public class OrderProductServiceImpl implements OrderProductService {
 		HashMap<String, Object> map = new HashMap<>();
 		
 		try {
+			
 			int totalCount = dao.selectOrderListCount();
-			PagingBean pageBean = new PagingBean(totalCount, page);
+			int handingCount = dao.selectOrderHandingListCount(items);
+
+			PagingBean pageBean = null;
+			
+			if(items.equals("전체보기")) {
+				pageBean = new PagingBean(totalCount, page);
+			}else {
+				pageBean = new PagingBean(handingCount, page);
+			}
+						
 			map.put("pageBean", pageBean);
 			list = dao.selectOrderList(items,pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());
 			map.put("list", list);
@@ -98,7 +108,7 @@ public class OrderProductServiceImpl implements OrderProductService {
 		HashMap<String, Object> map = new HashMap<>();
 		
 		try {
-			int totalCount = dao.selectOrderListCount();
+			int totalCount = dao.selectOrderMemberIdDateListCount(memberId,items);
 			PagingBean pageBean = new PagingBean(totalCount, page);
 			map.put("pageBean", pageBean);
 			list = dao.selectMemberOrderList(memberId, items, pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());

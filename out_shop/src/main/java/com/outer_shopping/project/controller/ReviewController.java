@@ -129,17 +129,8 @@ public class ReviewController {
         
         ReviewVo reviewInfo = reviewService.getReviewNo(review.getReviewNo());
 
-        try {
-        	 ra.addFlashAttribute("review", reviewInfo);
-        	 
-		} catch (Exception e) {
-			System.out.println("############################################################");
-			e.printStackTrace();
-		}
-        
-        
-       
-        
+        ra.addFlashAttribute("review", reviewInfo);
+
         logger.info("############# 리뷰등록 완료 #############");
 		
 		logger.info("############# 리뷰 페이지 이동 #############");
