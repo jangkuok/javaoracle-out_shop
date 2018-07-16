@@ -67,21 +67,22 @@
 	
 	//상품size 추가
 	$("#sizePlusButton").click(function() {
-		var size = '<tr><td><select id ="type_'+index+'" name="type"><option value="선택하세요">선택하세요</option><option value="S">S</option>'+
-		'<option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="FREE">FREE</option></select>'+
+		var size = '<tr><td><select class="form-control sizeInputStyle" id ="type_'+index+'" name="type"><option value="선택하세요">선택하세요</option><option value="S">S</option>'+
+		'<option  value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="FREE">FREE</option></select>'+
 		'<input type="hidden" id="typeHidden_'+index+'" name="productSize" value=""></td>'+
-		'<td><input type="number" id="chest'+index+'" name="productSize" size="3"></td>'+
-		'<td><input type="number" id="sleeve'+index+'" name="productSize" size="3"></td>'+
-		'<td><input type="number" id="shoulder'+index+'" name="productSize" size="3"></td>'+
-		'<td><input type="number" id="whole'+index+'" name="productSize" size="3"></td>'+											
-		'<td><input type="number" id="amount'+index+'" name="productSize" value=""></td>'+
-		'<td><select id ="color_'+index+'" name="color"><option value="선택하세요">선택하세요</option>'+
+		'<td><input class="form-control sizeInputStyle" type="number" id="chest'+index+'" name="productSize" size="3"></td>'+
+		'<td><input class="form-control sizeInputStyle" type="number" id="sleeve'+index+'" name="productSize" size="3"></td>'+
+		'<td><input class="form-control sizeInputStyle" type="number" id="shoulder'+index+'" name="productSize" size="3"></td>'+
+		'<td><input class="form-control sizeInputStyle" type="number" id="whole'+index+'" name="productSize" size="3"></td>'+											
+		'<td><input class="form-control sizeInputStyle" type="number" id="amount'+index+'" name="productSize" value=""></td>'+
+		'<td><select class="form-control sizeInputStyle" id ="color_'+index+'" name="color"><option value="선택하세요">선택하세요</option>'+
 		'<option style="background-color:black;color:white" value="블랙">블랙</option>'+
 		'<option style="background-color:white" value="화이트">화이트</option>'+
 		'<option style="background-color:red;color:white" value="레드">레드</option>'+
 		'<option style="background-color:#08088A;color:white" value="네이비">네이비</option>'+
 		'<option style="background-color:#2E2E2E;color:white" value="차콜">차콜</option>'+
-		'<input type="hidden" id="colorHidden_'+index+'" name="productSize" value=""></select></td></tr>'	
+		'<option style="background-color:#FFE4B5;color:white" value="아이보리">아이보리</option>'+
+		'<input type="hidden" id="colorHidden_'+index+'" name="productSize" value=""></select></td></tr>';
 		
 		index++;
 		
@@ -121,10 +122,10 @@
 			$('#whole'+no).val('75');
 		}
 		if($(this).val() == "FREE"){
-			$('#chest'+no).val('64');
-			$('#sleeve'+no).val('55');
-			$('#shoulder'+no).val('60');
-			$('#whole'+no).val('74');
+			$('#chest'+no).val('59');
+			$('#sleeve'+no).val('26');
+			$('#shoulder'+no).val('50');
+			$('#whole'+no).val('73');
 		}
 	});
 	
@@ -155,8 +156,7 @@
  			var s = $(this).val();
 			sizeArr.push(s);
 		});	
-		alert(sizeArr);
- 		
+		
 		$.ajax
 		({		
 			"url":"${pageContext.request.contextPath}/admin/addOuterSize.do", 
@@ -229,6 +229,11 @@
 	
 });
 </script>
+<style type="text/css">
+.sizeInputStyle{
+   width:135px;
+}
+</style>
 </head>
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
@@ -236,7 +241,7 @@
 <h1>상품 등록</h1><hr>
 </div>
 	<form id="outerVo" name="outerVo" enctype="multipart/form-data">
-		<table class="table table-hover" id="outerAdd">
+		<table class="table table-hover" id="outerAdd" style="margin-bottom:10px;">
 			<tr>
 				<th width="20%">종류</th>
 				<td width="80%">
@@ -296,7 +301,7 @@
 			<input class="btn" type="button" id="sizePlusButton" value="+">
 			<input class="btn" type="button" id="sizeMinusButton" value="-">
 		</div>
-		<table class="table table-hover">
+		<table class="table table-hover" style="margin-bottom:10px;">
 			<thead>
 				<tr>
 					<th>사이즈</th>
@@ -311,7 +316,7 @@
 			<tbody id="sizeTable">
 				<tr>
 					<td>
-						<select id ="type_1" name="type">
+						<select class="form-control sizeInputStyle" id ="type_1" name="type">
 							<option value="선택하세요">선택하세요</option>
 							<option value="S">S</option>
 							<option value="M">M</option>
@@ -322,28 +327,29 @@
 						<input type="hidden" id="typeHidden_1" name="productSize" value="">
 					</td>
 					<td>
-						<input type="number" id="chest1" name="productSize" size="3">
+						<input class="form-control sizeInputStyle" type="number" id="chest1" name="productSize" size="3">
 					</td>
 					<td>
-						<input type="number" id="sleeve1" name="productSize" size="3">
+						<input class="form-control sizeInputStyle" type="number" id="sleeve1" name="productSize" size="3">
 					</td>
 					<td>
-						<input type="number" id="shoulder1" name="productSize" size="3">
+						<input class="form-control sizeInputStyle" type="number" id="shoulder1" name="productSize" size="3">
 					</td>
 					<td>
-						<input type="number" id="whole1" name="productSize" size="3">
+						<input class="form-control sizeInputStyle" type="number" id="whole1" name="productSize" size="3">
 					</td>														
 					<td>
-						<input type="number" id="amount1" name="productSize" value="${outerVo.price}">
+						<input class="form-control sizeInputStyle" type="number" id="amount1" name="productSize" value="${outerVo.price}">
 					</td>
 					<td>
-						<select id ="color_1" name="color">
+						<select class="form-control sizeInputStyle" id ="color_1" name="color">
 							<option value="선택하세요">선택하세요</option>
 							<option style="background-color:black;color:white" value="블랙">블랙</option>
 							<option style="background-color:white" value="화이트">화이트</option>
 							<option style="background-color:red;color:white" value="레드">레드</option>
 							<option style="background-color:#08088A;color:white" value="네이비">네이비</option>
 							<option style="background-color:#2E2E2E;color:white" value="차콜">차콜</option>
+							<option style="background-color:#FFE4B5;color:white" value="아이보리">아이보리</option>
 						</select>
 						<input type="hidden" id="colorHidden_1" name="productSize" value="">
 					</td>

@@ -60,13 +60,6 @@ public class ReviewServiceImpl implements ReviewService {
 		try {
 			map = reviewDao.selectReviewStarAvg(outerNo);
 			
-			if(map == null) {
-				int i = 0;
-				
-				map.put("starAvg", i);
-			}else {
-				map.put("starAvg", map);				
-			}
 		}catch (Exception e) {
 			System.out.println("getListReview(service) : ");
 			e.printStackTrace();

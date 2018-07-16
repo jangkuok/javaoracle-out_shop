@@ -34,7 +34,7 @@ document.onkeydown = function(e){
             	${member.name}님 회원가입을 환영합니다.
             </div>
             <div class="card-footer" style="text-align:center;">
-            	<a href="${pageContext.request.contextPath}/" class="btn btn-dark">홈으로</a>          	      	
+            	<a style="color:white;" href="${pageContext.request.contextPath}/" class="btn btn-dark">홈으로</a>          	      	
             </div>
           </div>
         </div>

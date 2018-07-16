@@ -19,11 +19,15 @@
 	background-color:transparent;
 	border:0 solid black;
 }
-  .my-hr3 {
-    border: 0;
-    height: 3px;
-    background: #ccc;
-  }
+.my-hr3 {
+   border: 0;
+   height: 3px;
+   background: #ccc;
+}
+  
+a:link { color: black; text-decoration: none;}
+a:visited { color: black; text-decoration: none;}
+a:hover { color: black; text-decoration: underline;}
 </style>
 </head>
 <body>

@@ -9,10 +9,10 @@
 			+ Outer 조회
 	 -->
 	 
-	<sql id="all-column">
-	
-	OUTER_NO, OUTER_TYPE, OUTER_NAME, OUTER_CONTENT, OUTER_PRICE, OUTER_DATE, OUTER_THUMBNAIL_NAME, OUTER_IMAGENAME
+	<sql id="all-column">	
+		OUTER_NO, OUTER_TYPE, OUTER_NAME, OUTER_CONTENT, OUTER_PRICE, OUTER_DATE, OUTER_THUMBNAIL_NAME, OUTER_IMAGENAME
 	</sql> 
+	
 	
 	<!-- 전체 조회 sql -->
 	<sql id="select-Outer-sql">
@@ -144,18 +144,59 @@
 	</delete>
 	
 	<!-- 상품List 카운트  -->
-	<select id = "selectOuterListCount" resultType="_int">
+	<select id = "selectOuterAmountCount" resultType="_int">
+		SELECT 	COUNT(*) 
+		FROM	OUTER_TB o, OUTER_SIZE s	
+		WHERE	o.OUTER_NO = s.OUTER_NO(+)		
+	</select>
+	
+	<!-- 상품List 카운트  -->
+	<select id = "selectOuterListCount" parameterType="hashmap" resultType="_int">
 		SELECT COUNT(*) FROM OUTER_TB
+		<choose>
+	 	   <when test="items == 'Jacket'">
+	           WHERE OUTER_TYPE LIKE '자켓'
+
+	       </when>
+	       
+	       <when test="items == 'Coat'">
+	           WHERE OUTER_TYPE LIKE '코트'
+	           ORDER BY OUTER_DATE DESC
+	       </when>
+	       
+	       <when test="items == 'Padding'">
+	           WHERE OUTER_TYPE LIKE '패딩'
+	           ORDER BY OUTER_DATE DESC
+	       </when>
+	       
+	       <when test="items == 'Cardigan'">
+	           WHERE OUTER_TYPE LIKE '가디건'
+	           ORDER BY OUTER_DATE DESC
+	       </when>
+	       
+	       <when test="items == 'Vest'">
+	           WHERE OUTER_TYPE LIKE '조끼'
+	           ORDER BY OUTER_DATE DESC
+	       </when>
+	       <when test="items == 'Outer'">
+	           ORDER BY OUTER_DATE DESC
+	       </when>
+	       <!-- 단어 경우 -->
+	       <otherwise>
+	        	WHERE OUTER_NAME LIKE '%'||#{items}||'%'
+	        	ORDER BY OUTER_DATE DESC
+	       </otherwise>
+	   </choose>		
 	</select>
 
 	<!-- LIST 전체 조회 SQL -->
-	<select id="selectOuterList" resultMap="outer-size-resultmap">
-		<include refid="select-Outer-size-sql"/>
+	<select id="selectOuterList" resultMap="outer-resultmap">
+		<include refid="select-Outer-sql"/>		
 		ORDER BY OUTER_DATE DESC
 	</select>
 	 
-	 <!-- 카테고리 별 상품 리스트 SQP --> 
-	<select id="selectItemsOuterList" parameterType="hashmap" resultMap="outer-size-resultmap">
+	<!-- 카테고리 별 상품 리스트 SQP --> 
+	<select id="selectItemsOuterList" parameterType="hashmap" resultMap="outer-resultmap">
 		SELECT <include refid="all-column"/>
 			FROM
 			(
@@ -188,8 +229,12 @@
 						            WHERE OUTER_TYPE LIKE '조끼'
 						            ORDER BY OUTER_DATE DESC
 						        </when>
-						        <!-- 전체 검색이 아닐 경우 -->
+						        <when test="items == 'Outer'">
+						            ORDER BY OUTER_DATE DESC
+						        </when>
+						        <!-- 단어 검색일 경우 -->
 						        <otherwise>
+						        	WHERE OUTER_NAME LIKE '%'||#{items}||'%'
 						            ORDER BY OUTER_DATE DESC
 						        </otherwise>
 						    </choose>
@@ -204,8 +249,6 @@
 		<include refid="select-Outer-size-picture-sql"/>
 		AND o.OUTER_NO = #{outerNo}
 	</select>
-	
-	
 	
 	<sql id="outer-review-list-column">
 		REVIEW_NO, REVIEW_SUBJECT,	
@@ -236,6 +279,26 @@
 			WHERE ROWNUM &lt;=#{endIndex}	
 			)
 		WHERE RNUM>=#{startIndex}
+	</select>
+
+	<!-- 카테고리 별 상품 리스트 SQP --> 
+	<select id="selectOuterAmountList" parameterType="hashmap" resultMap="outer-size-resultmap">
+		SELECT OUTER_NAME, OUTER_PRICE, OUTER_THUMBNAIL_NAME, SIZE_TYPE, AMOUNT, COLOR, OUTER_NO
+			FROM
+			(
+				SELECT ROWNUM RNUM, OUTER_NAME, OUTER_PRICE, OUTER_THUMBNAIL_NAME, SIZE_TYPE, AMOUNT, COLOR, OUTER_NO 
+				FROM
+					(
+						SELECT  	o.OUTER_NAME, o.OUTER_PRICE, 
+									o.OUTER_THUMBNAIL_NAME, s.SIZE_TYPE, s.AMOUNT, s.COLOR, 
+									s.OUTER_NO 
+						FROM		OUTER_TB o, OUTER_SIZE s	
+						WHERE		o.OUTER_NO = s.OUTER_NO(+)
+							 
+					)	
+				WHERE ROWNUM &lt;=#{endIndex}
+			)
+			WHERE RNUM>=#{startIndex}
 	</select>
 	
 </mapper>

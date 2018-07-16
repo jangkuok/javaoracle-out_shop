@@ -11,8 +11,8 @@
 <div>
 <h1>SALES RATE</h1><hr>
 </div>
-<a href="${pageContext.request.contextPath}/admin/saleProductGraph.do" class="btn btn-primary">상품별 판매개수</a>
-<a href="${pageContext.request.contextPath}/admin/saleMonthProductGraph.do" class="btn btn-primary">월별 판매익</a>
+<a style="color:white;" href="${pageContext.request.contextPath}/admin/saleProductGraph.do" class="btn btn-primary">상품별 판매개수</a>
+<a style="color:white;" href="${pageContext.request.contextPath}/admin/saleMonthProductGraph.do" class="btn btn-primary">월별 판매익</a>
 	<p style="text-align: center;">
 		<img class="img-rounded" src="<c:url value='/image/graph/${graph}'/>"/>
 	</p>

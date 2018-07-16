@@ -68,20 +68,21 @@ $(document).ready(function(){
 		         <h5>등급 : ${memberVo.grade}</h5>
             </div>
             <div class="card-footer" style="text-align:center;">          	
-            	<a href="${pageContext.request.contextPath}/member/modifyPage.do?memberId=${memberVo.id}"
+            	<a style="color:white;"  href="${pageContext.request.contextPath}/member/modifyPage.do?memberId=${memberVo.id}"
             		 class="btn btn-dark">회원수정</a>
-              	<a id="secessionB" href="#" class="btn btn-dark">회원탈퇴</a>
+              	<a style="color:white;"  id="secessionB" class="btn btn-dark">회원탈퇴</a>
               	<div id="secessionDiv">
               		<form id="deleteForm" action="${pageContext.request.contextPath}/member/deleteMember.do" method="post">
 						<input type="hidden" name="id" value="${memberVo.id}">		
 						<input type="hidden" name="pw" value="${memberVo.pw}">
 						<div class="row" style="margin-top:5px;text-align:center;">
-							<div class="col-sm-4">
-             					<input class="form-control" type="password" name="password">
-            				</div>
-             				<div class="col-sm-2">
-             					<input class="btn btn-dark" type="button" id="deleteB" value="회원탈퇴">
-             				</div>
+								<div class="col-sm-4">
+	             					<input class="form-control" type="password" name="password">
+	            				</div>
+	             				<div class="col-sm-2">
+	             					<input class="btn btn-dark" type="button" id="deleteB" value="회원탈퇴">
+	             				</div>
+
               			</div>
               		</form>
               	</div>
@@ -91,19 +92,19 @@ $(document).ready(function(){
         <div class="col-lg-6">
         	<input type="hidden" id="memberId" name="memberId" value="${memberVo.id}">
         	<h4><strong>
-	      		<a href="${pageContext.request.contextPath}/member/wishListSearch.do?memberId=${memberVo.id}">
+	      		<a style="color:blue;"  href="${pageContext.request.contextPath}/member/wishListSearch.do?memberId=${memberVo.id}">
 	      			WISHLIST
 	      		</a>
 	      		<p style="text-align:right;">관심 상품</p>	      		
 			 </strong></h4><hr>
 			 <h4><strong>
-	      	 <a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${memberVo.id}&items=전체">
+	      	 <a style="color:blue;" href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${memberVo.id}&items=전체">
 			      	ORDER
 			    </a>
 			    <p style="text-align:right;">주문 목록</p>
 			 </strong></h4><hr>	
 			 <h4><strong>
-	      		<a href="${pageContext.request.contextPath}/member/memberReviewList.do?memberId=${memberVo.id}">
+	      		<a style="color:blue;" href="${pageContext.request.contextPath}/member/memberReviewList.do?memberId=${memberVo.id}">
 			      	BOARD
 			    </a>
 			    <p style="text-align:right;">게시물 관리</p>

@@ -56,7 +56,7 @@ document.onkeydown = function(e){
 			       	 </c:if> 
 			         <p>${review.reviewDate}</p>
 			         <p>${review.content}</p>
-			         <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${review.outerNo}" class="btn btn-primary" >상품 상세보기</a>
+			         <a style="color:white;" href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${review.outerNo}" class="btn btn-primary" >상품 상세보기</a>
 			       </div>
 			       <div class="col-lg-2">
 			         <p>아이디 : ${review.memberId}</p>
@@ -67,7 +67,7 @@ document.onkeydown = function(e){
 				 </div>
             </div>
             <div class="card-footer" style="text-align:center;">
-            	<a href="${pageContext.request.contextPath}/" class="btn btn-dark">홈으로</a>          	      	
+            	<a style="color:white;" href="${pageContext.request.contextPath}/" class="btn btn-dark">홈으로</a>          	      	
             </div>
           </div>
         </div>

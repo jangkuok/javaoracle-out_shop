@@ -89,11 +89,13 @@ public class ReviewDaoImpl implements ReviewDao {
 		Map<String, Object> map = new HashMap<>();
 		
 		try {
+			
 			map = session.getMapper(ReviewMapper.class).selectReviewStarAvg(outerNo);
-		}catch (Exception e) {
-
-			System.out.println("selectReviewNo(dao) : ");
-			e.printStackTrace();
+			
+		}catch (NullPointerException e) {
+			map.put("ROUND",0);
+			/*System.out.println("selectReviewNo(dao) : ");
+			e.printStackTrace();*/
 		}
 		
 		return map;

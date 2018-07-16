@@ -303,11 +303,12 @@ $(document).ready(function() {
 	            	
 	            	TOTAL &nbsp; <input class="textTrans" type="text" id="commaTotalPrice" value="0" size="5" readOnly="readOnly"> won
 	            	<input type="hidden" id="totalPrice" value="0" size="4" readOnly="readOnly">
-	            	<input type="hidden" id="memberId" name="memberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
 	            	<sec:authorize access="hasRole('ROLE_USER')">
+	            		<input type="hidden" id="memberId" name="memberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
 						<input class="form-control" type="button" id="wishB" name="wishB" value="Wish List">
 					</sec:authorize>
-					<sec:authorize access="!hasRole('ROLE_ADMIN')">	
+					<sec:authorize access="!hasRole('ROLE_ADMIN')">
+						<input type="hidden" id="memberId" name="memberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">	
 		            	<input class="form-control btn btn-dark" type="button" id="buyB" name="buyB" value="Buy Now">		
 						<input class="form-control" type="button" id="cartB" name="cartB" value="Add To Cart">
 					</sec:authorize>

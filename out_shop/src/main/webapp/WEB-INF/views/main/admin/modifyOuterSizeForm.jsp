@@ -19,18 +19,19 @@
 		//상품size 추가
 		$("#sizePlusButton").click(function() {			
 			index++;
-			var size = '<tr><td><select id ="type_'+index+'" name="productSize_type'+index+'"><option value="선택하세요">선택하세요</option><option value="S">S</option>'+
+			var size = '<tr><td><select class="form-control sizeInputStyle" id ="type_'+index+'" name="productSize_type'+index+'"><option value="선택하세요">선택하세요</option><option value="S">S</option>'+
 			'<option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="FREE">FREE</option></select>'+
-			'<td><input type="number" id="chest'+index+'" name="productSize_chest'+index+'" size="3"></td>'+
-			'<td><input type="number" id="sleeve'+index+'" name="productSize_sleeve'+index+'" size="3"></td>'+
-			'<td><input type="number" id="shoulder'+index+'" name="productSize_shoulder'+index+'" size="3"></td>'+
-			'<td><input type="number" id="whole'+index+'" name="productSize_whole'+index+'" size="3"></td>'+											
-			'<td><input type="number" id="amount'+index+'" name="productSize_amount'+index+'" value=""></td>'+
-			'<td><select id ="color_'+index+'" name="productSize_color'+index+'"><option value="선택하세요">선택하세요</option>'+
+			'<td><input class="form-control sizeInputStyle" type="number" id="chest'+index+'" name="productSize_chest'+index+'" size="3"></td>'+
+			'<td><input class="form-control sizeInputStyle" type="number" id="sleeve'+index+'" name="productSize_sleeve'+index+'" size="3"></td>'+
+			'<td><input class="form-control sizeInputStyle" type="number" id="shoulder'+index+'" name="productSize_shoulder'+index+'" size="3"></td>'+
+			'<td><input class="form-control sizeInputStyle" type="number" id="whole'+index+'" name="productSize_whole'+index+'" size="3"></td>'+											
+			'<td><input class="form-control sizeInputStyle" type="number" id="amount'+index+'" name="productSize_amount'+index+'" value=""></td>'+
+			'<td><select class="form-control sizeInputStyle" id ="color_'+index+'" name="productSize_color'+index+'"><option value="선택하세요">선택하세요</option>'+
 			'<option style="background-color:black;color:white" value="블랙">블랙</option>'+
 			'<option style="background-color:white" value="화이트">화이트</option>'+
 			'<option style="background-color:red;color:white" value="레드">레드</option>'+
 			'<option style="background-color:#08088A;color:white" value="네이비">네이비</option>'+
+			'<option style="background-color:#FFE4B5;color:white" value="아이보리">아이보리</option>'+
 			'<option style="background-color:#2E2E2E;color:white" value="차콜">차콜</option>	</td></tr>'	
 
 			
@@ -71,10 +72,10 @@
 				$('#whole'+no).val('75');
 			}
 			if($(this).val() == "FREE"){
-				$('#chest'+no).val('64');
-				$('#sleeve'+no).val('55');
-				$('#shoulder'+no).val('60');
-				$('#whole'+no).val('74');
+				$('#chest'+no).val('59');
+				$('#sleeve'+no).val('26');
+				$('#shoulder'+no).val('50');
+				$('#whole'+no).val('73');
 			}
 		});
 		
@@ -109,73 +110,87 @@
 		});
  });
 </script>
+<style type="text/css">
+
+.sizeInputStyle {
+   width:135px;
+}
+</style>
 </head>
 <body>
-<form id="modifySizeForm" name="modifySizeForm"
-		action="${pageContext.request.contextPath}/admin/ModefiyOuterSize.do" method="post">
-<input type="text" id="outerNo" name="outerNo" value="${outerVo.outerNo }">
-<input type="text" id="index" name="index" value="">
-	<div>
-		<input type="button" id="sizePlusButton" value="+">
-		<input type="button" id="sizeMinusButton" value="-">
+<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
+<div>
+<h1>상품 사이즈 수정</h1><hr>
+</div>
+<div class="row">
+	<form id="modifySizeForm" name="modifySizeForm"
+			action="${pageContext.request.contextPath}/admin/ModefiyOuterSize.do" method="post">
+	<input type="hidden" id="outerNo" name="outerNo" value="${outerVo.outerNo }">
+	<input type="hidden" id="index" name="index" value="">
+		<div>
+			<input class="btn" type="button" id="sizePlusButton" value="+">
+			<input class="btn" type="button" id="sizeMinusButton" value="-">
+		</div>
+	<table id="sizeTable" class="table table-hover">
+			<thead>
+				<tr>
+					<th>사이즈</th>
+					<th>가슴</th>
+					<th>소매</th>
+					<th>어깨</th>
+					<th>길이</th>
+					<th>수량</th>
+					<th>색상</th>
+				</tr>
+			</thead>
+			<tbody id="sizeTable">
+			<c:forEach var="sizeList" items="${outerVo.sizeList}" varStatus="st">
+				<tr>
+					<td>
+						<select class="form-control sizeInputStyle" id ="type_${sizeList.sizeNo}" name="productSize_type${st.count}">
+							<option value="${sizeList.type}">${sizeList.type}</option>
+							<option value="S">S</option>
+							<option value="M">M</option>
+							<option value="L">L</option>
+							<option value="XL">XL</option>
+							<option value="FREE">FREE</option>
+						</select><br>
+						<%-- <input type="hidden" id="chest${sizeList.sizeNo}" name="productSize_type${sizeList.sizeNo}" value="${sizeList.type}"> --%>
+					</td>
+					<td>
+						<input class="form-control sizeInputStyle" type="number" id="chest${sizeList.sizeNo}" name="productSize_chest${st.count}"  value="${sizeList.chest}">
+					</td>
+					<td>
+						<input class="form-control sizeInputStyle" type="number" id="sleeve${sizeList.sizeNo}" name="productSize_sleeve${st.count}" value="${sizeList.sleeve}">
+					</td>
+					<td>
+						<input class="form-control sizeInputStyle" type="number" id="shoulder${sizeList.sizeNo}" name="productSize_shoulder${st.count}" value="${sizeList.shoulder}">
+					</td>
+					<td>
+						<input class="form-control sizeInputStyle" type="number" id="whole${sizeList.sizeNo}" name="productSize_whole${st.count}" value="${sizeList.whole}">
+					</td>														
+					<td> 
+						<input class="form-control sizeInputStyle" type="number" id="amount${sizeList.sizeNo}" name="productSize_amount${st.count}" value="${sizeList.amount}">
+					</td>
+					<td>
+						<select class="form-control sizeInputStyle" id ="color_${sizeList.sizeNo}" name="productSize_color${st.count}">
+							<option value="${sizeList.color}">${sizeList.color}</option>
+							<option style="background-color:black;color:white" value="블랙">블랙</option>
+							<option style="background-color:white" value="화이트">화이트</option>
+							<option style="background-color:red;color:white" value="레드">레드</option>
+							<option style="background-color:#08088A;color:white" value="네이비">네이비</option>
+							<option style="background-color:#2E2E2E;color:white" value="차콜">차콜</option>
+							<option style="background-color:#FFE4B5;color:white" value="아이보리">아이보리</option>
+						</select>
+						<%-- <input type="hidden" id="colorHidden_${sizeList.sizeNo}" name="productSize_color${sizeList.sizeNo}" value="${sizeList.color}"> --%>
+					</td>
+				</tr>
+			</c:forEach>
+			</tbody>
+		</table>
+		<input class="btn btn-dark" type="button" id="modifySizeButton" name="modifySizeButton" value="등록">
+	</form>	
 	</div>
-<table id="sizeTable" border="1" width="35%">
-		<thead>
-			<tr>
-				<th>사이즈</th>
-				<th>가슴</th>
-				<th>소매</th>
-				<th>어깨</th>
-				<th>길이</th>
-				<th>수량</th>
-				<th>색상</th>
-			</tr>
-		</thead>
-		<tbody id="sizeTable">
-		<c:forEach var="sizeList" items="${outerVo.sizeList}" varStatus="st">
-			<tr>
-				<td>
-					<select id ="type_${sizeList.sizeNo}" name="productSize_type${st.count}">
-						<option value="${sizeList.type}">${sizeList.type}</option>
-						<option value="S">S</option>
-						<option value="M">M</option>
-						<option value="L">L</option>
-						<option value="XL">XL</option>
-						<option value="FREE">FREE</option>
-					</select><br>
-					<%-- <input type="hidden" id="chest${sizeList.sizeNo}" name="productSize_type${sizeList.sizeNo}" value="${sizeList.type}"> --%>
-				</td>
-				<td>
-					<input type="number" id="chest${sizeList.sizeNo}" name="productSize_chest${st.count}" size="3" value="${sizeList.chest}">
-				</td>
-				<td>
-					<input type="number" id="sleeve${sizeList.sizeNo}" name="productSize_sleeve${st.count}" size="3" value="${sizeList.sleeve}">
-				</td>
-				<td>
-					<input type="number" id="shoulder${sizeList.sizeNo}" name="productSize_shoulder${st.count}" size="3" value="${sizeList.shoulder}">
-				</td>
-				<td>
-					<input type="number" id="whole${sizeList.sizeNo}" name="productSize_whole${st.count}" size="3" value="${sizeList.whole}">
-				</td>														
-				<td>
-					<input type="number" id="amount${sizeList.sizeNo}" name="productSize_amount${st.count}" value="${sizeList.amount}">
-				</td>
-				<td>
-					<select id ="color_${sizeList.sizeNo}" name="productSize_color${st.count}">
-						<option value="${sizeList.color}">${sizeList.color}</option>
-						<option style="background-color:black;color:white" value="블랙">블랙</option>
-						<option style="background-color:white" value="화이트">화이트</option>
-						<option style="background-color:red;color:white" value="레드">레드</option>
-						<option style="background-color:#08088A;color:white" value="네이비">네이비</option>
-						<option style="background-color:#2E2E2E;color:white" value="차콜">차콜</option>
-					</select>
-					<%-- <input type="hidden" id="colorHidden_${sizeList.sizeNo}" name="productSize_color${sizeList.sizeNo}" value="${sizeList.color}"> --%>
-				</td>
-			</tr>
-		</c:forEach>
-		</tbody>
-	</table>
-	<input type="button" id="modifySizeButton" name="modifySizeButton" value="등록">
-</form>	
+</div>
 </body>
 </html>

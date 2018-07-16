@@ -31,6 +31,12 @@ public interface OuterDao {
 	int selectOuterListCount();
 	
 	/**
+	 * 아웃터 목록 카운트
+	 * @return
+	 */
+	int selectOuterListCount(String items);
+	
+	/**
 	 * 아웃터 목록
 	 */
 	List<OuterVo> selectListOuter();
@@ -50,4 +56,12 @@ public interface OuterDao {
 	 * @return
 	 */
 	OuterVo selectOuterId(int outerNo);
+	
+	/**
+	 * 아웃터 수량 확인
+	 * @param startIndex
+	 * @param endIndex
+	 * @return
+	 */
+	List<OuterVo> selectOuterAmountList(int startIndex, int endIndex);
 }

@@ -69,7 +69,7 @@ $(document).ready(function() {
                		 '<img src="<c:url value="/image/thumbnail/'+item.thumbnailName+'"/>"/></a></td>'+
                		 '<td><a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo='+item.outerNo+'">'+ 
                		 item.productName + '</a><br>'+
-               		 '<a href="${pageContext.request.contextPath}/member/addReviewPage.do?outerNo='+item.outerNo+'&outerName='+item.productName+'" class="btn btn-dark">리뷰 등록</a>'+
+               		 '<a style="color:white;" href="${pageContext.request.contextPath}/member/addReviewPage.do?outerNo='+item.outerNo+'&outerName='+item.productName+'" class="btn btn-dark">리뷰 등록</a>'+
                		 '</td>'+
                		 '<td>'+ item.productSize + '</td>'+
                		 '<td>'+ item.productColor + '</td>'+
@@ -135,10 +135,10 @@ function returnOrder(i){
 <div>
 <h1>MY ORDER LIST</h1><hr>
 </div>
-	<a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=1달" class="btn btn-primary">현재 ~ 1달전</a>
-	<a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=3달" class="btn btn-primary">현재 ~ 3달전</a>
-	<a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=1년" class="btn btn-primary">현재 ~ 1년전</a>
-	<a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=전체" class="btn btn-primary">전체</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=1달" class="btn btn-primary">현재 ~ 1달전</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=3달" class="btn btn-primary">현재 ~ 3달전</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=1년" class="btn btn-primary">현재 ~ 1년전</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=전체" class="btn btn-primary">전체</a>
 			
 	<c:if test="${empty list}">
 		<div style="text-align:center;">
@@ -182,7 +182,7 @@ function returnOrder(i){
 					<td>${orderList.orderDate}</td>
 					<td>${orderList.handing}</td>
 					<td>
-						<c:if test="${orderList.handing == '결제 대기중' || orderList.handing == '상품 준비중'}">
+						<c:if test="${orderList.handing == '결제대기중' || orderList.handing == '상품준비중'}">
 								<form id="cancelForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do" method="post" style="margin-bottom:1px;">
 									<input type="hidden" id="handing" name="handing" value="주문취소">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">
@@ -191,7 +191,7 @@ function returnOrder(i){
 									<input type="button" class="btn btn-dark" value="주문취소" onclick="cancelOrder(${orderList.orderNo})">
 								</form>
 						</c:if>
-						<c:if test="${orderList.handing == '결제 대기중'}">
+						<c:if test="${orderList.handing == '결제대기중'}">
 								<form id="payForm${orderList.orderNo}" action="${pageContext.request.contextPath}/member/haningUpdateOrder.do?" method="post" style="margin-bottom:1px;">
 									<input type="hidden" id="handing" name="handing" value="결제완료">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">

@@ -47,4 +47,6 @@ public interface OuterService {
 	 */
 	OuterVo getOuter(int outerNo);
 	
+	
+	Map<String, Object> findOuterAmountList(int page);
 }

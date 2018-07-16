@@ -37,9 +37,9 @@ $(document).ready(function() {
 		var no = $(this).val();
 
 		var writer = $('#writeMemberId_'+ no).val();
-	
- 		if(member != ''){
-			if(member == writer){
+		
+ 		if(member != '' || $('#loginAdminId').val() != ''){
+			if(member == writer || $('#loginAdminId').val() != ''){
 				$('#removeButton_'+no).show();
 			}			
 		}
@@ -68,7 +68,12 @@ $(document).ready(function() {
 	</center>
 	</c:if>	
 	<c:if test="${not empty list}">
-		<input type="hidden" id="loginMemberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
+		<sec:authorize access="hasRole('ROLE_USER')">
+			<input type="hidden" id="loginMemberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<input type="hidden" id="loginAdminId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.adminId}">
+		</sec:authorize>
 		<c:forEach var="reviewList" items="${list}" varStatus="st" >
 		  <div class="row">
 		  	<div class="col-lg-1">
@@ -94,15 +99,17 @@ $(document).ready(function() {
 	        	</c:if>          
 	          <h5>${reviewList.subject} (${reviewList.reviewDate})</h5>
 	          <p>${reviewList.content}</p>
-	          <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${reviewList.outerNo}" class="btn btn-primary" >상품 상세보기</a>
+	          <a style="color:white;" href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${reviewList.outerNo}" class="btn btn-primary" >상품 상세보기</a>
 	          <input type="hidden" id="reviewNo_${reviewList.reviewNo}" name="reviewNo" value="${reviewList.reviewNo}">
 	          <input type="hidden" id="writeMemberId_${reviewList.reviewNo}" name="writeMemberId" value="${reviewList.memberId}">
-	          <a id="modifyButton_${reviewList.reviewNo}" name="modifyButton" href="${pageContext.request.contextPath}/member/modifyReviewPage.do?reviewNo=${reviewList.reviewNo}" class="btn btn-primary">수정하기</a>
-	          <a id="removeButton_${reviewList.reviewNo}" name="removeButton" href="${pageContext.request.contextPath}/member/removeMemberReview.do?reviewNo=${reviewList.reviewNo}" class="btn btn-primary">삭제하기</a>
+	          <a style="color:white;" id="modifyButton_${reviewList.reviewNo}" name="modifyButton" href="${pageContext.request.contextPath}/member/modifyReviewPage.do?reviewNo=${reviewList.reviewNo}" class="btn btn-primary">수정하기</a>
+	          <a style="color:white;" id="removeButton_${reviewList.reviewNo}" name="removeButton" href="${pageContext.request.contextPath}/member/removeMemberReview.do?reviewNo=${reviewList.reviewNo}" class="btn btn-primary">삭제하기</a>
 	        </div>
 	        <div class="col-lg-2">
 	          <p>아이디 : ${reviewList.memberId}</p>
-	          <img class="card-img-top" src="<c:url value='/image/${reviewList.pictureName}'/>" alt="">
+	          <c:if test="${reviewList.pictureName != null}">
+	          	<img class="card-img-top" src="<c:url value='/image/${reviewList.pictureName}'/>" alt="">
+	          </c:if>
 	        </div>
 	      </div>
 	      <hr>

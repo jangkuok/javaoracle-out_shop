@@ -111,7 +111,7 @@
 				#{thumbnailName},
 				#{orderName},
 				#{totalPrice},
-				'결제 대기중',
+				'결제대기중',
 				#{memberId},
 				#{address},
 				#{phoneNum},
@@ -172,12 +172,12 @@
 						        </when>
 						        
 						        <when test="items == '주문취소완료'">
-						            WHERE HANDLING LIKE '주문취소 완료'
+						            WHERE HANDLING LIKE '주문취소완료'
 						            ORDER BY ORDER_NO DESC
 						        </when>
 						        
 						        <when test="items == '상품준비중'">
-						            WHERE HANDLING LIKE '상품 준비중'
+						            WHERE HANDLING LIKE '상품준비중'
 						            ORDER BY ORDER_NO DESC
 						        </when>
 						        
@@ -191,7 +191,7 @@
 						            ORDER BY ORDER_NO DESC
 						        </when>
 						        <when test="items == '결제대기중'">
-						            WHERE HANDLING LIKE '결제 대기중'
+						            WHERE HANDLING LIKE '결제대기중'
 						            ORDER BY ORDER_NO DESC
 						        </when>
 						        <when test="items == '배송완료'">

@@ -17,7 +17,7 @@ package com.outer_shopping.project.util;
  * @author kgmyh
  *
  */
-public class PagingBean {
+public class OuterPagingBean {
 	/**
 	 * 총 데이터(항목)의 개수
 	 */
@@ -29,18 +29,18 @@ public class PagingBean {
 	/**
 	 * 한 페이지에 보여질 데이터(항목)개수
 	 */
-	private int itemsPerPage = Constants.ITEMS_PER_PAGE;
+	private int itemsPerPage = OuterConstants.ITEMS_PER_PAGE;
 	/**
 	 * Page Group 내 Page 수.  페이지 그룹에 들어갈 페이지 개수
 	 */
-	private int pagesPerPagegroup = Constants.PAGES_PER_PAGEGROUP;
+	private int pagesPerPagegroup = OuterConstants.PAGES_PER_PAGEGROUP;
 	
 	/**
 	 * 총 데이터 개수, 현재 페이지를 받아 member variable에 할당
 	 * @param totalItems 총 데이터 수
 	 * @param page 보려는 페이지.
 	 */
-	public PagingBean(int totalItems, int page) {
+	public OuterPagingBean(int totalItems, int page) {
 		this.totalItems = totalItems;
 		this.page = page;
 	}

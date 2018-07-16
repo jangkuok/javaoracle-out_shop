@@ -1,14 +1,6 @@
---아웃터 등록
-INSERT INTO OUTER_TB values(1,'타입','제목','내용',가격,TO_DATE('날짜(년월일시분초)','YYYY-MM-DDHH24MISS'),'이미지이름','이미지이름');
-
-
-select 'select ''insert into ' || tname || ' (' || wm_concat(cname) || ')' 
-    || ' values ('''''' || ' || replace(wm_concat(cname),',',' || '''''','''''' || ') || ' || '''''')'' qry from ' 
-    || tname qry
-from col 
-where tname = 'EMP'
-group by tname
-
+select 'insert into OUTER_TB (OUTER_NO, OUTER_TYPE, OUTER_NAME, OUTER_CONTENT, OUTER_PRICE, OUTER_DATE, OUTER_THUMBNAIL_NAME, OUTER_IMAGENAME) 
+values ('|| OUTER_NO || ','|| OUTER_TYPE ||',' || OUTER_NAME || ',' || OUTER_CONTENT || ','|| OUTER_PRICE || ',' || OUTER_DATE || ',' || OUTER_THUMBNAIL_NAME || ',' || OUTER_IMAGENAME || ');' 
+from OUTER_TB; 
 
 
 
