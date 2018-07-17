@@ -38,7 +38,7 @@
 	
 	
 	<!-- ORDER_CHECK + ORDER_PRODUCT sql -->
-	<sql id="select-order-produck-sql">
+	<sql id="select-order-product-sql">
 	SELECT		c.ORDER_MEMBER_NAME, c.TOTAL_PRICE, c.ORDER_THUMBNAIL_NAME, 
 				c.ORDER_NAME, c.HANDLING, 
 				c.MEMBER_ID, c.ADDRESS,
@@ -308,9 +308,11 @@
 	
 	
 	<!-- 주문량 상위 TOP3 리스트 조회  SQL -->
- 	<select id="selectTop3List" resultMap="orderProduct-resultmap">
-		<include refid="select-orderProduct-sql"/>		
-			WHERE ROWNUM <![CDATA[ < ]]>= 3		
+ 	<select id="selectTop3List" resultMap="orderCheck-orderProduct-resultmap">
+		<include refid="select-order-product-sql"/>		
+			WHERE (c.HANDLING = '배송완료'
+			OR c.HANDLING = '주문완료') 
+			AND ROWNUM <![CDATA[ < ]]>= 3		
 	</select>	
 	
 	<select id="selectMonthProduct" resultType="java.util.HashMap">
