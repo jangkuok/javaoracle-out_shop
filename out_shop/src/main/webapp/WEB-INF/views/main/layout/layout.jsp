@@ -28,6 +28,9 @@
 a:link { color: black; text-decoration: none;}
 a:visited { color: black; text-decoration: none;}
 a:hover { color: black; text-decoration: underline;}
+
+.cardBox { box-shadow: 3px 3px 2px #aaaaaa; }
+
 </style>
 </head>
 <body>

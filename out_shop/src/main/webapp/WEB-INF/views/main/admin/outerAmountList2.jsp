@@ -6,11 +6,6 @@
 <html lang="ko-kr">
 <head>
 <meta charset="utf-8">
-<style type="text/css">
-	form{
-		display: inline;
-	}
-</style>
 <title>Insert title here</title>
 </head>
 <body>
@@ -29,7 +24,7 @@
 		</tr>
 		</thead>
 		<tbody>
-<%-- 		<c:forEach var="outer" items="${list}" varStatus="st">
+		<c:forEach var="outer" items="${list}" varStatus="st">
 			<tr>
 				<td>${outer.outerNo}</td>
 				<td>
@@ -47,61 +42,6 @@
 					<fmt:formatNumber value="${outer.price}" pattern="#,###.##"/>
 				</td>
 			</tr>
-		</c:forEach> --%>
-		<c:forEach var="outer" items="${list}" varStatus="st">
-
-
-			<c:forEach var="size" items="${outer.sizeList}" varStatus="st2">
-					<tr>
-						<td>${outer.outerNo}</td>
-						<td>
-							<img src="<c:url value='/image/thumbnail/${outer.thumbnailName}'/>"/>
-						</td>
-						<td>
-							${outer.name}<br>
-							<form id="updateProductForm" name="updateProductForm" action="${pageContext.request.contextPath}/admin/modifyOuterPage.do" method="post">
-								<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">
-								<input type="hidden" id="modify" name="modify" value="상품">	
-								<input class="btn btn-primary" type="submit" id="updateProduct" name="updateProduct" value="상품 수정">
-							</form>
-							<form id="updateSizeForm" name="updateSizeForm" action="${pageContext.request.contextPath}/admin/modifyOuterPage.do" method="post">
-								<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">
-								<input type="hidden" id="modify" name="modify" value="사이즈">		
-								<input class="btn btn-primary" type="submit" id="updateSize" name="updateSize" value="사이즈 수정">
-							</form>
-							<form id="updateImagesForm" name="updateImagesForm" action="${pageContext.request.contextPath}/admin/modifyOuterPage.do" method="post">
-								<input type="hidden" id="outerNo" name="outerNo" value="${outer.outerNo}">	
-								<input type="hidden" id="modify" name="modify" value="이미지">	
-								<input class="btn btn-primary" type="submit" id="updateImages" name="updateImages" value="이미지 수정">
-							</form>
-						</td>
-						<td>
-							   <c:choose>
-							       <c:when test="${size.type == 'S'}">
-							           <p style="color:red;">${size.type}</p> : ${size.amount} 개 (${size.color})<br>
-							       </c:when>
-							       <c:when test="${size.type == 'M'}">
-							           <p style="color:blue;">${size.type}</p> : ${size.amount} 개 (${size.color})<br>
-							       </c:when>
-							       <c:when test="${size.type == 'L'}">
-							           <p style="color:orange;">${size.type}</p> : ${size.amount} 개 (${size.color})<br>
-							       </c:when>
-							       <c:when test="${size.type == 'XL'}">
-							           <p style="color:green;">${size.type}</p> : ${size.amount} 개 (${size.color})<br>
-							       </c:when>
-							       <c:when test="${size.type == 'FREE'}">
-							           <p style="color:black;">${size.type}</p> : ${size.amount} 개 (${size.color})<br>
-							       </c:when>
-							   </c:choose>
-							
-						</td>
-						<td>
-							<fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won
-						</td>
-					</tr>
-			</c:forEach>
-			
-			
 		</c:forEach>
 		</tbody>
 	</table>

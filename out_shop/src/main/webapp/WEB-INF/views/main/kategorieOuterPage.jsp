@@ -66,20 +66,21 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</sec:authorize>
-		<div class="row">
+		<div class="row" style="text-align:center;">
 	     <c:forEach var="outer" items="${list}" varStatus="st">
 	       <div class="col-lg-4 col-sm-6 portfolio-item">
-	         <div class="card h-100">
+	         <div class="card h-100 cardBox">
 	           <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">
 	           	<img class="card-img-top" src="<c:url value='/image/${outer.imageName}'/>" alt="">
 	           </a>
 	           <div class="card-body">
-	             <h4 class="card-title">
+	             <h5 class="card-title">
 	               <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
-	             </h4>
+	             </h5>
 	             <p class="card-text">
 	             	<h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>
 	             </p>
+	             <span class="border border-dark"><strong>&nbsp;&nbsp;OUTSHOP&nbsp;&nbsp;</strong></span>
 	           </div>
 	         </div>
 	       </div>

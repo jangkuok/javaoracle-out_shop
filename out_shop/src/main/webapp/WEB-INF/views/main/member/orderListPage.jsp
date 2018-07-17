@@ -29,8 +29,12 @@ $(document).ready(function() {
             "data":{ "orderNo" : orderNo},
             "dataType":"json",
             "success" : function (data) {
+<<<<<<< HEAD
+            	 $('.modal-body tbody').remove();           	
+=======
             	 $('tr#modalTr').remove();
             	
+>>>>>>> branch 'master' of https://github.com/jangkuok/javaoracle-out_shop.git
             	 $.each(data,function(index,item){
             		 
            			 var product = '<tr id="modalTr"><td>'+ item.outerNo + '</td>'+
@@ -46,6 +50,13 @@ $(document).ready(function() {
             	 });
             }                  
         });
+<<<<<<< HEAD
+
+/*         $('input[id^=orderProductList_]').on('click',function(){
+        	$('tr#modalTr').remove();
+        }); */
+=======
+>>>>>>> branch 'master' of https://github.com/jangkuok/javaoracle-out_shop.git
     });
     
 	// 리뷰 작성 

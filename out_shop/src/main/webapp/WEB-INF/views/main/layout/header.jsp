@@ -70,7 +70,7 @@
 	               <a class="nav-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?items=Outer">상품목록</a>
 	            </li>
 	            <li class="nav-item">
-	               <a class="nav-link" href="${pageContext.request.contextPath}/admin/outerAmountList.do">상품수량</a>
+	               <a class="nav-link" href="${pageContext.request.contextPath}/admin/outerAmountList.do">상품관리</a>
 	            </li>	            
 				<li class="nav-item">
 	               <a class="nav-link" href="${pageContext.request.contextPath}/admin/outerForm.do">상품등록</a>
