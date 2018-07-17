@@ -73,6 +73,32 @@ public class OuterSizeServiceImpl implements OuterSizeService {
 		}
 		return list;
 	}
+
+	@Override
+	public OuterSizeVo orderProductAmountPlusCnt(int outerNo, String type, String color) {
+		OuterSizeVo outerSize = null;
+		
+		try {
+			outerSize = sizeDao.outerSizeAmountPlusCnt(outerNo, type, color);
+		}catch (Exception e) {
+			System.out.println("orderProductAmountPlusCnt(service) : ");
+			e.printStackTrace();
+		}
+		return outerSize;
+	}
+
+	@Override
+	public OuterSizeVo orderProductAmountMinusCnt(int outerNo, String type, String color) {
+		OuterSizeVo outerSize = null;
+		
+		try {
+			outerSize = sizeDao.outerSizeAmountMinusCnt(outerNo, type, color);
+		}catch (Exception e) {
+			System.out.println("orderProductAmountMinusCnt(service) : ");
+			e.printStackTrace();
+		}
+		return outerSize;
+	}
 	
 	
 	

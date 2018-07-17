@@ -27,6 +27,7 @@ import com.outer_shopping.project.service.OuterService;
 import com.outer_shopping.project.service.ReviewService;
 import com.outer_shopping.project.vo.AuthorityVo;
 import com.outer_shopping.project.vo.MemberVo;
+import com.outer_shopping.project.vo.OrderCheckVo;
 import com.outer_shopping.project.vo.OrderProductVo;
 import com.outer_shopping.project.vo.OuterVo;
 
@@ -62,15 +63,17 @@ public class HomeController {
 		
 		model.addAttribute("list",list);
 		
-		List<OrderProductVo> orderList = orderProductService.getOrderTopThreeList();
+		List<OrderCheckVo> orderList = orderProductService.getOrderTopThreeList();
 		
 		List<Object> topList = new ArrayList<>();
 		
 		for (int i = 0; i < orderList.size(); i++) {
-			OuterVo outer = new OuterVo();
-			outer = outerService.getOuter(orderList.get(i).getOuterNo());
-			
-			topList.add(outer);
+		
+			for (int j = 0; j < orderList.get(i).getProductList().size(); j++) {
+				OuterVo outer = new OuterVo();
+				outer = outerService.getOuter(orderList.get(i).getProductList().get(j).getOuterNo());
+				topList.add(outer);
+			}
 		}
 		
 		model.addAttribute("top",topList);

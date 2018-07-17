@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
-<header>
+<header style="margin-bottom:30px;">
      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
        <ol class="carousel-indicators">
          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -39,9 +39,11 @@
        </a>
      </div>
 </header>
+	
     <div class="container"  style="text-align:center;">
+    <c:if test="${not empty top}">
       <h1 class="my-4">BEST3</h1><hr>
-      <div class="row">
+      <div class="row" style="margin-bottom:30px;">
       <c:forEach var="outer" items="${top}" varStatus="st">
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100  cardBox">
@@ -50,7 +52,7 @@
             </a>
             <div class="card-body">
               <h5 class="card-title">
-                <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
+                <a style="white-space: nowrap;" href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
               </h5>
               <p class="card-text">
               	<h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>
@@ -61,7 +63,7 @@
         </div>
         </c:forEach>
       </div>		
-      
+      </c:if>
       <!-- 품목소개 -->
       <h2>NEW ARRIVALS</h2><hr>
       <div class="row" style="margin-bottom:15px;text-align:center;">
@@ -73,7 +75,7 @@
             </a>
             <div class="card-body">
               <h5 class="card-title">
-                <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
+                <a style="white-space: nowrap;" href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
               </h5>
               <p class="card-text">
               	<h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>

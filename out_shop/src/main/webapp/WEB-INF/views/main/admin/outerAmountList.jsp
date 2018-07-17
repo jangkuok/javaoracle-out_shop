@@ -109,7 +109,7 @@
 								페이징 처리
 			###################################################### --%>		
 	<nav aria-label="Page navigation example">
-	  <ul class="pagination">    
+	  <ul class="pagination ulCenter">    
 		<!--
 			이전 페이지 그룹 처리.
 			만약에 이전페이지 그룹이 있으면 링크처리하고 없으면 화살표만 나오도록 처리.
@@ -118,7 +118,7 @@
 		<c:choose>
 			<c:when test="${requestScope.pageBean.previousPageGroup}">
 				<%-- 이전페이지 그룹이 있디면 : previousPageGroup()--%>
-				<a class="page-link" href="${pageContext.request.contextPath}/admin/outerAmountList.do?page=1" aria-label="Previous">
+				<a class="page-link" style="color:blue;" href="${pageContext.request.contextPath}/admin/outerAmountList.do?page=1" aria-label="Previous">
 	       			<span aria-hidden="true">&laquo;</span>
 	        		<span class="sr-only">Previous</span>
 	      		</a>
@@ -139,7 +139,7 @@
 			<c:forEach begin="${requestScope.pageBean.beginPage}" end="${requestScope.pageBean.endPage}" var="page">
 				<c:choose>
 					<c:when test="${requestScope.pageBean.page != page}"> <%-- 현재패이지가 아니라면 --%>
-						<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/admin/outerAmountList.do?page=${page}">${page}</a></li>
+						<li class="page-item"><a style="color:blue;" class="page-link" href="${pageContext.request.contextPath}/admin/outerAmountList.do?page=${page}">${page}</a></li>
 					</c:when>
 					<c:otherwise>
 						<li class="page-item"><a class="page-link">${page}</a></li>
@@ -154,7 +154,7 @@
 		<c:choose> 	
 			<c:when test="${requestScope.pageBean.nextPageGroup}">
 				<%-- 다음페이지 그룹이 있디면 : nextPageGroup()--%>
-	    		<a class="page-link" href="${pageContext.request.contextPath}/admin/outerAmountList.do?page=${requestScope.pageBean.endPage + 1}" aria-label="Next">
+	    		<a class="page-link" style="color:blue;" href="${pageContext.request.contextPath}/admin/outerAmountList.do?page=${requestScope.pageBean.endPage + 1}" aria-label="Next">
 	        		<span aria-hidden="true">&raquo;</span>
 	        		<span class="sr-only">Next</span>
 	      		</a>		

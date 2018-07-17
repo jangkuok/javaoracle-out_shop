@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.outer_shopping.project.service.MemberService;
 import com.outer_shopping.project.service.OrderProductService;
+import com.outer_shopping.project.service.OuterSizeService;
 import com.outer_shopping.project.vo.OrderCheckVo;
 import com.outer_shopping.project.vo.OrderProductVo;
 import com.outer_shopping.project.vo.ProductVo;
@@ -33,6 +34,9 @@ public class OrderController {
 	
 	@Autowired
 	private OrderProductService orderservice;
+	
+	@Autowired
+	private OuterSizeService sizeService;
 	
 	/**
 	 * 상세페이지 -> 주문하기 page 이동
@@ -149,8 +153,12 @@ public class OrderController {
 			list.add(product);
 		}
 		
-		
 		orderservice.addOrderProduct(list);
+		
+		for (int i = 0; i < list.size(); i++) {
+			sizeService.orderProductAmountMinusCnt(list.get(i).getOuterNo(), list.get(i).getProductSize(), list.get(i).getProductColor());
+			logger.info("############# 상품 수량 변경 #############");
+		}
 		
 		ra.addFlashAttribute("productList", list);	
 		ra.addFlashAttribute("order", check);

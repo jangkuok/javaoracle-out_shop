@@ -65,44 +65,32 @@
 		WHERE OUTER_NO = #{outerNo}
 	</select>	
 	
-	
+
 	<!-- 상품 사이즈 목록 확인 SQL -->	 	
 	<select id="selectSizeColorCheck" parameterType="hashmap" resultMap="outerSize-resultmap">
 		<include refid="select-OuterSize-sql"/>
 		WHERE OUTER_NO = #{outerNo}
 		AND SIZE_TYPE = #{type}
 	</select>
-
-	
-<!-- 	
-	상품 수정 SQL
-	<update id="updateOuter" parameterType="com.outer_shopping.project.vo.OuterVo">
-		UPDATE 	OUTER_TB 
-		SET		
-				OUTER_TYPE = #{type},
-				OUTER_NAME = #{name},
-				OUTER_CONTENT = #{content},
-				OUTER_PRICE = #{price},
-				OUTER_COLOR = #{color},
-				OUTER_DATE = #{insertDate}
-		WHERE	OUTER_NO = #{outerNo}
-	</update>
-
-	상품 삭제 SQL
-	<delete id="deleteOuter" parameterType="int">
-		DELETE FROM OUTER_TB WHERE OUTER_NO = #{outerNo}
-	</delete>
-	
-		LIST 전체 조회 SQL
-	<select id="selectOuterList" resultMap = "outer-resultmap">
-		<include refid="select-Outer-sql"/>
-		ORDER BY OUTER_DATE DESC
-	</select> 
 	
 	
-	상품 상세정보 확인 SQL
-	<select id="selectOuterId" parameterType="int" resultMap="outer-resultmap">
-		<include refid="select-Outer-sql"/>
-		WHERE OUTER_NO=#{outerNo}
-	</select> -->
+	<!-- 주문 취소 증가 처리 -->
+    <update id="outerSizeAmountPlusCnt" parameterType="hashmap">
+        UPDATE OUTER_SIZE 
+        SET AMOUNT = AMOUNT + 1 
+        WHERE OUTER_NO = #{outerNo}
+        AND SIZE_TYPE = #{type}
+        AND COLOR = #{color}
+    </update>
+    
+ 	<!-- 주문 완료 감소 처리 -->
+    <update id="outerSizeAmountMinusCnt" parameterType="hashmap">
+        UPDATE OUTER_SIZE 
+        SET AMOUNT = AMOUNT - 1 
+        WHERE OUTER_NO = #{outerNo}
+        AND SIZE_TYPE = #{type}
+        AND COLOR = #{color}
+    </update>   
+    
+	
 </mapper>

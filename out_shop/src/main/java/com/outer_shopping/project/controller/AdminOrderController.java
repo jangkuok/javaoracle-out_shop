@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RConnection;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.outer_shopping.project.service.OrderProductService;
+import com.outer_shopping.project.service.OuterSizeService;
 import com.outer_shopping.project.vo.OrderProductVo;
 
 @Controller
@@ -31,6 +31,8 @@ public class AdminOrderController {
 	@Autowired
 	private OrderProductService orderService;
 	
+	@Autowired
+	private OuterSizeService sizeService;
 	
 	
 	/**
@@ -91,6 +93,18 @@ public class AdminOrderController {
 		model.addAttribute("orderList", map.get("list"));
 		
 		model.addAttribute("pageBean", map.get("pageBean"));
+
+		List<OrderProductVo> productlist = orderService.getOrderProductList(orderNo);
+		
+		System.out.println(productlist);
+		
+		if(handing.equals("주문취소완료")) {
+			for (int i = 0; i < productlist.size(); i++) {
+				System.out.println(productlist.get(i).getOuterNo() + " / " + productlist.get(i).getProductSize() + " / " + productlist.get(i).getProductColor());
+				sizeService.orderProductAmountPlusCnt(productlist.get(i).getOuterNo(), productlist.get(i).getProductSize(), productlist.get(i).getProductColor());
+			}
+			logger.info("############# 상품 수량 변경 #############");
+		}
 		
 		logger.info("############# 주문 list 페이지 이동 #############");
 		
@@ -145,16 +159,6 @@ public class AdminOrderController {
 		
 		try {
 	        connection = new RConnection();
-/*	        connection.eval("library(ggplot2)");
-	        connection.eval("require(ggplot2)");
-	        connection.eval("name <- c("+name+")");
-	        connection.eval("count <- c("+count+")");
-	        connection.eval("pp <- data.frame(상품이름=name,판매개수=count)");
-	        connection.eval("pp$pos <- pp$판매개수>=mean(pp$판매개수)");
-	        connection.eval("png(filename='D://DEV/fileUpLoad/image/graph/"+fileName+"',width=800,height=600)");
-	        connection.parseAndEval("print(ggplot(pp, aes(x = 상품이름, y = 판매개수, fill = pos)) + geom_col(size = .25) + scale_fill_manual(values = c('#F7756B', '#00BEFF')) +labs(fill='평균 이상'))");
-	        connection.parseAndEval("print(dev.off());");
-	        connection.close(); */
 	        connection.eval("library(Rserve)");
 	        connection.eval("library(ggplot2)");	        
 	        connection.eval("require(ggplot2)");	        
@@ -230,17 +234,7 @@ public class AdminOrderController {
 		
 		try {
 	        connection = new RConnection();
-/*	        connection.eval("library(ggplot2)");
-	        connection.eval("require(ggplot2)");
-	        connection.eval("name <- c("+month+")");
-	        connection.eval("count <- c("+price+")");
-	        connection.eval("pp <- data.frame(월=name,총판매익=count)");
-	        connection.eval("pp$pos <- pp$총판매익>=mean(pp$총판매익)");
-	        connection.eval("png(filename='D://DEV/fileUpLoad/image/graph/"+fileName+"',width=800,height=600)");
-	        connection.parseAndEval("print(ggplot(pp, aes(x = 월, y = 총판매익, fill = pos)) + geom_col(size = .25) + scale_fill_manual(values = c('#F7756B', '#00BEFF')) +labs(fill='평균 이상'))");
-	        connection.parseAndEval("print(dev.off());");
-	        connection.close(); 
-*/	     
+
 	        connection.eval("library(Rserve)");
 	        connection.eval("library(ggplot2)");	        
 	        connection.eval("require(ggplot2)");	        
