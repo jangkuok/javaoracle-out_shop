@@ -29,6 +29,7 @@ $(document).ready(function() {
             "data":{ "orderNo" : orderNo},
             "dataType":"json",
             "success" : function (data) {
+            	 $('.modal-body tbody').remove();           	
             	 $.each(data,function(index,item){
            			 var product = '<tr id="modalTr"><td>'+ item.outerNo + '</td>'+
                		 '<td><a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo='+item.outerNo+'">'+
@@ -44,9 +45,9 @@ $(document).ready(function() {
             }                  
         });
 
-        $('input[id^=orderProductList_]').on('click',function(){
+/*         $('input[id^=orderProductList_]').on('click',function(){
         	$('tr#modalTr').remove();
-        });
+        }); */
     });
     
 	// 리뷰 작성 
