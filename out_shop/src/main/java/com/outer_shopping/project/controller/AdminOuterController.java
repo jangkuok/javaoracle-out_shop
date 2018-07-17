@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -401,5 +400,23 @@ public class AdminOuterController {
 		logger.info("############# 상품 이미지 삭제 #############");
 		
 		return "삭제";
+	}
+	
+	/**
+	 * 아웃터 이미지 삭제
+	 */
+	@RequestMapping(value = "/outerAmountList.do", method = RequestMethod.GET)
+    public String outerAmountList(Model model, @RequestParam(defaultValue="1") int page){
+		
+		Map<String, Object> map = outerService.findOuterAmountList(page);
+		
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("pageBean", map.get("pageBean"));
+		
+		
+		logger.info("############# 상품 수량 페이지 이동 #############");
+		
+		return "admin/outerAmountList";
 	}
 }

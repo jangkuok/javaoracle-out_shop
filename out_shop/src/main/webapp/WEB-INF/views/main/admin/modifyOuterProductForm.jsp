@@ -17,10 +17,9 @@
 $(document).ready(function() {
 	//이미지 삭제
 	$('#delImage').click(function() {		
-		var file = '<input type="file" id="imageFile" name="imageFile" value="사진등록" accept=".jpg, .jpeg, .png"/>';
+		var file = '<div class="col-sm-5"><input type="file" id="imageFile" name="imageFile" value="사진등록" accept=".jpg, .jpeg, .png"/></div>';
 		
-		$('#imageName').remove();
-		$('#delImage').remove();
+		$('#imageDiv').remove();
 		$('#imageTd').append(file);
 		$('#outerVo').attr("enctype","multipart/form-data");
 	});
@@ -53,52 +52,71 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
+<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
+<div>
+<h1>상품 정보 수정</h1><hr>
+</div>
 	<form:form modelAttribute="outerVo" id="outerVo" name="outerVo"
 		action="${pageContext.request.contextPath}/admin/modifyOuterProduct.do" method="post">	
 		<input type="hidden" name="outerNo" id="outerNo" value="${outerVo.outerNo}"/>
 		<input type="hidden" name="insertDate" id="insertDate" value="${outerVo.insertDate}"/>
 		<input type="hidden" name="thumbnailName" id="thumbnailName" value="${outerVo.thumbnailName}"/>
 		
-		<table id="outerAdd" border="1" width="50%">
+		<table id="outerAdd" class="table table-hover">
 			<tr>
 				<th width="20%">종류</th>
 				<td width="80%">
-					<select id="type" name="type">
+					<div class="col-sm-3">
+					<select class="form-control" id="type" name="type">
 						<option value="${outerVo.type}">${outerVo.type}</option>
 						<option value="코트">코트</option>
 						<option value="자켓">자켓</option>
 						<option value="조끼">조끼</option>
 						<option value="패딩">패딩</option>
 					</select>
+					</div>
 				</td>
 			</tr>
 			<tr> 
 				<th>상품이름</th>
 				<td>
-					<input type="text" name="name" id="name" value="${outerVo.name}"/>
+					<div class="col-sm-10">
+						<input class="form-control" type="text" name="name" id="name" value="${outerVo.name}"/>
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>가격</th>
 				<td>
-					<input type="number" name="price" id="price" value="${outerVo.price}"/>
+					<div class="col-sm-3">
+						<input class="form-control" type="number" name="price" id="price" value="${outerVo.price}"/>
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>사진</th>
 				<td id="imageTd">
-					<input type="text" name="imageName" id="imageName" value="${outerVo.imageName}" readonly="readonly"/>
-					<input type="button" id="delImage" name="delImage" value="이미지 삭제">
+					<div class="row col-sm-11"  id="imageDiv">
+						<div class="col-sm-5">
+							<input class="form-control" type="text" name="imageName" id="imageName" value="${outerVo.imageName}" readonly="readonly"/>
+						</div>
+						<div class="col-sm-5">
+							<input class="btn btn-dark" type="button" id="delImage" name="delImage" value="이미지 삭제">
+						</div>
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>상품 소개</th>
 				<td>
-					<textarea name="content" id="content" cols="50" rows="5">${outerVo.content}</textarea>
+					<div class="col-sm-11">
+						<textarea class="form-control" name="content" id="content" cols="50" rows="5">${outerVo.content}</textarea>
+					</div>
 				</td>
 			</tr>
 		</table>
-		<input type="button" id="modifyButton" name="modifyButton" value="수정하기">
+		<input class="btn btn-dark" type="button" id="modifyButton" name="modifyButton" value="수정하기">
 	</form:form>
+</div>
 </body>
 </html>

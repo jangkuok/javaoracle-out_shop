@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.outer_shopping.project.dao.ReviewDao;
 import com.outer_shopping.project.service.ReviewService;
 import com.outer_shopping.project.util.PagingBean;
+import com.outer_shopping.project.vo.OuterVo;
 import com.outer_shopping.project.vo.ReviewVo;
 
 @Service("ReviewService")
@@ -50,6 +51,23 @@ public class ReviewServiceImpl implements ReviewService {
 		
 	}
 	
+	
+	@Override
+	public Map<String, Object> getReviewStarAvg(int outerNo) {
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		try {
+			map = reviewDao.selectReviewStarAvg(outerNo);
+			
+		}catch (Exception e) {
+			System.out.println("getListReview(service) : ");
+			e.printStackTrace();
+		}
+		
+		return map;
+	}
+
 	@Override
 	public ReviewVo getReviewNo(int reviewNo) {
 		ReviewVo review = new ReviewVo();
@@ -90,7 +108,7 @@ public class ReviewServiceImpl implements ReviewService {
 		 
 		HashMap<String, Object> map = new HashMap<>();
 		try {
-			int totalCount = reviewDao.selectReivewListCount();
+			int totalCount = reviewDao.selectReivewMemberIdListCount(memberId);
 			PagingBean pageBean = new PagingBean(totalCount, page);
 			map.put("pageBean", pageBean);
 			list = reviewDao.selectMemberReview(memberId,pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());
@@ -103,5 +121,27 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		return map;
 	}
+
+	@Override
+	public Map<String, Object> getOuterNoReview(int outerNo, int page) {
+		List<OuterVo> list = null;
+		 
+		HashMap<String, Object> map = new HashMap<>();
+		try {
+			int totalCount = reviewDao.selectReivewListCount();
+			PagingBean pageBean = new PagingBean(totalCount, page);
+			map.put("pageBean", pageBean);
+			list = reviewDao.selectOuterNoReview(outerNo, pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());
+			map.put("list", list);
+			
+		}catch (Exception e) {
+			System.out.println("getOuterNoReview(service) : ");
+			e.printStackTrace();
+		}
+		
+		return map;
+	}
+	
+	
 
 }

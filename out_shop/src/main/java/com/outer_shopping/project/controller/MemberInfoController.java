@@ -132,9 +132,9 @@ public class MemberInfoController {
 	 */
 	@RequestMapping(value = "/deleteMember.do", method = RequestMethod.POST)
 	public String deleteMember(Model model,@RequestParam(value="id",required=false) String id,
-			@RequestParam(value="pw",required=false) String pw, @RequestParam(value="pw2",required=false) String pw2,
+			@RequestParam(value="pw",required=false) String pw, @RequestParam(value="password",required=false) String password,
 			HttpSession session) {		
-		if(pw.equals(pw2)) {
+		if(pw.equals(password)) {
 			service.deleteMember(id);
 			authorityService.removeAuthority(id);
 

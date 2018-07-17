@@ -53,7 +53,7 @@ function loginCheck(){
 <div>
 <h1>LOGIN</h1><hr>
 </div>
-    <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+    <div class="col-md-4 col-md-offset-3 col-sm-8 col-sm-offset-2" style="margin:auto;">
         <div class="panel panel-success">         
             <div class="panel-body">
                 <form id="loginForm" name="loginForm" action="${pageContext.request.contextPath}/loginForm.do" method="post">

@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${memberVo.name}님의 마이페이지</title>
+<title>${memberVo.name}님의 MyPage</title>
 <style type="text/css">
 form{
 	display:inline
@@ -17,33 +17,22 @@ form{
 <script type="text/javascript">
 //삭제버튼(보이기.숨기기) jquery
 $(document).ready(function(){
-    $("#showButton").click(function(){
-        $("#showDiv").show();
-        $("#showButton").hide();
+	//$("#secessionDiv").hide();
+	
+    $("#secessionB").click(function(){
+        $("#secessionDiv").show();
+        $("#secessionB").hide();
         $("#pw2").focus();
     });
+    $("#deleteB").on('click',function() {		
+    	if(confirm('회원탈퇴를 하시겠습니까?')){
+        	$("#deleteForm").submit();
+        }else{
+        	return;
+        }
+    });
+    
 });  
-
-/* //새로고침 뒤로가기 방지 javascript
-document.onkeydown = function(e){
-    key = (e) ? e.keyCode : event.keyCode;
-    if(key==8 || key==116){
-       if(e){
-          e.preventDefault();
-       }
-       else{
-          event.keyCode = 0;
-          event.returnValue = false;
-       }
-    }
-}; */
-
-//삭제 버튼 submit 
-function delete_member(){
-	if(confirm('회원탈퇴를 하시겠습니까?')){
-    	$("#deleteForm").submit();
-    }
-};
 </script>
 <style>
     body {
@@ -79,28 +68,43 @@ function delete_member(){
 		         <h5>등급 : ${memberVo.grade}</h5>
             </div>
             <div class="card-footer" style="text-align:center;">          	
-            	<a href="${pageContext.request.contextPath}/member/modifyPage.do?memberId=${memberVo.id}"
+            	<a style="color:white;"  href="${pageContext.request.contextPath}/member/modifyPage.do?memberId=${memberVo.id}"
             		 class="btn btn-dark">회원수정</a>
-              	<a href="#" class="btn btn-dark">회원탈퇴</a>
+              	<a style="color:white;"  id="secessionB" class="btn btn-dark">회원탈퇴</a>
+              	<div id="secessionDiv">
+              		<form id="deleteForm" action="${pageContext.request.contextPath}/member/deleteMember.do" method="post">
+						<input type="hidden" name="id" value="${memberVo.id}">		
+						<input type="hidden" name="pw" value="${memberVo.pw}">
+						<div class="row" style="margin-top:5px;text-align:center;">
+								<div class="col-sm-4">
+	             					<input class="form-control" type="password" name="password">
+	            				</div>
+	             				<div class="col-sm-2">
+	             					<input class="btn btn-dark" type="button" id="deleteB" value="회원탈퇴">
+	             				</div>
+
+              			</div>
+              		</form>
+              	</div>
             </div>
           </div>
         </div>
         <div class="col-lg-6">
         	<input type="hidden" id="memberId" name="memberId" value="${memberVo.id}">
         	<h4><strong>
-	      		<a href="${pageContext.request.contextPath}/member/wishListSearch.do?memberId=${memberVo.id}">
+	      		<a style="color:blue;"  href="${pageContext.request.contextPath}/member/wishListSearch.do?memberId=${memberVo.id}">
 	      			WISHLIST
 	      		</a>
 	      		<p style="text-align:right;">관심 상품</p>	      		
 			 </strong></h4><hr>
 			 <h4><strong>
-	      	 <a href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${memberVo.id}&items=전체">
+	      	 <a style="color:blue;" href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${memberVo.id}&items=전체">
 			      	ORDER
 			    </a>
 			    <p style="text-align:right;">주문 목록</p>
 			 </strong></h4><hr>	
 			 <h4><strong>
-	      		<a href="${pageContext.request.contextPath}/member/memberReviewList.do?memberId=${memberVo.id}">
+	      		<a style="color:blue;" href="${pageContext.request.contextPath}/member/memberReviewList.do?memberId=${memberVo.id}">
 			      	BOARD
 			    </a>
 			    <p style="text-align:right;">게시물 관리</p>

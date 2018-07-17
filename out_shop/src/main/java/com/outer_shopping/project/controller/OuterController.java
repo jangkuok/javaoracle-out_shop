@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.outer_shopping.project.service.OuterService;
 import com.outer_shopping.project.service.OuterSizeService;
+import com.outer_shopping.project.service.ReviewService;
 import com.outer_shopping.project.service.WishListSerice;
 import com.outer_shopping.project.vo.ProductVo;
 import com.outer_shopping.project.vo.OuterSizeVo;
@@ -42,16 +43,31 @@ public class OuterController {
 	@Autowired
 	private WishListSerice wishService;
 	
+	@Autowired
+	private ReviewService reviewService;
+	
 	/**
 	 * 아웃터 상세 정보
 	 */
 	@RequestMapping("/outerView.do")
-	public String outerView(Model model, @RequestParam(value="outerNo",required=false) int outerNo) {
-		
-		OuterVo outer = new OuterVo();
-		outer = service.getOuter(outerNo);
-	
+	public String outerView(Model model, @RequestParam(value="outerNo",required=false) int outerNo,
+			@RequestParam(defaultValue="1") int page) {
+			
+		OuterVo outer = service.getOuter(outerNo);
 		model.addAttribute("outer", outer);
+		
+		Map<String, Object> map = reviewService.getOuterNoReview(outerNo, page);
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("pageBean", map.get("pageBean"));
+		
+		Map<String, Object> starAvg = reviewService.getReviewStarAvg(outerNo);
+		
+		if(starAvg != null) {
+			model.addAttribute("starAvg", starAvg.get("ROUND"));
+		}else {
+			model.addAttribute("starAvg", "0");
+		}		
 		
 		logger.info("############# 아웃터 상세페이지 이동 #############");
 		return "outerViewPage";

@@ -121,14 +121,14 @@ function successDelivery(i){
 <div>
 <h1>ORDER LIST</h1><hr>
 </div>
-	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=결제대기중" class="btn btn-primary">결제 대기중</a>
-	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=결제완료" class="btn btn-primary">결제 완료</a>
-	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=상품준비중" class="btn btn-primary">상품 준비중</a>
-	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=배송중" class="btn btn-primary">배송중</a>
-	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=배송완료" class="btn btn-primary">배송완료</a>
-	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=주문취소" class="btn btn-primary">주문취소</a>
-	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=주문취소완료" class="btn btn-primary">주문취소 완료</a>
-	<a href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=전체보기" class="btn btn-primary">전체보기</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=결제대기중" class="btn btn-primary">결제 대기중</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=결제완료" class="btn btn-primary">결제 완료</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=상품준비중" class="btn btn-primary">상품 준비중</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=배송중" class="btn btn-primary">배송중</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=배송완료" class="btn btn-primary">배송완료</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=주문취소" class="btn btn-primary">주문취소</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=주문취소완료" class="btn btn-primary">주문취소 완료</a>
+	<a style="color:white;" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=전체보기" class="btn btn-primary">전체보기</a>
 			
 	<c:if test="${empty orderList}">
 		<div style="margin-top:110px;text-align:center;">
@@ -174,7 +174,7 @@ function successDelivery(i){
 					<td> 
 						<c:if test="${orderList.handing == '결제완료'}">
 								<form id="productPreparationsForm${orderList.orderNo}" action="${pageContext.request.contextPath}/admin/haningUpdateOrder.do" method="post">
-									<input type="hidden" id="handing" name="handing" value="상품 준비중">
+									<input type="hidden" id="handing" name="handing" value="상품준비중">
 									<input type="hidden" id="items" name="items" value="${param.items}">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">
 									<input type="button" class="btn btn-dark"  value="상품준비" onclick="productPreparations(${orderList.orderNo})">
@@ -182,13 +182,13 @@ function successDelivery(i){
 						</c:if>
 						<c:if test="${orderList.handing == '주문취소'}">
 								<form id="cancelOrderForm${orderList.orderNo}" action="${pageContext.request.contextPath}/admin/haningUpdateOrder.do" method="post">
-									<input type="hidden" id="handing" name="handing" value="주문취소 완료">
+									<input type="hidden" id="handing" name="handing" value="주문취소완료">
 									<input type="hidden" id="items" name="items" value="${param.items}">
 									<input type="hidden" id="orderNo" name="orderNo" value="${orderList.orderNo}">
 									<input type="button" class="btn btn-dark" value="취소완료" onclick="cancelOrder(${orderList.orderNo})">
 								</form>
 						</c:if>
-						<c:if test="${orderList.handing == '상품 준비중'}">
+						<c:if test="${orderList.handing == '상품준비중'}">
 								<form id="startDeliveryForm${orderList.orderNo}" action="${pageContext.request.contextPath}/admin/haningUpdateOrder.do" method="post">
 									<input type="hidden" id="handing" name="handing" value="배송중">
 									<input type="hidden" id="items" name="items" value="${param.items}">
@@ -222,7 +222,7 @@ function successDelivery(i){
 			<c:choose>
 				<c:when test="${requestScope.pageBean.previousPageGroup}">
 					<%-- 이전페이지 그룹이 있디면 : previousPageGroup()--%>
-					<a class="page-link" href="${pageContext.request.contextPath}/amdin/adminOrderListPage.do?page=1&items=${requestScope.items}" aria-label="Previous">
+					<a class="page-link" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?page=1&items=${items}" aria-label="Previous">
 		       			<span aria-hidden="true">&laquo;</span>
 		        		<span class="sr-only">Previous</span>
 		      		</a>
@@ -243,7 +243,7 @@ function successDelivery(i){
 				<c:forEach begin="${requestScope.pageBean.beginPage}" end="${requestScope.pageBean.endPage}" var="page">
 					<c:choose>
 						<c:when test="${requestScope.pageBean.page != page}"> <%-- 현재패이지가 아니라면 --%>
-							<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/amdin/adminOrderListPage.do?page=${page}&items=${requestScope.items}">${page}</a></li>
+							<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?page=${page}&items=${items}">${page}</a></li>
 						</c:when>
 						<c:otherwise>
 							<li class="page-item"><a class="page-link">${page}</a></li>
@@ -258,7 +258,7 @@ function successDelivery(i){
 			<c:choose> 	
 				<c:when test="${requestScope.pageBean.nextPageGroup}">
 					<%-- 다음페이지 그룹이 있디면 : nextPageGroup()--%>
-		    		<a class="page-link" href="${pageContext.request.contextPath}/amdin/adminOrderListPage.do?page=${requestScope.pageBean.endPage + 1}&items=${requestScope.items}" aria-label="Next">
+		    		<a class="page-link" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?page=${requestScope.pageBean.endPage + 1}&items=${items}" aria-label="Next">
 		        		<span aria-hidden="true">&raquo;</span>
 		        		<span class="sr-only">Next</span>
 		      		</a>		

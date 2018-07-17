@@ -3,6 +3,7 @@ package com.outer_shopping.project.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.outer_shopping.project.vo.OuterVo;
 import com.outer_shopping.project.vo.ReviewVo;
 
 public interface ReviewMapper {
@@ -14,6 +15,10 @@ public interface ReviewMapper {
     void deleteReview(int reviewNo);
     
     int selectReivewListCount();
+    
+    int selectReivewMemberIdListCount(String memberId);
+    
+    Map<String, Object> selectReviewStarAvg(int outerNo);
     
     ReviewVo selectReviewNo(int reviewNo);
     

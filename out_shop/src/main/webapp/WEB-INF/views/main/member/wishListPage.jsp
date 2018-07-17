@@ -10,7 +10,7 @@
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 //상품 선택하기
-$(document).ready(function() {
+$(document).ready(function() {	
 	//상품삭제
 	$("#deleteWishList").click(function() {
 		
@@ -67,7 +67,7 @@ $(document).ready(function() {
 			<thead>
 			<tr>
 				<th></th>
-				<th>이미지</th>
+				<th>상품 이미지</th>
 				<th>상품 이름</th>
 				<th>가격</th>
 			</tr>
@@ -99,7 +99,7 @@ $(document).ready(function() {
 		</table>
 		</div>
 		</center>
-		<input type="button" id="deleteWishList" name="deleteWishList" value="상품삭제">
+		<input class="btn btn-dark" type="button" id="deleteWishList" name="deleteWishList" value="상품삭제">
 		
 
 <%-- ######################################################

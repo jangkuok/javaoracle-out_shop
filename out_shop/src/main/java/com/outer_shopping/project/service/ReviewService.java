@@ -14,9 +14,13 @@ public interface ReviewService {
     
     void removeReview(int reviewNo);
     
+    Map<String, Object> getReviewStarAvg(int outerNo);
+    
     ReviewVo getReviewNo(int reviewNo);
     
     Map<String, Object> getListReview(int page);
     
     Map<String, Object> getMemberReview(String memberId,int page);
+    
+    Map<String, Object> getOuterNoReview(int outerNo,int page);
 }

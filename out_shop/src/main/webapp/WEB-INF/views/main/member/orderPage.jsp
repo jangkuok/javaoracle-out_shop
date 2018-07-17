@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="ko-kr">
 <head>
@@ -11,11 +12,30 @@
 <!-- daum 우편번호 서비스 외장 JS(Javascript) 파일 링크 -->
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script type="text/javascript">
+<!-- 가격 "," 처리 추가  -->
+function commaNum(num) {  
+    var len, point, str;  
+
+    num = num + "";  
+    point = num.length % 3  
+    len = num.length;  
+
+    str = num.substring(0, point);  
+    while (point < len) {  
+        if (str != "") str += ",";  
+        str += num.substring(point, point + 3);  
+        point += 3;  
+    }  
+    return str;  
+} 
+
 $(document).ready(function() {
 	
 	var price = 0;
 	
 	var productListCount = $('#productListTable tbody tr').length;
+
+	$('#newAddress').hide();
 	
 	//상품금액
 	$('input[name="price"]').each(function(){
@@ -23,6 +43,8 @@ $(document).ready(function() {
 		price = parseInt(price) + parseInt(no);
 		//상품가격
 		$("input[name='productPrice']").val(price);
+		
+		$('#commaProductPrice').val(commaNum($("input[name='productPrice']").val()));
 	});
 	
 	//배송비 가격
@@ -33,6 +55,7 @@ $(document).ready(function() {
 	}
 	if(parseInt(productPrice) < parseInt("50000")){
 		$('#deliveryPrice').val("2500");
+		$('#commaDeliveryPrice').val(commaNum($("#deliveryPrice").val()));
 	}
 	
 	
@@ -42,21 +65,24 @@ $(document).ready(function() {
 	var total = parseInt(productPrice) + parseInt(deliveryPrice);
 	
 	$("#totalPrice1").val(total);
+	$('#commaTotalPrice1').val(commaNum(total));
+	
 	$("#totalPrice2").val(total);
+	$('#commaTotalPrice2').val(commaNum(total));
 	
 	//상품 삭제
 	$("#removeProduct").click(function() {
 		$("input[name='checkBox']:checked").each(function(){
-			 var no = $(this).val();		
+			 var delNo = $(this).val();		
 			 
-			 var price = $('#productPrice'+no).val();
+			 var delPrice = $('#productPrice'+delNo).val();
 			 
 			 //총 상품 가격
-			 var productPrice = $('#productPrice').val();
+			 var delProductPrice = $('#productPrice').val();
 			 
-			 $('#productPrice').val(parseInt(productPrice) - parseInt(price));
-
-			 
+			 $('#productPrice').val(parseInt(delProductPrice) - parseInt(delPrice));
+			 $('#commaProductPrice').val(commaNum($("input[name='productPrice']").val()));
+			 	 
 			 //배송비 가격
 			 var cpp = $('#productPrice').val();
 			 
@@ -66,26 +92,42 @@ $(document).ready(function() {
 			 
 			 if(cpp < parseInt("50000") && cpp > parseInt("0")){
 				 $('#deliveryPrice').val("2500");
+				 $('#commaDeliveryPrice').val(commaNum("2500"));
 			 }
 			 //상품 + 배송비 가격
-			 var deliveryPrice = $('#deliveryPrice').val();
+			 var delDeliveryPrice = $('#deliveryPrice').val();
 			 
-			 var total = parseInt(cpp) - parseInt(deliveryPrice);
+			 var delTotal = parseInt(cpp) - parseInt(delDeliveryPrice);
 			 
-			 $("#totalPrice1").val(total);
-			 $("#totalPrice2").val(total);
+			 $("#totalPrice1").val(delTotal);
+			 $('#commaTotalPrice1').val(commaNum(delTotal));				
+
+			 
+			 $("#totalPrice2").val(delTotal);
+			 $('#commaTotalPrice2').val(commaNum(delTotal));
 			 
 			 //해당 상품 삭제
-			 $("#trProduct"+no).remove();
+			 $("#trProduct"+delNo).remove();
 			 productListCount--;
 		}) ;	
 	});
 
 	//배송지 선택
-	if($('input[name="orderCheck"]:checked').val() == '새로운'){
-		alert('sdfsdfsdf');
+	$('input[name="orderCheck"]').on('click',function(){
+		if($('input[name="orderCheck"]:checked').val() == '새로운'){
+			$('#newAddress').show();
+			$('#addressMagin2').hide();
+			
+		}
+		
+		if($('input[name="orderCheck"]:checked').val() == '주문자'){
+			$('#addressMagin2').show();
+			$('#newAddress').hide();
+			
+		}		
+	});
+	
 
-	}
 
 	//상품 주문
 	$('#buyB').on('click',function(){
@@ -193,21 +235,13 @@ function getPostcodeAddress(i) {
                 // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
                 fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
             }
-           
-           // 주소 정보 전체 필드 및 내용 확인 : javateacher
-           /*  var output = '';
-            for (var key in data) {
-                output += key + ":" +  data[key]+"\n";
-            }
-           
-            alert(output); */
-
             // 3단계 : 해당 필드들에 정보 입력
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
             document.getElementById('zipcode'+i).value = data.zonecode; //5자리 새우편번호 사용
             document.getElementById('address'+i).value = fullAddr;
 
             // 커서를 상세주소 필드로 이동한다.
+            document.getElementById('address2'+i).value = "";
             document.getElementById('address2'+i).focus();
             
 
@@ -249,7 +283,7 @@ function getPostcodeAddress(i) {
 	text-align:right;
 }
 
-#addressMagin > div , #addressMagin2 > div{
+#addressMagin > div , #addressMagin2 > div, #newAddress > div{
     	margin: 15px 0;
     }
 </style>
@@ -302,7 +336,8 @@ function getPostcodeAddress(i) {
 							<input class="textTrans" type="text" id="productSize" name="cartProduct" value="${orderList.productSize}" readOnly="readOnly">
 						</td>
 						<td>
-							<input class="textTrans" type="text" id="productPrice${st.count}" name="cartProduct" value="${orderList.productPrice}" readOnly="readOnly">
+							<fmt:formatNumber value="${orderList.productPrice}" pattern="#,###.##"/>
+							<input type="hidden" id="productPrice${st.count}" name="cartProduct" value="${orderList.productPrice}" readOnly="readOnly">
 							<input type="hidden" id="price" name="price" value="${orderList.productPrice}" readOnly="readOnly">
 						</td>
 					</tr>
@@ -313,9 +348,12 @@ function getPostcodeAddress(i) {
 			<table class="table table-hover">
 				<tr>
 					<td colspan="7" >
-								상품금액<input class="textTran" type="text" id="productPrice" name="productPrice" size="6" value="0">
-								배송비<input class="textTran" type="text" id="deliveryPrice" name="deliveryPrice" size="6" value="0"> 
-								합계 : <input class="textTran" type="text" id="totalPrice1" name="totalPrice" size="8" value="0"><br>
+								상품금액 <input class="textTran" type="text" id="commaProductPrice" name="commaProductPrice" size="6" value="0">
+								<input type="hidden" id="productPrice" name="productPrice" size="6" value="0">
+								배송비 <input class="textTran" type="text" id="commaDeliveryPrice" name="commaDeliveryPrice" size="6" value="0">
+								<input type="hidden" id="deliveryPrice" name="deliveryPrice" size="6" value="0"> 
+								합계 : <input class="textTran" type="text" id="commaTotalPrice1" name="commaTotalPrice1" size="8" value="0"><br>
+								<input type="hidden" id="totalPrice1" name="totalPrice" size="8" value="0"><br>
 					</td>
 				</tr>
 			</table>
@@ -330,7 +368,7 @@ function getPostcodeAddress(i) {
 				<th width="20%">주문자*</th>
 				<td width="80%">
 					<div class="col-sm-5">
-						<input class="form-control" type="text" id="" name="" value="${memberVo.name}">
+						<input class="form-control" type="text" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
 					</div>
 				</td>
 			</tr>
@@ -339,7 +377,7 @@ function getPostcodeAddress(i) {
 				<td id="addressMagin">
 					<div class="row">
 						<div class="col-sm-2" style="float:left;">
-							<input type="text" class="form-control" id="zipcode1" name="" value="${memberVo.zipcode}" readOnly="readOnly">
+							<input type="text" class="form-control" id="zipcode1" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.zipcode}" readOnly="readOnly">
 						</div>
 						<c:if test="${memberVo.zipcode == null}">
 							<div class="col-sm-3" style="float:left;">
@@ -353,13 +391,13 @@ function getPostcodeAddress(i) {
 						</c:if>
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address1" name="" value="${memberVo.address}" readOnly="readOnly"> 
+						<input type="text" class="form-control" id="address1" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address}" readOnly="readOnly"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						기본주소
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address21" name="" value="${memberVo.address2}"> 
+						<input type="text" class="form-control" id="address21" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address2}"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						나머지주소
@@ -370,7 +408,7 @@ function getPostcodeAddress(i) {
 				<th>휴대전화*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="" name="" value="${memberVo.phoneNum}">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.phoneNum}">
 					</div>
 				</td>
 			</tr>
@@ -378,7 +416,7 @@ function getPostcodeAddress(i) {
 				<th>이메일*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="" name="" value="${memberVo.email}">
+						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.email}">
 					</div>
 				</td>
 			</tr>
@@ -387,51 +425,51 @@ function getPostcodeAddress(i) {
 <hr>	
 	<div>
 		배송정보
-		<input type="hidden" id="memberId" name="memberId" value="${memberVo.id}">
+		<input type="hidden" id="memberId" name="memberId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id}">
 		<table class="table table-hover">
 			<tr>
-				<th width="20%">배송지 선택</th>
+				<th width="20%">주문자*</th>
 				<td width="80%">
-					<input type="radio" id="existSelect" name="orderCheck" checked="checked" value="주문자" /> 주문자 정보와 동일
-					<input type="radio" id="newSelect" name="orderCheck" value="새로운" /> 새로운 배송지
-				</td>
-			</tr>
-			<tr>
-				<th>주문자*</th>
-				<td>
 					<div class="col-sm-5">
-						<input type="text" class="form-control" id="name" name="deliveryInfo" value="${memberVo.name}">
+						<input type="text" class="form-control" id="name" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
 					</div>
 				</td>
-			</tr>
-			<tr>
+			</tr>		
+			<tr>			
 				<th>주소*</th>
 				<td id="addressMagin2">
 					<div class="col-sm-2" style="float:left;">
-						<input type="text" class="form-control" id="zipcode2" name="deliveryInfo" value="${memberVo.zipcode}" readOnly="readOnly">
+						<input type="text" class="form-control" id="zipcode2" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.zipcode}" readOnly="readOnly">
 					</div>
-					<div class="col-sm-3" style="float:left;">
-						<input class="btn btn-dark" type="button" value="주소 검색" onClick="getPostcodeAddress('2')">
-					</div>
+					<c:if test="${memberVo.zipcode == null}">
+						<div class="col-sm-3" style="float:left;">
+							<input class="btn btn-dark" type="button" value="주소 검색" onClick="getPostcodeAddress('2')">
+						</div>
+					</c:if>
+					<c:if test="${memberVo.zipcode != null }">
+						<div class="col-sm-3" style="float:left;">
+							<input class="btn btn-dark" type="button" value="주소 변경" onClick="getPostcodeAddress('2')">
+						</div>
+					</c:if>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address2" name="deliveryInfo" value="${memberVo.address}" readOnly="readOnly"> 
+						<input type="text" class="form-control" id="address2" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address}" readOnly="readOnly"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						기본주소
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address22" name="deliveryInfo" value="${memberVo.address2}"> 
+						<input type="text" class="form-control" id="address22" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address2}"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						나머지주소
 					</div>
-				</td>
+				</td>			
 			</tr>
 			<tr>
 				<th>휴대전화*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="phoneNum" name="deliveryInfo" value="${memberVo.phoneNum}">
+						<input type="text" class="form-control" id="phoneNum" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.phoneNum}">
 					</div>
 				</td>
 			</tr>
@@ -439,7 +477,7 @@ function getPostcodeAddress(i) {
 				<th>이메일*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="email" name="deliveryInfo" value="${memberVo.email}">
+						<input type="text" class="form-control" id="email" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.email}">
 					</div>
 				</td>
 			</tr>
@@ -459,17 +497,14 @@ function getPostcodeAddress(i) {
 				<th width="20%">결제 예정 금액</th>
 				<td width="80%">
 					<div class="col-sm-4">
-						<input class="textTrans" style="text-align:left;" type="text" id="totalPrice2" name="deliveryInfo" value="0">
+						<input class="textTrans" style="text-align:left;" type="text" id="commaTotalPrice2"  value="0">
+						<input type="hidden" id="totalPrice2" name="deliveryInfo" value="0">
 					</div>
 				</td>
 			</tr>
 		</table>
 	</div>
 <hr>	
-결제 수단<br>
-<input type="radio" name="" value="" /> 카드 결제
-<input type="radio" name="" value="" /> 무통장 입금
-<input type="radio" name="" value="" /> 핸드폰 결제<br>
 <input class="btn btn-dark" type="button" id="buyB" value="결제하기">
 </div>
 </body>

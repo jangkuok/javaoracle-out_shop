@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.outer_shopping.project.dao.OuterDao;
 import com.outer_shopping.project.service.OuterService;
+import com.outer_shopping.project.util.OuterPagingBean;
 import com.outer_shopping.project.util.PagingBean;
-import com.outer_shopping.project.vo.OrderCheckVo;
 import com.outer_shopping.project.vo.OuterVo;
 
 
@@ -93,8 +93,8 @@ public class OuterServiceImpl implements OuterService {
 		HashMap<String, Object> map = new HashMap<>();
 		
 		try {
-			int totalCount = dao.selectOuterListCount();
-			PagingBean pageBean = new PagingBean(totalCount, page);
+			int totalCount = dao.selectOuterListCount(items);
+			OuterPagingBean pageBean = new OuterPagingBean(totalCount, page);
 			map.put("pageBean", pageBean);
 			list = dao.selectItemsOuterList(items, pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());
 			map.put("list", list);
@@ -124,6 +124,28 @@ public class OuterServiceImpl implements OuterService {
 		}
 		
 		return outer;
+	}
+
+
+	@Override
+	public Map<String, Object> findOuterAmountList(int page) {
+		List<OuterVo> list = new ArrayList<>();
+		
+		HashMap<String, Object> map = new HashMap<>();
+		
+		try {
+			int totalCount = dao.selectOuterListCount();
+			PagingBean pageBean = new PagingBean(totalCount, page);
+			map.put("pageBean", pageBean);
+			list = dao.selectOuterAmountList(pageBean.getBeginItemInPage(), pageBean.getEndItemInPage());
+			map.put("list", list);
+			
+		}catch (Exception e) {
+			System.out.println("findOuterAmountList(service) : ");
+			e.printStackTrace();
+		}	
+		
+		return map;
 	}
 	
 	

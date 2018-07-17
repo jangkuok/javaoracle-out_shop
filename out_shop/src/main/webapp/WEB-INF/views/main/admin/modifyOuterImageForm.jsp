@@ -105,77 +105,50 @@
  </script>
 </head>
 <body>
-<form:form modelAttribute="outerPictureVo" id="outerPictureVo" name="outerPictureVo" 
-			action="${pageContext.request.contextPath}/admin/addOuterPicture.do" method="post" enctype="multipart/form-data">
-			<form:hidden path="outerNo" name="outerNo" value="${outerVo.outerNo}"/>
-	<%-- <form:hidden name="pictureUrl" path="pictureUrl" value=""/>
-	<form:hidden name="pictureName" path="pictureName" value=""/> --%>
-			<input type="text" name="trSize" id="trSize" value=""/>
-			<input type="text" name="trFile" id="trFile" value=""/>
-		<table id="imageTable" border="1" width="35%">
+<div class="container" style="margin-top: 110px;margin-bottom: 110px;">
+<div>
+<h1>상품 상세 이미지 수정</h1><hr>
+</div>
+	<form:form modelAttribute="outerPictureVo" id="outerPictureVo" name="outerPictureVo" 
+				action="${pageContext.request.contextPath}/admin/addOuterPicture.do" method="post" enctype="multipart/form-data">
+				<form:hidden path="outerNo" name="outerNo" value="${outerVo.outerNo}"/>
+		<%-- <form:hidden name="pictureUrl" path="pictureUrl" value=""/>
+		<form:hidden name="pictureName" path="pictureName" value=""/> --%>
+				<input type="hidden" name="trSize" id="trSize" value=""/>
+				<input type="hidden" name="trFile" id="trFile" value=""/>
 			<div>
-				<input type="button" id="imagePlusButton" value="+">
-				<input type="button" id="imageMinusButton" value="-">
-			</div>
-			<tr>
-				<td>
-					상품 이미지 수정
-				</td>
-			</tr>
-			<tbody id="imageTbody">
-			<c:if test="${not empty outerVo.imageList}">
-				<c:forEach var="imageList" items="${outerVo.imageList}" varStatus="st">
-				<c:if test="${imageList.pictureNo != ''}">
-					<tr id="imageTr${st.count}">
-						<td id="imageTd${st.count}">
-							<input type="hidden" name="pictureNo${st.count}" id="pictureNo${st.count}" value="${imageList.pictureNo}"/>
-							<input type="hidden" name="pictureUrl${st.count}" id="pictureUrl${st.count}" value="${imageList.pictureUrl}"/>
-							<input type="text" name="pictureName${st.count}" id="pictureName${st.count}" value="${imageList.pictureName}" readonly="readonly"/>
-							<input type="button" name="delImage" id="delImage${st.count}"  value="이미지 삭제">
-						</td>
-					</tr>
+				<input class="btn" type="button" id="imagePlusButton" value="+">
+				<input class="btn" type="button" id="imageMinusButton" value="-">
+			</div>	
+			<table id="imageTable" class="table table-hover">
+				<tbody id="imageTbody">
+				<c:if test="${not empty outerVo.imageList}">
+					<c:forEach var="imageList" items="${outerVo.imageList}" varStatus="st">
+					<c:if test="${imageList.pictureNo != ''}">
+						<tr id="imageTr${st.count}">
+							<td id="imageTd${st.count}">
+								<input type="hidden" name="pictureNo${st.count}" id="pictureNo${st.count}" value="${imageList.pictureNo}"/>
+								<input type="hidden" name="pictureUrl${st.count}" id="pictureUrl${st.count}" value="${imageList.pictureUrl}"/>
+								
+								<div class="row col-sm-11"  id="imageDiv">
+									<div class="col-sm-5">
+										<input class="form-control" type="text" name="pictureName${st.count}" id="pictureName${st.count}" value="${imageList.pictureName}" readonly="readonly"/>
+									</div>
+									<div class="col-sm-5">
+										<input class="btn btn-dark" type="button" name="delImage" id="delImage${st.count}"  value="이미지 삭제">
+									</div>
+								</div>
+								
+								
+							</td>
+						</tr>
+					</c:if>
+					</c:forEach>
 				</c:if>
-				</c:forEach>
-			</c:if>
-			</tbody>
-		</table>
-		<input type="button" id="addPicture" name="addPicture" value="등록">
-</form:form>
-<%-- <form id="outerPictureVo" name="outerPictureVo" action="${pageContext.request.contextPath}/admin/modifyOuterPicture.do" 
-			method="post" enctype="multipart/form-data">
-	<input type="hidden" name="outerNo" id="outerNo" value="${outerVo.outerNo}"/>
-							
-	<input type="text" name="trSize" id="trSize" value=""/>
-	<input type="text" name="trFile" id="trFile" value=""/>
-	
-		<table id="imageTable" border="1" width="35%">
-			<div>
-				<input type="button" id="imagePlusButton" value="+">
-				<input type="button" id="imageMinusButton" value="-">
-			</div>
-			<tr>
-				<td>
-					상품 이미지 수정
-				</td>
-			</tr>
-			<tbody id="imageTbody">
-			<c:if test="${not empty outerVo.imageList}">
-				<c:forEach var="imageList" items="${outerVo.imageList}" varStatus="st">
-				<c:if test="${imageList.pictureNo != ''}">
-					<tr id="imageTr${st.count}">
-						<td id="imageTd${st.count}">
-							<input type="text" name="pictureNo${st.count}" id="pictureNo${st.count}" value="${imageList.pictureNo}"/>
-							<input type="text" name="pictureUrl${st.count}" id="pictureUrl${st.count}" value="${imageList.pictureUrl}"/>
-							<input type="text" name="pictureName${st.count}" id="pictureName${st.count}" value="${imageList.pictureName}" readonly="readonly"/>
-							<input type="button" name="delImage" id="delImage${st.count}"  value="이미지 삭제">
-						</td>
-					</tr>
-				</c:if>
-				</c:forEach>
-			</c:if>
-			</tbody>
-		</table>
-		<input type="button" id="addPicture" name="addPicture" value="등록">
-</form> --%>
+				</tbody>
+			</table>
+			<input class="btn btn-dark" type="button" id="addPicture" name="addPicture" value="등록">
+	</form:form>
+</div>
 </body>
 </html>

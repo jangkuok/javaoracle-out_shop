@@ -135,6 +135,25 @@
 	<select id = "selectReivewListCount" resultType="_int">
 		SELECT COUNT(*) FROM REVIEW
 	</select>
+		<!-- 회원별 리뷰 List 카운트  -->
+	<select id = "selectReivewMemberIdListCount" parameterType="String" resultType="_int">
+		SELECT COUNT(*) FROM REVIEW
+		WHERE MEMBER_ID = #{memberId}
+	</select>
+
+	<!-- 상품별 별점 평균 SQL -->
+	<select id="selectReviewStarAvg" parameterType="_int" resultType="java.util.Map">	
+		SELECT ROUND("AVG",1) AS "ROUND", OUTER_NO
+		FROM 
+		(
+			SELECT AVG(NVL(STAR,0)) AS "AVG", OUTER_NO
+			FROM REVIEW
+			WHERE OUTER_NO = #{outerNo}
+			GROUP BY OUTER_NO
+	 	)
+	</select>
+
+
 		
 	<!-- 리뷰 List 조회 SQL -->
 	<select id="selectListReview" parameterType="hashmap" resultMap="review-outer-resultmap">	
@@ -172,5 +191,8 @@
 			)
 		WHERE RNUM>=#{startIndex}
 	</select>
+	
+	
+
 
 </mapper>

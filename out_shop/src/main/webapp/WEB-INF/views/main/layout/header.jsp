@@ -66,11 +66,17 @@
 				<li class="nav-item">
 	               <a class="nav-link" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=전체보기">주문관리</a>
 	            </li>
+	            <li class="nav-item">
+	               <a class="nav-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?items=Outer">상품목록</a>
+	            </li>
+	            <li class="nav-item">
+	               <a class="nav-link" href="${pageContext.request.contextPath}/admin/outerAmountList.do">상품수량</a>
+	            </li>	            
 				<li class="nav-item">
 	               <a class="nav-link" href="${pageContext.request.contextPath}/admin/outerForm.do">상품등록</a>
 	            </li>
 	            <li class="nav-item">
-	              <a class="nav-link" href="#">게시판 관리</a>
+	              <a class="nav-link" href="${pageContext.request.contextPath}/reviewPage.do">게시판 관리</a>
 	            </li>			
 				<li class="nav-item">
 	               <a class="nav-link" href="${pageContext.request.contextPath}/admin/saleProductGraph.do">판매량 확인</a>

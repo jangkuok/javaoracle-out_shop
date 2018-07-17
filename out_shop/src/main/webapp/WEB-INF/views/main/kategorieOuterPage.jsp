@@ -2,11 +2,26 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="ko-kr">
 <head>
 <meta charset="utf-8">
-<title>Insert title here</title>
+<title>OUTSHOP</title>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#search").click(function(){
+		var items = $('#items').val();
+		
+		if(items == ''){
+			alert("검색어를 작성하시오.");
+		}else{
+			location.replace('${pageContext.request.contextPath}/kategorieOuterList.do?items='+items);
+		}
+	});
+});
+</script>
 </head>
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
@@ -38,6 +53,19 @@
 		</center>
 	</c:if>	
 	<c:if test="${not empty list}">
+	<!-- 관리자 로그인 할 경우 -->
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<div class="row" style="margin-bottom: 10px;">
+				<div class="col-sm-8">
+				</div>
+				<div class="col-sm-3">
+					<input class="form-control" type="text" name="items" id="items">
+				</div>
+				<div class="col-sm-1">
+					<input class="btn btn-dark" type="button" id="search" value="검색">
+				</div>
+			</div>
+		</sec:authorize>
 		<div class="row">
 	     <c:forEach var="outer" items="${list}" varStatus="st">
 	       <div class="col-lg-4 col-sm-6 portfolio-item">

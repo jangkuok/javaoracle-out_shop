@@ -89,6 +89,50 @@ public class OrderProductDaoImpl implements OrderProductDao {
 	}
 
 	/**
+	 * 상태별 리스트 카운트
+	 */
+	@Override
+	public int selectOrderHandingListCount(String handing) {
+		
+		int count = 0;
+		
+		try {
+			count = session.selectOne(makeSqlId("selectOrderHandingListCount"),handing);
+		}catch (Exception e) {
+			System.out.println("selectOrderHandingListCount(dao) : ");
+			e.printStackTrace();
+		}
+	
+		return count;
+	}
+	
+	
+	
+	/**
+	 * 회원별 리스트 카운트
+	 */
+	@Override
+	public int selectOrderMemberIdDateListCount(String memberId, String items) {
+		int count = 0;
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		try {
+			
+			map.put("memberId", memberId);
+			map.put("items", items);
+			
+			count = session.selectOne(makeSqlId("selectOrderMemberIdDateListCount"),map);
+		}catch (Exception e) {
+			System.out.println("selectOrderMemberIdDateListCount(dao) : ");
+			e.printStackTrace();
+		}
+	
+		return count;
+	}
+
+
+	/**
 	 * 전체 주문 목록
 	 */
 	@Override

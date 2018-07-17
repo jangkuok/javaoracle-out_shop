@@ -39,11 +39,17 @@ public class AdminOrderController {
 	@RequestMapping(value = "/adminOrderListPage.do", method=RequestMethod.GET)
 	public String adminOrderListPage(Model model,@RequestParam("items") String items, @RequestParam(defaultValue="1") int page) {
 		
+		if(items == null) {
+			items = "전체보기";
+		}
+		
 		Map<String, Object> map = new HashMap<>();
 		
 		map  = orderService.getOrderList(items,page);
 		
 		model.addAttribute("orderList", map.get("list"));
+		
+		model.addAttribute("items", items);
 		
 		model.addAttribute("pageBean", map.get("pageBean"));
 		

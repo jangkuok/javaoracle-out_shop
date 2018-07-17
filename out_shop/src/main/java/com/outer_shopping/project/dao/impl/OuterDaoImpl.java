@@ -92,7 +92,23 @@ public class OuterDaoImpl implements OuterDao {
 		int count = 0;
 		
 		try {
-			count = session.selectOne(makeSqlId("selectOuterListCount"));
+			count = session.selectOne(makeSqlId("selectOuterAmountCount"));
+		} catch (Exception e) {
+			System.out.println("selectOuterListCount(dao) : ");
+			e.printStackTrace();
+		}
+		return count;
+	}
+	
+	
+	@Override
+	public int selectOuterListCount(String items) {
+		int count = 0;
+		
+		try {
+			Map<String, Object> input = new HashMap<String, Object>();
+			input.put("items",items);			
+			count = session.selectOne(makeSqlId("selectOuterListCount"),input);
 		} catch (Exception e) {
 			System.out.println("selectOuterListCount(dao) : ");
 			e.printStackTrace();
@@ -159,6 +175,26 @@ public class OuterDaoImpl implements OuterDao {
 		}	
 		
 		return outer;
+	}
+
+	
+	@Override
+	public List<OuterVo> selectOuterAmountList(int startIndex, int endIndex) {
+		List<OuterVo> list = new ArrayList<>();
+		
+		try {
+			Map<String, Object> input = new HashMap<String, Object>();
+			input.put("startIndex",startIndex);
+			input.put("endIndex",endIndex);
+		
+			
+			list = session.selectList(makeSqlId("selectOuterAmountList"), input);
+		}catch (Exception e) {
+			System.out.println("selectOuterAmountList(dao) : ");
+			e.printStackTrace();
+		}	
+		
+		return list;
 	}
 	
 	
