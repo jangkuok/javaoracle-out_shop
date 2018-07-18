@@ -60,122 +60,21 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String mainPage(Model model) {
 	
-		List<OuterVo> outerList = outerService.findOuterList();
+		List<OuterVo> outerList = outerService.findOuterList();		
 		
-		List<Map<Object , String>> list = new ArrayList<>();
-		
-		String color = "";
-		String size = "";
-		int amount = 0;
-		
-		for (int i = 0; i < outerList.size(); i++) {
-			
-			OuterVo outerVo = outerService.getOuter(outerList.get(i).getOuterNo());
-			
-			for (int j = 0; j < outerVo.getSizeList().size(); j++) {
-				
-				//사이즈
-				if(size.contains(outerVo.getSizeList().get(j).getType())) {
-		            size = size + "";
-				}else if(j == outerVo.getSizeList().size()-1) {
-					size = size + outerVo.getSizeList().get(j).getType();
-				}else {
-					size = size + outerVo.getSizeList().get(j).getType() + " ";
-		        }
-				
-				//색상
-				if(color.contains(outerVo.getSizeList().get(j).getColor())) {
-					color = color + "";
-				}else {
-					color = color + outerVo.getSizeList().get(j).getColor() + ",";
-		        }
-				
-				//수량
-				amount = amount + outerVo.getSizeList().get(j).getAmount();
-			}
-			
-/*			if(color.charAt(color.length()-1)==','){
-				color = color.replace(color.substring(color.length()-1), "");
-			}*/
-			
-			
-			Map<Object , String> map = new HashMap<>();
-			
-			map.put("outerNo", Integer.toString(outerList.get(i).getOuterNo()));
-			map.put("imageName", outerList.get(i).getImageName());
-			map.put("name", outerList.get(i).getName());
-			map.put("price", Integer.toString(outerList.get(i).getPrice()));
-			map.put("size", size);
-			map.put("color", color);
-			map.put("amount", Integer.toString(amount));
-			
-			list.add(map);
-			
-			size = "";
-			color = "";
-			amount = 0;
-		}		
-		
-		model.addAttribute("list",list);
+		model.addAttribute("list",outerList);
 						
 		List<OrderCheckVo> orderList = orderProductService.getOrderTopThreeList();
 		
-		List<Map<Object , String>> topList = new ArrayList<>();
+		List<OuterVo> topList = new ArrayList<>();
 		
 		for (int i = 0; i < orderList.size(); i++) {
 			
-			for (int j = 0; j < orderList.get(i).getProductList().size(); j++) {
-				
-				OuterVo outerVo = outerService.getOuter(orderList.get(i).getProductList().get(j).getOuterNo());
-				
-				for (int k = 0; k < outerVo.getSizeList().size(); k++) {					
-					//사이즈
-					if(size.contains(outerVo.getSizeList().get(k).getType())) {
-						
-			            size = size + "";
-			            
-					}else if(k == outerVo.getSizeList().size()-1) {
-						
-						size = size + outerVo.getSizeList().get(k).getType();
-						
-					}else {
-						
-						size = size + outerVo.getSizeList().get(k).getType() + " ";
-						
-			        }
-					
-					//색상
-					if(color.contains(outerVo.getSizeList().get(k).getColor())) {
-						
-						color = color + "";
-						
-					}else {
-						
-						color = color + outerVo.getSizeList().get(k).getColor() + ",";
-						
-			        }					
-					
-					//수량
-					amount = amount + outerVo.getSizeList().get(k).getAmount();
-				}
-
-				Map<Object , String> map = new HashMap<>();
-				
-				map.put("outerNo", Integer.toString(outerVo.getOuterNo()));
-				map.put("imageName", outerVo.getImageName());
-				map.put("name", outerVo.getName());
-				map.put("price", Integer.toString(outerVo.getPrice()));
-				map.put("size", size);
-				map.put("color", color);
-				map.put("amount", Integer.toString(amount));
-				
-				topList.add(map);
-				
-				size = "";
-				color = "";
-				amount = 0;
-			}
+			OuterVo outer =  outerService.getOuter(orderList.get(i).getProductList().get(i).getOuterNo());
+			
+			topList.add(outer);
 		}
+		
 		
 		model.addAttribute("top",topList);
 		

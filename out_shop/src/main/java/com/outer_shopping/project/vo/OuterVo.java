@@ -21,6 +21,10 @@ public class OuterVo implements Serializable {
 	
 	private Date insertDate; //등록날짜
 	
+	private String totalSize;
+	private String totalColor;
+	private int totalAmount; 
+	
 	private String imageName;
 	private String thumbnailName;
 	
@@ -32,29 +36,33 @@ public class OuterVo implements Serializable {
 	
 	public OuterVo() {}
 
-	
-	public OuterVo(int outerNo, String type, String name, String content, int price, Date insertDate,
-			String imageName, String thumbnailName) {
+	public OuterVo(int outerNo, String type, String name, String content, int price, Date insertDate, String totalSize,
+			String totalColor, int totalAmount, String imageName, String thumbnailName) {
 		this.outerNo = outerNo;
 		this.type = type;
 		this.name = name;
 		this.content = content;
 		this.price = price;
 		this.insertDate = insertDate;
+		this.totalSize = totalSize;
+		this.totalColor = totalColor;
+		this.totalAmount = totalAmount;
 		this.imageName = imageName;
 		this.thumbnailName = thumbnailName;
 	}
 
-	
-	public OuterVo(int outerNo, String type, String name, String content, int price, Date insertDate, String imageName,
-			String thumbnailName, MultipartFile imageFile, List<OuterSizeVo> sizeList, List<OuterImagesVo> imageList,
-			List<ReviewVo> reviewList) {
+	public OuterVo(int outerNo, String type, String name, String content, int price, Date insertDate, String totalSize,
+			String totalColor, int totalAmount, String imageName, String thumbnailName, MultipartFile imageFile,
+			List<OuterSizeVo> sizeList, List<OuterImagesVo> imageList, List<ReviewVo> reviewList) {
 		this.outerNo = outerNo;
 		this.type = type;
 		this.name = name;
 		this.content = content;
 		this.price = price;
 		this.insertDate = insertDate;
+		this.totalSize = totalSize;
+		this.totalColor = totalColor;
+		this.totalAmount = totalAmount;
 		this.imageName = imageName;
 		this.thumbnailName = thumbnailName;
 		this.imageFile = imageFile;
@@ -63,135 +71,134 @@ public class OuterVo implements Serializable {
 		this.reviewList = reviewList;
 	}
 
-
 	@Override
 	public String toString() {
 		return "OuterVo [outerNo=" + outerNo + ", type=" + type + ", name=" + name + ", content=" + content + ", price="
-				+ price + ", insertDate=" + insertDate + ", imageName=" + imageName + ", thumbnailName=" + thumbnailName
+				+ price + ", insertDate=" + insertDate + ", totalSize=" + totalSize + ", totalColor=" + totalColor
+				+ ", totalAmount=" + totalAmount + ", imageName=" + imageName + ", thumbnailName=" + thumbnailName
 				+ ", imageFile=" + imageFile + ", sizeList=" + sizeList + ", imageList=" + imageList + ", reviewList="
 				+ reviewList + "]";
 	}
-
 
 	public int getOuterNo() {
 		return outerNo;
 	}
 
-
 	public void setOuterNo(int outerNo) {
 		this.outerNo = outerNo;
 	}
-
 
 	public String getType() {
 		return type;
 	}
 
-
 	public void setType(String type) {
 		this.type = type;
 	}
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public String getContent() {
 		return content;
 	}
 
-
 	public void setContent(String content) {
 		this.content = content;
 	}
-
 
 	public int getPrice() {
 		return price;
 	}
 
-
 	public void setPrice(int price) {
 		this.price = price;
 	}
-
 
 	public Date getInsertDate() {
 		return insertDate;
 	}
 
-
 	public void setInsertDate(Date insertDate) {
 		this.insertDate = insertDate;
 	}
 
+	public String getTotalSize() {
+		return totalSize;
+	}
+
+	public void setTotalSize(String totalSize) {
+		this.totalSize = totalSize;
+	}
+
+	public String getTotalColor() {
+		return totalColor;
+	}
+
+	public void setTotalColor(String totalColor) {
+		this.totalColor = totalColor;
+	}
+
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
 
 	public String getImageName() {
 		return imageName;
 	}
 
-
 	public void setImageName(String imageName) {
 		this.imageName = imageName;
 	}
-
 
 	public String getThumbnailName() {
 		return thumbnailName;
 	}
 
-
 	public void setThumbnailName(String thumbnailName) {
 		this.thumbnailName = thumbnailName;
 	}
-
 
 	public MultipartFile getImageFile() {
 		return imageFile;
 	}
 
-
 	public void setImageFile(MultipartFile imageFile) {
 		this.imageFile = imageFile;
 	}
-
 
 	public List<OuterSizeVo> getSizeList() {
 		return sizeList;
 	}
 
-
 	public void setSizeList(List<OuterSizeVo> sizeList) {
 		this.sizeList = sizeList;
 	}
-
 
 	public List<OuterImagesVo> getImageList() {
 		return imageList;
 	}
 
-
 	public void setImageList(List<OuterImagesVo> imageList) {
 		this.imageList = imageList;
 	}
-
 
 	public List<ReviewVo> getReviewList() {
 		return reviewList;
 	}
 
-
 	public void setReviewList(List<ReviewVo> reviewList) {
 		this.reviewList = reviewList;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -208,10 +215,12 @@ public class OuterVo implements Serializable {
 		result = prime * result + ((reviewList == null) ? 0 : reviewList.hashCode());
 		result = prime * result + ((sizeList == null) ? 0 : sizeList.hashCode());
 		result = prime * result + ((thumbnailName == null) ? 0 : thumbnailName.hashCode());
+		result = prime * result + totalAmount;
+		result = prime * result + ((totalColor == null) ? 0 : totalColor.hashCode());
+		result = prime * result + ((totalSize == null) ? 0 : totalSize.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -271,6 +280,18 @@ public class OuterVo implements Serializable {
 				return false;
 		} else if (!thumbnailName.equals(other.thumbnailName))
 			return false;
+		if (totalAmount != other.totalAmount)
+			return false;
+		if (totalColor == null) {
+			if (other.totalColor != null)
+				return false;
+		} else if (!totalColor.equals(other.totalColor))
+			return false;
+		if (totalSize == null) {
+			if (other.totalSize != null)
+				return false;
+		} else if (!totalSize.equals(other.totalSize))
+			return false;
 		if (type == null) {
 			if (other.type != null)
 				return false;
@@ -278,11 +299,5 @@ public class OuterVo implements Serializable {
 			return false;
 		return true;
 	}
-
-
-
-	
-	
-		
 }
 

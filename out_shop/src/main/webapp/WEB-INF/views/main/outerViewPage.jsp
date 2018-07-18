@@ -279,6 +279,7 @@ $(document).ready(function() {
      				<input type="hidden" id="sizeNo" value="">
      			</div>	     			
      			<div class="col-sm-5" style="margin-bottom:2px;">
+     			${outer.totalSize} / ${outer.totalColor}
 				<select class="form-control" id ="sizeSelect" name="sizeSelect">
 					<option value="[필수]사이즈 선택">[필수]사이즈 선택</option>
 					<option value="S">S</option>

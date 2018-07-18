@@ -138,7 +138,7 @@ $(document).ready(function() {
       <c:forEach var="outer" items="${top}" varStatus="st">
 	    <div class="col-lg-4 col-sm-6 portfolio-item">
           <input type="hidden" id="outerTop3Count${outer.outerNo}" name="outerTop3Count" value="${outer.outerNo}">
-          <input type="hidden" id="colorTop3List${outer.outerNo}" value="${outer.color}">
+          <input type="hidden" id="colorTop3List${outer.outerNo}" value="${outer.totalColor}">
           <div class="card h-100 cardBox">
             <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">
             	<img class="card-img-top" src="<c:url value='/image/${outer.imageName}'/>" alt="">
@@ -150,7 +150,7 @@ $(document).ready(function() {
                 </strong>
               </h6>
               <div class="card-text">
-              	${outer.size}
+              	${outer.totalSize}
               </div>
               <span class="card-text" id="colorTop3Span${outer.outerNo}"></span>
               <h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>           
@@ -168,10 +168,10 @@ $(document).ready(function() {
       
       <div class="row" style="margin-bottom:15px;text-align:center;">
       <c:forEach var="outer" items="${list}" varStatus="st">
-      	<c:if test="${outer.amount == '0'}">
+      	<c:if test="${outer.totalAmount == '0'}">
 	        <div class="col-lg-4 col-sm-6 portfolio-item">
 	          <input type="hidden" id="outerCount_${outer.outerNo}" name="outerCount" value="${outer.outerNo}">
-	          <input type="hidden" id="colorList${outer.outerNo}" value="${outer.color}">
+	          <input type="hidden" id="colorList${outer.outerNo}" value="${outer.totalColor}">
 	          <div class="card h-100 cardBox" style="position:relative;">
             	<img class="card-img-top" style="opacity:0.2" src="<c:url value='/image/${outer.imageName}'/>" alt="">
             	<div style="position:absolute;">
@@ -194,10 +194,10 @@ $(document).ready(function() {
 	          </div>
 	        </div>      	
       	</c:if>
-      	<c:if test="${outer.amount != '0'}">
+      	<c:if test="${outer.totalAmount != '0'}">
 	        <div class="col-lg-4 col-sm-6 portfolio-item">
 	          <input type="hidden" id="outerCount${outer.outerNo}" name="outerCount" value="${outer.outerNo}">
-	          <input type="hidden" id="colorList${outer.outerNo}" value="${outer.color}">
+	          <input type="hidden" id="colorList${outer.outerNo}" value="${outer.totalColor}">
 	          <div class="card h-100 cardBox">
 	            <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">
 	            	<img class="card-img-top" src="<c:url value='/image/${outer.imageName}'/>" alt="">
@@ -209,7 +209,7 @@ $(document).ready(function() {
 	                </strong>
 	              </h6>
 	              <div class="card-text">
-	              	${outer.size}
+	              	${outer.totalSize}
 	              </div>
 	              <span class="card-text" id="colorSpan${outer.outerNo}"></span>
 	              <h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>           

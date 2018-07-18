@@ -134,23 +134,6 @@ public class OuterDaoImpl implements OuterDao {
 		return list;
 	}
 
-	/**
-	 * 카테고리별 상품목록(페이징 X)
-	 */
-	@Override
-	public List<OuterVo> selectItemsOuterListNotPage(String items) {
-		
-		List<OuterVo> list = new ArrayList<>();
-		
-		try {
-			list = session.selectList(makeSqlId("selectItemsOuterListNotPage"), items);
-		}catch (Exception e) {
-			System.out.println("selectItemsOuterListNotPage(dao) : ");
-			e.printStackTrace();
-		}	
-		
-		return list;
-	}
 	
 	/**
 	 * 카테고리별 상품목록
@@ -178,34 +161,6 @@ public class OuterDaoImpl implements OuterDao {
 		return list;
 	}
 	
-	
-
-	@Override
-	public List<Map<Object,String>> selectItemsOuterList2(String items, int startIndex, int endIndex, String size, String color,
-			int amount) {
-		
-		List<Map<Object,String>> list = new ArrayList<>();
-		
-		try {
-		
-			Map<String, Object> input = new HashMap<String, Object>();
-			
-			input.put("items",items);
-			input.put("size",size);
-			input.put("color",color);
-			input.put("amount",amount);
-			input.put("startIndex",startIndex);
-			input.put("endIndex",endIndex);
-		
-			
-			list = session.selectList(makeSqlId("selectItemsOuterList2"), input);
-		}catch (Exception e) {
-			System.out.println("selectItemsOuterList2(dao) : ");
-			e.printStackTrace();
-		}	
-		
-		return list;
-	}
 
 	/**
 	 * 아웃터 상세 정보
