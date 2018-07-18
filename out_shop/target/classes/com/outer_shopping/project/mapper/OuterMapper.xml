@@ -191,7 +191,8 @@
 
 	<!-- LIST 전체 조회 SQL -->
 	<select id="selectOuterList" resultMap="outer-resultmap">
-		<include refid="select-Outer-sql"/>		
+		<include refid="select-Outer-sql"/>	
+		WHERE ROWNUM &lt;= 18
 		ORDER BY OUTER_DATE DESC
 	</select>
 	 

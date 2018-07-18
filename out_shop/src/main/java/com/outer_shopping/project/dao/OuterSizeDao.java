@@ -21,4 +21,9 @@ public interface OuterSizeDao {
 	List<OuterSizeVo> selectOuterSizeProduct(int outerNo);
 	
 	List<OuterSizeVo> selectListOuterSizeColor(int outerNo,String type);
+	
+	
+	OuterSizeVo outerSizeAmountPlusCnt(int outerNo, String type, String color); 
+	
+	OuterSizeVo outerSizeAmountMinusCnt(int outerNo, String type, String color); 
 }

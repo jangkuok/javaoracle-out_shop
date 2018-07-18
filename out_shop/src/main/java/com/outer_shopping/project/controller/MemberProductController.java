@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.outer_shopping.project.service.AuthorityService;
 import com.outer_shopping.project.service.MemberService;
 import com.outer_shopping.project.service.OrderProductService;
+import com.outer_shopping.project.service.OuterSizeService;
 import com.outer_shopping.project.service.WishListSerice;
 import com.outer_shopping.project.vo.OrderProductVo;
 
@@ -39,6 +40,8 @@ public class MemberProductController {
 	
 	@Autowired
 	private AuthorityService authorityService;
+	
+
 
 	/**
 	 * 관심상품 조회

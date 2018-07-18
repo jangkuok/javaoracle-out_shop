@@ -101,6 +101,48 @@ public class OuterSizeDaoImpl implements OuterSizeDao {
 		return list;
 	}
 
+
+	@Override
+	public OuterSizeVo outerSizeAmountPlusCnt(int outerNo, String type, String color) {
+		OuterSizeVo outerSize = null;
+		
+		try {
+			
+			Map<String, Object> input = new HashMap<String, Object>();
+			input.put("outerNo",outerNo);
+			input.put("type",type);
+			input.put("color",color);
+			
+			outerSize = session.selectOne(makeSqlId("outerSizeAmountPlusCnt"), input);
+		}catch (Exception e) {
+			System.out.println("outerSizeAmountPlusCnt(dao) : ");
+			e.printStackTrace();
+		}	
+		
+		return outerSize;
+	}
+
+
+	@Override
+	public OuterSizeVo outerSizeAmountMinusCnt(int outerNo, String type, String color) {
+		OuterSizeVo outerSize = null;
+		
+		try {
+			
+			Map<String, Object> input = new HashMap<String, Object>();
+			input.put("outerNo",outerNo);
+			input.put("type",type);
+			input.put("color",color);
+			
+			outerSize = session.selectOne(makeSqlId("outerSizeAmountMinusCnt"), input);
+		}catch (Exception e) {
+			System.out.println("outerSizeAmountMinusCnt(dao) : ");
+			e.printStackTrace();
+		}	
+		
+		return outerSize;
+	}
+
 	
 	
 	

@@ -75,7 +75,7 @@ $(document).ready(function(){
 	           </a>
 	           <div class="card-body">
 	             <h5 class="card-title">
-	               <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
+	               <a style="white-space: nowrap;" href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
 	             </h5>
 	             <p class="card-text">
 	             	<h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>
@@ -89,8 +89,9 @@ $(document).ready(function(){
 		<%-- ######################################################
 									페이징 처리
 				###################################################### --%>	
+		
 		<nav aria-label="Page navigation example">
-		  <ul class="pagination">    
+		  <ul class="pagination ulCenter">    
 			<!--
 				이전 페이지 그룹 처리.
 				만약에 이전페이지 그룹이 있으면 링크처리하고 없으면 화살표만 나오도록 처리.
@@ -120,7 +121,7 @@ $(document).ready(function(){
 				<c:forEach begin="${requestScope.pageBean.beginPage}" end="${requestScope.pageBean.endPage}" var="page">
 					<c:choose>
 						<c:when test="${requestScope.pageBean.page != page}"> <%-- 현재패이지가 아니라면 --%>
-							<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?page=${page}&items=${requestScope.items}">${page}</a></li>
+							<li class="page-item"><a style="color:blue;" class="page-link" href="${pageContext.request.contextPath}/kategorieOuterList.do?page=${page}&items=${requestScope.items}">${page}</a></li>
 						</c:when>
 						<c:otherwise>
 							<li class="page-item"><a class="page-link">${page}</a></li>
@@ -149,9 +150,7 @@ $(document).ready(function(){
 			</c:choose>
 			</li>
 		  </ul>
-		</nav>	    
-	    
-	    
+		</nav>	        
 	</c:if>  
 </div>
 

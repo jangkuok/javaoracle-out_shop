@@ -31,6 +31,11 @@ a:hover { color: black; text-decoration: underline;}
 
 .cardBox { box-shadow: 3px 3px 2px #aaaaaa; }
 
+.ulCenter {
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+}
 </style>
 </head>
 <body>

@@ -29,12 +29,10 @@ $(document).ready(function() {
             "data":{ "orderNo" : orderNo},
             "dataType":"json",
             "success" : function (data) {
-<<<<<<< HEAD
             	 $('.modal-body tbody').remove();           	
-=======
+
             	 $('tr#modalTr').remove();
             	
->>>>>>> branch 'master' of https://github.com/jangkuok/javaoracle-out_shop.git
             	 $.each(data,function(index,item){
             		 
            			 var product = '<tr id="modalTr"><td>'+ item.outerNo + '</td>'+
@@ -50,13 +48,6 @@ $(document).ready(function() {
             	 });
             }                  
         });
-<<<<<<< HEAD
-
-/*         $('input[id^=orderProductList_]').on('click',function(){
-        	$('tr#modalTr').remove();
-        }); */
-=======
->>>>>>> branch 'master' of https://github.com/jangkuok/javaoracle-out_shop.git
     });
     
 	// 리뷰 작성 
@@ -237,7 +228,7 @@ function returnOrder(i){
 									페이징 처리
 				###################################################### --%>		
 		<nav aria-label="Page navigation example">
-		  <ul class="pagination">    
+		  <ul class="pagination ulCenter">    
 			<!--
 				이전 페이지 그룹 처리.
 				만약에 이전페이지 그룹이 있으면 링크처리하고 없으면 화살표만 나오도록 처리.
@@ -246,7 +237,7 @@ function returnOrder(i){
 			<c:choose>
 				<c:when test="${requestScope.pageBean.previousPageGroup}">
 					<%-- 이전페이지 그룹이 있디면 : previousPageGroup()--%>
-					<a class="page-link" href="${pageContext.request.contextPath}/member/orderListSearch.do?page=1&memberId=${param.memberId}&items=${param.items}" aria-label="Previous">
+					<a style="color:blue;" class="page-link" href="${pageContext.request.contextPath}/member/orderListSearch.do?page=1&memberId=${param.memberId}&items=${param.items}" aria-label="Previous">
 		       			<span aria-hidden="true">&laquo;</span>
 		        		<span class="sr-only">Previous</span>
 		      		</a>
@@ -267,7 +258,7 @@ function returnOrder(i){
 				<c:forEach begin="${requestScope.pageBean.beginPage}" end="${requestScope.pageBean.endPage}" var="page">
 					<c:choose>
 						<c:when test="${requestScope.pageBean.page != page}"> <%-- 현재패이지가 아니라면 --%>
-							<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/member/orderListSearch.do?page=${page}&memberId=${param.memberId}&items=${param.items}">${page}</a></li>
+							<li class="page-item"><a style="color:blue;" class="page-link" href="${pageContext.request.contextPath}/member/orderListSearch.do?page=${page}&memberId=${param.memberId}&items=${param.items}">${page}</a></li>
 						</c:when>
 						<c:otherwise>
 							<li class="page-item"><a class="page-link">${page}</a></li>
@@ -282,7 +273,7 @@ function returnOrder(i){
 			<c:choose> 	
 				<c:when test="${requestScope.pageBean.nextPageGroup}">
 					<%-- 다음페이지 그룹이 있디면 : nextPageGroup()--%>
-		    		<a class="page-link" href="${pageContext.request.contextPath}/member/orderListSearch.do?page=${requestScope.pageBean.endPage + 1}&memberId=${param.memberId}&items=${param.items}" aria-label="Next">
+		    		<a style="color:blue;" class="page-link" href="${pageContext.request.contextPath}/member/orderListSearch.do?page=${requestScope.pageBean.endPage + 1}&memberId=${param.memberId}&items=${param.items}" aria-label="Next">
 		        		<span aria-hidden="true">&raquo;</span>
 		        		<span class="sr-only">Next</span>
 		      		</a>		

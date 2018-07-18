@@ -14,4 +14,8 @@ public interface OuterSizeService {
 	List<OuterSizeVo> getListOuterSizeProduct(int outerNo);
 	
 	List<OuterSizeVo> getListOuterSizeColor(int outerNo, String type);
+	
+	OuterSizeVo orderProductAmountPlusCnt(int outerNo, String type, String color); 
+	
+	OuterSizeVo orderProductAmountMinusCnt(int outerNo, String type, String color);
 }
