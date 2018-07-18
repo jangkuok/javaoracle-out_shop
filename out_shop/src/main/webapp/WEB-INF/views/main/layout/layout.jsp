@@ -52,7 +52,5 @@ a:hover { color: black; text-decoration: underline;}
 <script src="${pageContext.request.contextPath}/bootstrap/vendor/jquery/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-
-
 </body>
 </html>
