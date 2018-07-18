@@ -50,7 +50,7 @@ $(document).ready(function() {
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>REVIEW MODIFY</h1><hr>
+<h1>REVIEW MODIFY</h1><hr class="hrStyle">
 </div>
 	<form:form modelAttribute="reviewVo" id="reviewVo" name="reviewVo"
 		action="${pageContext.request.contextPath}/member/modifyMemberReview.do" method="post">	

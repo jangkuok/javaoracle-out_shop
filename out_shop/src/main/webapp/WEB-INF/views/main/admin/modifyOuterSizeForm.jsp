@@ -120,7 +120,7 @@
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>상품 사이즈 수정</h1><hr>
+<h1>상품 사이즈 수정</h1><hr class="hrStyle">
 </div>
 <div class="row">
 	<form id="modifySizeForm" name="modifySizeForm"

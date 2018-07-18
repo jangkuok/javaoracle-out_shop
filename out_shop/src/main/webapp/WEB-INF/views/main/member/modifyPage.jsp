@@ -73,7 +73,7 @@
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>MODIFY</h1><hr>
+<h1>MODIFY</h1><hr class="hrStyle">
 </div>
 	<form:form commandName="memberVo" id="modify" name="modify" method="post" action="${pageContext.request.contextPath}/member/modifyCheck.do">	
 		<table class="table table-bordered">

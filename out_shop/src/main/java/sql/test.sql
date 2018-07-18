@@ -277,3 +277,13 @@ AND (c.HANDLING = '배송완료'
 OR c.HANDLING = '주문완료') 
 AND ROWNUM <= 3			
 	
+
+
+SELECT  	o.OUTER_NO, o.OUTER_TYPE, 
+										o.OUTER_NAME, o.OUTER_CONTENT, 
+										o.OUTER_PRICE, o.OUTER_DATE, 
+										o.OUTER_THUMBNAIL_NAME, 
+										o.OUTER_IMAGENAME, s.SIZE_TYPE, 
+										s.AMOUNT, s.COLOR
+							FROM		OUTER_TB o, OUTER_SIZE s	
+							WHERE		o.OUTER_NO = s.OUTER_NO(+)

@@ -3,6 +3,56 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+
+<script type="text/javascript">
+$(document).ready(function() {			
+		$('input[id^=outerCount]').each(function(e){
+		//$('input[name="outerCount"]').each(function(){
+			var no = e.target.id.substring(10);			
+			//var no = $(this).val();
+			
+			var color = $('#colorList'+no).val();
+			
+	 		var colorArray = color.split(',');
+			
+	 		for(var i in colorArray){
+	 			if(colorArray[i] == '블랙'){
+					var colorCss = '<p style="color:black;">■</p>';
+					
+					$('#colorSpan'+no).append(colorCss);
+				}
+	 			if(colorArray[i] == '화이트'){
+					var colorCss = '<p style="color:white;">■</p>';
+					
+					$('#colorSpan'+no).append(colorCss);
+				}
+	 			if(colorArray[i] == '레드'){
+					var colorCss = '<p style="color:red;">■</p>';
+					
+					$('#colorSpan'+no).append(colorCss);
+				}
+	 			if(colorArray[i] == '네이비'){
+					var colorCss = '<p style="color:#08088A;">■</p>';
+					
+					$('#colorSpan'+no).append(colorCss);
+				}
+	 			if(colorArray[i] == '차콜'){
+					var colorCss = '<p style="color:#2E2E2E;">■</p>';
+					
+					$('#colorSpan'+no).append(colorCss);
+				}
+				if(colorArray[i] == '아이보리'){
+					var colorCss = '<p style="color:#FFE4B5;">■</p>';
+					
+					$('#colorSpan'+no).append(colorCss);
+				}	
+			}	
+			
+		});
+});
+</script>
+
+
 <header style="margin-bottom:30px;">
      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
        <ol class="carousel-indicators">
@@ -12,20 +62,18 @@
        </ol>
        <div class="carousel-inner" role="listbox">
          <!-- Slide One - Set the background image for this slide in the line below -->
-         <div class="carousel-item active" style="background-image: url('<c:url value='/image/main1.bmp'/>')">
+         <div class="carousel-item active" style="background-image: url('<c:url value='/image/main.png'/>')">
            <div class="carousel-caption d-none d-md-block">
              <!-- <h3>First Slide</h3>
              <p>This is a description for the first slide.</p> -->
            </div>
          </div>
          <!-- Slide Two - Set the background image for this slide in the line below -->
-         <div class="carousel-item" style="background-image: url('<c:url value='/image/main2.jpg'/>')">
+         <div class="carousel-item" style="background-image: url('<c:url value='/image/main2.png'/>')">
          </div>
          <!-- Slide Three - Set the background image for this slide in the line below -->
-         <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
+         <div class="carousel-item" style="background-image: url('<c:url value='/image/main3.png'/>')">
            <div class="carousel-caption d-none d-md-block">
-             <h3>Third Slide</h3>
-             <p>This is a description for the third slide.</p>
            </div>
          </div>
        </div>
@@ -51,9 +99,11 @@
             	<img class="card-img-top" src="<c:url value='/image/${outer.imageName}'/>" alt="">
             </a>
             <div class="card-body">
-              <h5 class="card-title">
-                <a style="white-space: nowrap;" href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
-              </h5>
+              <h6 class="card-title">
+              	<strong>  
+                	<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
+              	</strong>
+              </h6>
               <p class="card-text">
               	<h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>
               </p>
@@ -65,31 +115,68 @@
       </div>		
       </c:if>
       <!-- 품목소개 -->
-      <h2>NEW ARRIVALS</h2><hr>
+      <h2>NEW ARRIVALS</h2><hr class="hrStyle">
+      
       <div class="row" style="margin-bottom:15px;text-align:center;">
       <c:forEach var="outer" items="${list}" varStatus="st">
-        <div class="col-lg-4 col-sm-6 portfolio-item">
+      	<c:if test="${outer.amount == '' }">
+         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100 cardBox">
-            <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">
-            	<img class="card-img-top" src="<c:url value='/image/${outer.imageName}'/>" alt="">
+          <input type="hidden" name = "outerCount" value="${st.count}">
+            <a href="#">
+            	<img class="card-img-top" style="opacity:0.2" onmouseover="this.style.opacity='1'" src="<c:url value='/image/${outer.imageName}'/>" alt="">
             </a>
             <div class="card-body">
-              <h5 class="card-title">
-                <a style="white-space: nowrap;" href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
-              </h5>
+              <h6 class="card-title">
+                <strong>
+                	<a href="#">${outer.name}</a>
+                </strong>
+              </h6>
               <p class="card-text">
+              	${outer.size}<br>
+              	<input type="text" id="colorList${st.count}" value="${outer.color}">
+              	<span id="colorSpan${st.count}"></span>
               	<h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>
               </p>
               <span class="border border-dark"><strong>&nbsp;&nbsp;OUTSHOP&nbsp;&nbsp;</strong></span>
             </div>
           </div>
-        </div>
+        </div>     	
+      	</c:if>
+      	<c:if test="${outer.amount != '' }">
+          <div class="col-lg-4 col-sm-6 portfolio-item">
+          <div class="card h-100 cardBox">
+          	<input type="hidden" name = "outerCount" value="${st.count}">
+            <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">
+            	<img class="card-img-top" src="<c:url value='/image/${outer.imageName}'/>" alt="">
+            </a>
+            <div class="card-body">
+              <h6 class="card-title">
+                <strong>
+                	<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
+                </strong>
+              </h6>
+              <p class="card-text">
+              	${outer.size}<br>
+              	<input type="text" id="colorList${st.count}" value="${outer.color}">
+              	<span id="colorSpan${st.count}"></span>
+              	<h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>
+              </p>
+              <span class="border border-dark"><strong>&nbsp;&nbsp;OUTSHOP&nbsp;&nbsp;</strong></span>
+            </div>
+          </div>
+        </div>    	
+      	</c:if>
+
         </c:forEach>
       </div>
+      
+      
       <!-- /.row -->
 
       <!-- Features Section -->
-      <div class="row">
+<!--       
+	<div class="row">
         <div class="col-lg-6">
           <h2>Modern Business Features</h2>
           <p>The Modern Business template by Start Bootstrap includes:</p>
@@ -108,11 +195,9 @@
           <img class="img-fluid rounded" src="http://placehold.it/700x450" alt="">
         </div>
       </div>
-      <!-- /.row -->
-
+      /.row
       <hr>
-
-      <!-- Call to Action Section -->
+      Call to Action Section
       <div class="row mb-4">
         <div class="col-md-8">
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias, expedita, saepe, vero rerum deleniti beatae veniam harum neque nemo praesentium cum alias asperiores commodi.</p>
@@ -120,7 +205,7 @@
         <div class="col-md-4">
           <a class="btn btn-lg btn-secondary btn-block" href="#">Call to Action</a>
         </div>
-      </div>
-
+      </div> 
+-->
     </div>
 <!-- /.container -->

@@ -25,7 +25,7 @@ document.onkeydown = function(e){
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>REVIEW WRTIE</h1><hr>
+<h1>REVIEW WRTIE</h1><hr class="hrStyle">
 </div>
 	<div class="row">
         <div class="col-lg-12 mb-6" style="margin:auto;">

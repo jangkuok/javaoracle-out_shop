@@ -17,13 +17,15 @@ form{
 <script type="text/javascript">
 //삭제버튼(보이기.숨기기) jquery
 $(document).ready(function(){
-	//$("#secessionDiv").hide();
+	$("#secessionDiv").hide();
 	
-    $("#secessionB").click(function(){
+    $("#secessionB").on('click',function(){
         $("#secessionDiv").show();
         $("#secessionB").hide();
-        $("#pw2").focus();
+        $("#password").focus();
     });
+    
+    
     $("#deleteB").on('click',function() {		
     	if(confirm('회원탈퇴를 하시겠습니까?')){
         	$("#deleteForm").submit();
@@ -48,7 +50,7 @@ $(document).ready(function(){
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>MY PAGE</h1><hr>
+<h1>MY PAGE</h1><hr class="hrStyle">
 </div>
 <c:if test="${msg == 'deleteError'}">
 	<script>
@@ -67,7 +69,7 @@ $(document).ready(function(){
 		         <h7>${memberVo.address} ${memberVo.address2}</h7>
 		         <h5>등급 : ${memberVo.grade}</h5>
             </div>
-            <div class="card-footer" style="text-align:center;">          	
+            <div class="card-footer" style="text-align:center;margin-bottom:10px;">          	
             	<a style="color:white;"  href="${pageContext.request.contextPath}/member/modifyPage.do?memberId=${memberVo.id}"
             		 class="btn btn-dark">회원수정</a>
               	<a style="color:white;"  id="secessionB" class="btn btn-dark">회원탈퇴</a>
@@ -75,14 +77,15 @@ $(document).ready(function(){
               		<form id="deleteForm" action="${pageContext.request.contextPath}/member/deleteMember.do" method="post">
 						<input type="hidden" name="id" value="${memberVo.id}">		
 						<input type="hidden" name="pw" value="${memberVo.pw}">
-						<div class="row" style="margin-top:5px;text-align:center;">
+						<div class="row" style="margin-top:5px;">
+								<div class="col-sm-3">
+	            				</div>
 								<div class="col-sm-4">
 	             					<input class="form-control" type="password" name="password">
 	            				</div>
 	             				<div class="col-sm-2">
 	             					<input class="btn btn-dark" type="button" id="deleteB" value="회원탈퇴">
 	             				</div>
-
               			</div>
               		</form>
               	</div>

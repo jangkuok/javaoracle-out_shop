@@ -36,6 +36,10 @@ a:hover { color: black; text-decoration: underline;}
   margin-left: auto;
   margin-right: auto;
 }
+
+.hrStyle{
+  border-top: 3px double #8c8b8b;
+}
 </style>
 </head>
 <body>
@@ -47,8 +51,6 @@ a:hover { color: black; text-decoration: underline;}
 <!-- Bootstrap core JavaScript -->
 <script src="${pageContext.request.contextPath}/bootstrap/vendor/jquery/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-
 
 </body>
 </html>

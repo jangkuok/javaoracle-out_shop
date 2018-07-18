@@ -135,7 +135,7 @@ function returnOrder(i){
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>MY ORDER LIST</h1><hr>
+<h1>MY ORDER LIST</h1><hr class="hrStyle">
 </div>
 	<a style="color:white;" href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=1달" class="btn btn-primary">현재 ~ 1달전</a>
 	<a style="color:white;" href="${pageContext.request.contextPath}/member/orderListSearch.do?memberId=${param.memberId}&items=3달" class="btn btn-primary">현재 ~ 3달전</a>

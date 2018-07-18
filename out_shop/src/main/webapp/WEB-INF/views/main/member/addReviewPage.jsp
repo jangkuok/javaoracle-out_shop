@@ -30,7 +30,7 @@ $(document).ready(function() {
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>REVIEW WRTIE</h1><hr>
+<h1>REVIEW WRTIE</h1><hr class="hrStyle">
 </div>
 	<form id="reviewForm" name="reviewForm" method="post" 
 		action="${pageContext.request.contextPath}/member/addMemberReview.do" enctype="multipart/form-data">
