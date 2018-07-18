@@ -58,7 +58,7 @@ $(document).ready(function() {
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>REVIEW</h1><hr>
+<h1>REVIEW</h1><hr class="hrStyle">
 </div>
 	<c:if test="${empty list}">
 	<center>

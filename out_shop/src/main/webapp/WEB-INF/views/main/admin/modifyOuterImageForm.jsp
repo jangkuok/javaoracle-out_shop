@@ -107,7 +107,7 @@
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>상품 상세 이미지 수정</h1><hr>
+<h1>상품 상세 이미지 수정</h1><hr class="hrStyle">
 </div>
 	<form:form modelAttribute="outerPictureVo" id="outerPictureVo" name="outerPictureVo" 
 				action="${pageContext.request.contextPath}/admin/addOuterPicture.do" method="post" enctype="multipart/form-data">

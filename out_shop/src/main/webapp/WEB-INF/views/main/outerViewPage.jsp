@@ -337,7 +337,7 @@ $(document).ready(function() {
 	</div>	
 	<div class="row">		
 		<div class="col-lg-12" style="text-align:center;">
-			<h2>PRODUCT INFO</h2><hr>
+			<h2>PRODUCT INFO</h2><hr class="hrStyle">
 			<c:forEach var="imageList" items="${outer.imageList}" varStatus="st">
 				<img src="<c:url value='/image/${imageList.pictureName}'/>" width="650"/><br>
 			</c:forEach>
@@ -345,7 +345,7 @@ $(document).ready(function() {
 	</div>
 	<div class="row">		
 		<div class="col-lg-12">
-			<h2 style="text-align:center;">REVIEW</h2><hr><br><br>
+			<h2 style="text-align:center;">REVIEW</h2><hr class="hrStyle"><br><br>
 			<c:if test="${empty list}">
 				<div style="text-align:center;">
 					작성된 리뷰가 없습니다.

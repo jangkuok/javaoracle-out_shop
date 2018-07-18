@@ -119,7 +119,7 @@ function successDelivery(i){
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>ORDER LIST</h1><hr>
+<h1>ORDER LIST</h1><hr class="hrStyle">
 </div>
 	<a style="color:white;" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=결제대기중" class="btn btn-primary">결제 대기중</a>
 	<a style="color:white;" href="${pageContext.request.contextPath}/admin/adminOrderListPage.do?items=결제완료" class="btn btn-primary">결제 완료</a>

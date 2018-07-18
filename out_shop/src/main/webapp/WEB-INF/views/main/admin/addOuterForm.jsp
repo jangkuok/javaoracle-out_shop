@@ -238,7 +238,7 @@
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>상품 등록</h1><hr>
+<h1>상품 등록</h1><hr class="hrStyle">
 </div>
 	<form id="outerVo" name="outerVo" enctype="multipart/form-data">
 		<table class="table table-hover" id="outerAdd" style="margin-bottom:10px;">

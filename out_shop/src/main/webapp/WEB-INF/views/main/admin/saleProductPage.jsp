@@ -9,7 +9,7 @@
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>SALES RATE</h1><hr>
+<h1>SALES RATE</h1><hr class="hrStyle">
 </div>
 <a style="color:white;" href="${pageContext.request.contextPath}/admin/saleProductGraph.do" class="btn btn-primary">상품별 판매개수</a>
 <a style="color:white;" href="${pageContext.request.contextPath}/admin/saleMonthProductGraph.do" class="btn btn-primary">월별 판매익</a>

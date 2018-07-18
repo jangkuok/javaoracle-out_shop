@@ -95,7 +95,7 @@ function join_button(){
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>JOIN</h1><hr>
+<h1>JOIN</h1><hr class="hrStyle">
 </div>
 <input type="hidden" id="error" name="error" value="${error}">	
 	<form:form commandName="memberVo" id="join" name="join" method="post" action="${pageContext.request.contextPath}/joinCheck.do">

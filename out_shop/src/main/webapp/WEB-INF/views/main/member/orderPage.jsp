@@ -292,7 +292,7 @@ function getPostcodeAddress(i) {
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>주문내역</h1><hr>
+<h1>주문내역</h1><hr class="hrStyle">
 </div>
 	<div>
 		<table id="productListTable" class="table table-hover">

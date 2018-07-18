@@ -40,21 +40,6 @@ CREATE TABLE ADMIN (
 
 INSERT INTO ADMIN values('adminuser','adminuser','adminuser','ROLE_ADMIN');
 
-
-/* 공지사항 */
-DROP TABLE NOTICE;
-/* 공지사항 */
-CREATE TABLE NOTICE (
-	NOTICE_NO NUMBER(10) PRIMARY KEY, /* 공지사항 번호 */
-	ITEMS VARCHAR2(30) NOT NULL, /* 항목 */
-	NOTICE_CONTENT VARCHAR2(1000) NOT NULL, /* 내용 */ 
-	NOTICE_DATE DATE DEFAULT SYSDATE NOT NULL, /* 작성일 */
-	HITS NUMBER(10) DEFAULT 0 NOT NULL, /* 조회수 */            ------------------------------
-	ADMIN_ID VARCHAR2(15) NOT NULL, /* 관리자 아이디 */
-	CONSTRAINT NOTICE_ADMIN_ID_FK FOREIGN KEY(ADMIN_ID) REFERENCES ADMIN ON DELETE CASCADE
-);
-
-
 /* 아웃터 */
 DROP TABLE OUTER_TB;
 /* 아웃터 */

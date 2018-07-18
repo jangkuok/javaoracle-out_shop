@@ -27,22 +27,22 @@ $(document).ready(function(){
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 	<div style="text-align:center;">
 		<c:if test="${items eq 'Outer'}">
-			<h1>ALL PRODUCT</h1><hr>
+			<h1>ALL PRODUCT</h1><hr class="hrStyle">
 		</c:if>
 		<c:if test="${items eq 'Jacket'}">
-			<h1>JACKET</h1><hr>
+			<h1>JACKET</h1><hr class="hrStyle"> 
 		</c:if>
 		<c:if test="${items eq 'Coat'}">
-			<h1>COAT</h1><hr>
+			<h1>COAT</h1><hr class="hrStyle">
 		</c:if>
 		<c:if test="${items eq 'Padding'}">
-			<h1>PADDING</h1><hr>
+			<h1>PADDING</h1><hr class="hrStyle">
 		</c:if>
 		<c:if test="${items eq 'Vest'}">
-			<h1>VEST</h1><hr>
+			<h1>VEST</h1><hr class="hrStyle">
 		</c:if>
 		<c:if test="${items eq 'Cardigan'}">
-			<h1>CARDIGAN</h1><hr>
+			<h1>CARDIGAN</h1><hr class="hrStyle">
 		</c:if>
 	</div>
 	<c:if test="${empty list}">
@@ -74,9 +74,11 @@ $(document).ready(function(){
 	           	<img class="card-img-top" src="<c:url value='/image/${outer.imageName}'/>" alt="">
 	           </a>
 	           <div class="card-body">
-	             <h5 class="card-title">
-	               <a style="white-space: nowrap;" href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
-	             </h5>
+	             <h6 class="card-title">
+	             	<strong>
+	               		<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
+	             	</strong>
+	             </h6>
 	             <p class="card-text">
 	             	<h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>
 	             </p>

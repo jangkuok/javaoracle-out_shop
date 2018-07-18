@@ -36,6 +36,10 @@ a:hover { color: black; text-decoration: underline;}
   margin-left: auto;
   margin-right: auto;
 }
+
+.hrStyle{
+  border-top: 3px double #8c8b8b;
+}
 </style>
 </head>
 <body>

@@ -51,7 +51,7 @@ function loginCheck(){
 </c:if>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
 <div>
-<h1>LOGIN</h1><hr>
+<h1>LOGIN</h1><hr class="hrStyle">
 </div>
     <div class="col-md-4 col-md-offset-3 col-sm-8 col-sm-offset-2" style="margin:auto;">
         <div class="panel panel-success">         
