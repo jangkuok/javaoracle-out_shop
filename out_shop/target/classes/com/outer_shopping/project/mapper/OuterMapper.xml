@@ -195,8 +195,48 @@
 		WHERE ROWNUM &lt;= 18
 		ORDER BY OUTER_DATE DESC
 	</select>
+	
+	<!-- (페이징x)카테고리 별 상품 리스트 SQL --> 
+	<select id="selectItemsOuterListNotPage" parameterType="String" resultMap="outer-resultmap">
+		<include refid="select-Outer-sql"/>	
+			 <choose>
+			 	<when test="items == 'Jacket'">
+		            WHERE OUTER_TYPE LIKE '자켓'
+		            ORDER BY OUTER_DATE DESC
+		        </when>
+		        
+		        <when test="items == 'Coat'">
+		            WHERE OUTER_TYPE LIKE '코트'
+		            ORDER BY OUTER_DATE DESC
+		        </when>
+		        
+		        <when test="items == 'Padding'">
+		            WHERE OUTER_TYPE LIKE '패딩'
+		            ORDER BY OUTER_DATE DESC
+		        </when>
+		        
+		        <when test="items == 'Cardigan'">
+		            WHERE OUTER_TYPE LIKE '가디건'
+		            ORDER BY OUTER_DATE DESC
+		        </when>
+		        
+		        <when test="items == 'Vest'">
+		            WHERE OUTER_TYPE LIKE '조끼'
+		            ORDER BY OUTER_DATE DESC
+		        </when>
+		        <when test="items == 'Outer'">
+		            ORDER BY OUTER_DATE DESC
+		        </when>
+		        <!-- 단어 검색일 경우 -->
+		        <otherwise>
+		        	WHERE OUTER_NAME LIKE '%'||#{items}||'%'
+		            ORDER BY OUTER_DATE DESC
+		        </otherwise>
+		    </choose>
+	</select> 
 	 
-	<!-- 카테고리 별 상품 리스트 SQP --> 
+	 	 
+	<!-- 카테고리 별 상품 리스트 SQL --> 
 	<select id="selectItemsOuterList" parameterType="hashmap" resultMap="outer-resultmap">
 		SELECT <include refid="all-column"/>
 			FROM
@@ -243,7 +283,57 @@
 				WHERE ROWNUM &lt;=#{endIndex}
 			)
 			WHERE RNUM>=#{startIndex}
-	</select>	 
+	</select>	
+	
+	<!-- 카테고리 별 상품 리스트 SQL --> 
+	<select id="selectItemsOuterList2" parameterType="hashmap" resultType="hashmap">
+		SELECT OUTER_NO, OUTER_NAME, OUTER_PRICE, OUTER_IMAGENAME, #{size}, #{color}, #{amount} 
+			FROM
+			(
+				SELECT  ROWNUM RNUM, OUTER_NO, OUTER_NAME, 
+						OUTER_PRICE, OUTER_IMAGENAME, #{size}, #{color}, #{amount} 
+				FROM
+					(
+						<include refid="select-Outer-sql"/>	
+							 <choose>
+							 	<when test="items == 'Jacket'">
+						            WHERE OUTER_TYPE LIKE '자켓'
+						            ORDER BY OUTER_DATE DESC
+						        </when>
+						        
+						        <when test="items == 'Coat'">
+						            WHERE OUTER_TYPE LIKE '코트'
+						            ORDER BY OUTER_DATE DESC
+						        </when>
+						        
+						        <when test="items == 'Padding'">
+						            WHERE OUTER_TYPE LIKE '패딩'
+						            ORDER BY OUTER_DATE DESC
+						        </when>
+						        
+						        <when test="items == 'Cardigan'">
+						            WHERE OUTER_TYPE LIKE '가디건'
+						            ORDER BY OUTER_DATE DESC
+						        </when>
+						        
+						        <when test="items == 'Vest'">
+						            WHERE OUTER_TYPE LIKE '조끼'
+						            ORDER BY OUTER_DATE DESC
+						        </when>
+						        <when test="items == 'Outer'">
+						            ORDER BY OUTER_DATE DESC
+						        </when>
+						        <!-- 단어 검색일 경우 -->
+						        <otherwise>
+						        	WHERE OUTER_NAME LIKE '%'||#{items}||'%'
+						            ORDER BY OUTER_DATE DESC
+						        </otherwise>
+						    </choose>
+					)	
+				WHERE ROWNUM &lt;=#{endIndex}
+			)
+			WHERE RNUM>=#{startIndex}
+	</select> 
 	  
 	<!-- 상품 상세정보 확인 SQL -->
 	<select id="selectOuterId" parameterType="int" resultMap="outer-size-picture-resultmap">

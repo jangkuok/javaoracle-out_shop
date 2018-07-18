@@ -1,6 +1,7 @@
 package com.outer_shopping.project.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.outer_shopping.project.vo.OuterVo;
 
@@ -42,6 +43,13 @@ public interface OuterDao {
 	List<OuterVo> selectListOuter();
 	
 	/**
+	 * 카테고리별 상품 목록(페이징X)
+	 * @param items
+	 * @return
+	 */
+	List<OuterVo> selectItemsOuterListNotPage(String items);
+	
+	/**
 	 * 카테고리별 상품 목록
 	 * @param items
 	 * @param startIndex
@@ -49,6 +57,9 @@ public interface OuterDao {
 	 * @return
 	 */
 	List<OuterVo> selectItemsOuterList(String items,int startIndex, int endIndex);
+	
+	
+	List<Map<Object,String>> selectItemsOuterList2(String items,int startIndex, int endIndex, String size, String color, int amount);
 	
 	/**
 	 * 아웃터 상세 정보

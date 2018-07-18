@@ -33,12 +33,23 @@ public interface OuterService {
 	List<OuterVo> findOuterList();
 	
 	/**
+	 * 
+	 * @param items
+	 * @return
+	 */
+	List<OuterVo> findItemOuterList(String items);
+	
+	
+	
+	/**
 	 * 카테고리별 아웃터 목록
 	 * @param items
 	 * @param page
 	 * @return
 	 */
 	Map<String, Object> findItemsOuterList(String items, int page);
+	
+	Map<String, Object> findItemsOuterList2(String items, int page);
 	
 	/**
 	 * 아웃터 상세 정보

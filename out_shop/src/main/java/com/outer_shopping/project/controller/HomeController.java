@@ -62,7 +62,7 @@ public class HomeController {
 	
 		List<OuterVo> outerList = outerService.findOuterList();
 		
-		List<Map<Object , String>> list2 = new ArrayList<>();
+		List<Map<Object , String>> list = new ArrayList<>();
 		
 		String color = "";
 		String size = "";
@@ -109,29 +109,71 @@ public class HomeController {
 			map.put("color", color);
 			map.put("amount", Integer.toString(amount));
 			
-			list2.add(map);
+			list.add(map);
 			
 			size = "";
 			color = "";
-		}
+			amount = 0;
+		}		
 		
-		
-		model.addAttribute("list",list2);
-		
-		
-		
-		
-		
+		model.addAttribute("list",list);
+						
 		List<OrderCheckVo> orderList = orderProductService.getOrderTopThreeList();
 		
-		List<Object> topList = new ArrayList<>();
+		List<Map<Object , String>> topList = new ArrayList<>();
 		
 		for (int i = 0; i < orderList.size(); i++) {
-		
+			
 			for (int j = 0; j < orderList.get(i).getProductList().size(); j++) {
-				OuterVo outer = new OuterVo();
-				outer = outerService.getOuter(orderList.get(i).getProductList().get(j).getOuterNo());
-				topList.add(outer);
+				
+				OuterVo outerVo = outerService.getOuter(orderList.get(i).getProductList().get(j).getOuterNo());
+				
+				for (int k = 0; k < outerVo.getSizeList().size(); k++) {					
+					//사이즈
+					if(size.contains(outerVo.getSizeList().get(k).getType())) {
+						
+			            size = size + "";
+			            
+					}else if(k == outerVo.getSizeList().size()-1) {
+						
+						size = size + outerVo.getSizeList().get(k).getType();
+						
+					}else {
+						
+						size = size + outerVo.getSizeList().get(k).getType() + " ";
+						
+			        }
+					
+					//색상
+					if(color.contains(outerVo.getSizeList().get(k).getColor())) {
+						
+						color = color + "";
+						
+					}else {
+						
+						color = color + outerVo.getSizeList().get(k).getColor() + ",";
+						
+			        }					
+					
+					//수량
+					amount = amount + outerVo.getSizeList().get(k).getAmount();
+				}
+
+				Map<Object , String> map = new HashMap<>();
+				
+				map.put("outerNo", Integer.toString(outerVo.getOuterNo()));
+				map.put("imageName", outerVo.getImageName());
+				map.put("name", outerVo.getName());
+				map.put("price", Integer.toString(outerVo.getPrice()));
+				map.put("size", size);
+				map.put("color", color);
+				map.put("amount", Integer.toString(amount));
+				
+				topList.add(map);
+				
+				size = "";
+				color = "";
+				amount = 0;
 			}
 		}
 		
