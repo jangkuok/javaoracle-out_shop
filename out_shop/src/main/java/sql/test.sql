@@ -297,3 +297,70 @@ ORDER BY SIZE_NO
 SELECT DISTINCT SIZE_TYPE AS "type", CHEST AS "chest", SLEEVE "sleeve", SHOULDER as "shoulder", WHOLE as "whole"
 FROM OUTER_SIZE
 WHERE OUTER_NO = 1
+
+
+
+
+
+
+SELECT TOP3, OUTER_NO
+FROM (
+        SELECT COUNT(p.OUTER_NO) AS TOP3 , p.OUTER_NO
+        FROM   ORDER_CHECK c, ORDER_PRODUCT p
+        Group by p.OUTER_NO
+        HAVING COUNT(p.OUTER_NO) > 1
+        ORDER BY TOP3 DESC
+)
+WHERE ROWNUM <= 3;
+
+
+SELECT TOP3, OUTER_NO
+FROM (
+        SELECT COUNT(p.OUTER_NO) AS TOP3 , p.OUTER_NO
+        FROM   ORDER_CHECK c, ORDER_PRODUCT p
+        WHERE c.ORDER_NO = p.ORDER_NO(+)
+        AND (c.HANDLING = '배송완료' OR c.HANDLING = '주문완료')
+        Group by p.OUTER_NO
+        HAVING COUNT(p.OUTER_NO) > 1
+        ORDER BY TOP3 DESC
+)
+WHERE ROWNUM <= 3;
+
+
+			SELECT TOP3, OUTER_NO, PRODUCT_NAME
+			FROM (
+			        SELECT COUNT(p.OUTER_NO) AS "TOP3" , p.OUTER_NO, p.PRODUCT_NAME
+			        FROM   ORDER_CHECK c, ORDER_PRODUCT p
+			        WHERE c.ORDER_NO = p.ORDER_NO(+)
+			        AND (c.HANDLING = '배송완료' OR c.HANDLING = '주문완료')
+			        Group by p.OUTER_NO,  p.PRODUCT_NAME
+			        HAVING COUNT(p.OUTER_NO) > 1
+			        ORDER BY "TOP3" DESC
+			)
+			WHERE ROWNUM <= 3;
+			
+			
+			
+SELECT COUNT(OUTER_NO) AS "TOP3", OUTER_NO    
+FROM (            
+	SELECT COUNT(p.OUTER_NO) AS "TOP3" , p.OUTER_NO            
+	FROM   ORDER_CHECK c, ORDER_PRODUCT p            
+	WHERE c.ORDER_NO = p.ORDER_NO            
+	AND (c.HANDLING = '배송완료' OR c.HANDLING = '주문완료')            
+	GROUP BY p.OUTER_NO            
+	HAVING COUNT(p.OUTER_NO)  >  1            
+	ORDER BY "TOP3" DESC    )    
+WHERE ROWNUM  <=  3;			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			

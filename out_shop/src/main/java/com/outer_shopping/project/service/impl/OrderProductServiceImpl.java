@@ -140,9 +140,9 @@ public class OrderProductServiceImpl implements OrderProductService {
 	}
 
 	@Override
-	public List<OrderCheckVo> getOrderTopThreeList() {
+	public List<Map<String,Object>> getOrderTopThreeList() {
 		
-		List<OrderCheckVo> list = new ArrayList<>();
+		List<Map<String,Object>> list = new ArrayList<>();
 		
 		try {
 			list = dao.selectTopThreeList();

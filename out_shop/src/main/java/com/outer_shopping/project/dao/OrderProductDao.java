@@ -72,7 +72,7 @@ public interface OrderProductDao {
 	List<OrderProductVo> selectOrderProductList(int orderId);
 	
 	
-	List<OrderCheckVo> selectTopThreeList();
+	List<Map<String,Object>> selectTopThreeList();
 	
 	List<Map<String, Object>> selectMonthProduct();
 	
