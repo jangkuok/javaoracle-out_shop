@@ -312,7 +312,7 @@
 			<include refid="select-order-product-sql"/>		
 			AND (c.HANDLING = '배송완료'
 			OR c.HANDLING = '주문완료') 
-			AND ROWNUM &lt;= 3		
+			AND ROWNUM <![CDATA[<=]]> 3		
 	</select>	
 	
 	<select id="selectMonthProduct" resultType="java.util.HashMap">

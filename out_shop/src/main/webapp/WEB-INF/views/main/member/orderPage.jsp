@@ -127,9 +127,7 @@ $(document).ready(function() {
 		}		
 	});
 	
-
-
-	//상품 주문
+	
 	$('#buyB').on('click',function(){
 		//상품정보 배열에 넣기
 		var productArr = []; 
@@ -184,22 +182,30 @@ $(document).ready(function() {
 			$form.append(input);
 			index2++;
 		}
+		
+		var error = $('#error').val();
+		
+		if(productListCount == '0'){
+			alert("상품이 없습니다.");
+			$('#error').val('error');
+			return false;
+		}
 		   
 		$('input[name="deliveryInfo"]').each(function(){
 			var input = $(this).val();
 			if(input == ""){
 				alert("정보를 입력하시오");
-				return;		
-			}
+				$('#error').val('error');
+				return false;		
+			}else{
+				$('#error').val('');
+			}	
 		});
 		
-		if(productListCount == '0'){
-			alert("상품이 없습니다.");
-			return;
-		}else{
+		if(error != 'error'){
 			$form.submit();	
 		}
-		
+			
 	});
 	
 });
@@ -242,6 +248,7 @@ function getPostcodeAddress(i) {
 
             // 커서를 상세주소 필드로 이동한다.
             document.getElementById('address2'+i).value = "";
+            $('#address2'+i).attr('readonly',false);
             document.getElementById('address2'+i).focus();
             
 
@@ -266,11 +273,13 @@ function getPostcodeAddress(i) {
 	 			{
 	 				document.getElementById('address22').value = document.getElementById('address21').value;
 	 				if(data = "변경완료"){
+	 					$('#address21').attr('readonly',true);
 	 					alert("주소가 변경 되었습니다.");	
 	 				}
 	 			}			
 	 		});
 	     }else { 
+	    	$('#address21').attr('readonly',true);
 	     	return;
 	     }
     });
@@ -291,6 +300,7 @@ function getPostcodeAddress(i) {
 </head>
 <body>
 <div class="container" style="margin-top: 110px;margin-bottom: 110px;">
+<input type="hidden" id="error" value="">
 <div>
 <h1>주문내역</h1><hr class="hrStyle">
 </div>
@@ -368,7 +378,7 @@ function getPostcodeAddress(i) {
 				<th width="20%">주문자*</th>
 				<td width="80%">
 					<div class="col-sm-5">
-						<input class="form-control" type="text" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
+						<input class="form-control" type="text" id="" name="" value="${memberVo.name}"  readonly="readonly">
 					</div>
 				</td>
 			</tr>
@@ -377,7 +387,7 @@ function getPostcodeAddress(i) {
 				<td id="addressMagin">
 					<div class="row">
 						<div class="col-sm-2" style="float:left;">
-							<input type="text" class="form-control" id="zipcode1" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.zipcode}" readOnly="readOnly">
+							<input type="text" class="form-control" id="zipcode1" name="" value="${memberVo.zipcode}" readOnly="readOnly">
 						</div>
 						<c:if test="${memberVo.zipcode == null}">
 							<div class="col-sm-3" style="float:left;">
@@ -391,13 +401,13 @@ function getPostcodeAddress(i) {
 						</c:if>
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address1" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address}" readOnly="readOnly"> 
+						<input type="text" class="form-control" id="address1" name="" value="${memberVo.address}" readOnly="readOnly"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						기본주소
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address21" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address2}"> 
+						<input type="text" class="form-control" id="address21" name="" value="${memberVo.address2}"  readonly="readonly"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						나머지주소
@@ -408,7 +418,7 @@ function getPostcodeAddress(i) {
 				<th>휴대전화*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.phoneNum}">
+						<input type="text" class="form-control" id="" name="" value="${memberVo.phoneNum}" readonly="readonly">
 					</div>
 				</td>
 			</tr>
@@ -416,7 +426,7 @@ function getPostcodeAddress(i) {
 				<th>이메일*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="" name="" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.email}">
+						<input type="text" class="form-control" id="" name="" value="${memberVo.email}" readonly="readonly">
 					</div>
 				</td>
 			</tr>
@@ -431,7 +441,7 @@ function getPostcodeAddress(i) {
 				<th width="20%">주문자*</th>
 				<td width="80%">
 					<div class="col-sm-5">
-						<input type="text" class="form-control" id="name" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.name}">
+						<input type="text" class="form-control" id="name" name="deliveryInfo" value="${memberVo.name}">
 					</div>
 				</td>
 			</tr>		
@@ -439,7 +449,7 @@ function getPostcodeAddress(i) {
 				<th>주소*</th>
 				<td id="addressMagin2">
 					<div class="col-sm-2" style="float:left;">
-						<input type="text" class="form-control" id="zipcode2" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.zipcode}" readOnly="readOnly">
+						<input type="text" class="form-control" id="zipcode2" name="deliveryInfo" value="${memberVo.zipcode}" readOnly="readOnly">
 					</div>
 					<c:if test="${memberVo.zipcode == null}">
 						<div class="col-sm-3" style="float:left;">
@@ -452,13 +462,13 @@ function getPostcodeAddress(i) {
 						</div>
 					</c:if>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address2" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address}" readOnly="readOnly"> 
+						<input type="text" class="form-control" id="address2" name="deliveryInfo" value="${memberVo.address}" readOnly="readOnly"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						기본주소
 					</div>
 					<div class="col-sm-8" style="float:left;">
-						<input type="text" class="form-control" id="address22" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.address2}"> 
+						<input type="text" class="form-control" id="address22" name="deliveryInfo" value="${memberVo.address2}"> 
 					</div>
 					<div class="col-sm-2" style="float:left;">
 						나머지주소
@@ -469,7 +479,7 @@ function getPostcodeAddress(i) {
 				<th>휴대전화*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="phoneNum" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.phoneNum}">
+						<input type="text" class="form-control" id="phoneNum" name="deliveryInfo" value="${memberVo.phoneNum}">
 					</div>
 				</td>
 			</tr>
@@ -477,7 +487,7 @@ function getPostcodeAddress(i) {
 				<th>이메일*</th>
 				<td>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="email" name="deliveryInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.email}">
+						<input type="text" class="form-control" id="email" name="deliveryInfo" value="${memberVo.email}">
 					</div>
 				</td>
 			</tr>

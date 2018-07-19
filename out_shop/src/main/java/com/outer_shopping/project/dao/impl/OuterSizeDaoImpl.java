@@ -60,6 +60,21 @@ public class OuterSizeDaoImpl implements OuterSizeDao {
 
 	
 	
+	@Override
+	public List<Map<String, String>> selectSize(int outerNo) {
+		List<Map<String, String>> list = null;
+		
+		try {
+			list = session.selectList(makeSqlId("selectSize"), outerNo);
+		}catch (Exception e) {
+			System.out.println("selectSize(dao) : ");
+			e.printStackTrace();
+		}	
+		
+		return list;
+	}
+
+
 	/**
 	 * 상품 사이즈 목록
 	 */

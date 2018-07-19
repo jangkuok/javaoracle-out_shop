@@ -67,7 +67,15 @@ public class OuterController {
 			model.addAttribute("starAvg", starAvg.get("ROUND"));
 		}else {
 			model.addAttribute("starAvg", "0");
-		}		
+		}
+		
+		List<Map<String, String>> sizeList = sizeService.getSizeList(outerNo);
+		System.out.println(sizeList);
+		
+		
+		
+		
+		model.addAttribute("sizeList", sizeList);
 		
 		logger.info("############# 아웃터 상세페이지 이동 #############");
 		return "outerViewPage";

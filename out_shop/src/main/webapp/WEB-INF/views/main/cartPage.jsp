@@ -79,9 +79,7 @@ function orderProduct(){
 		        checkArr.push(productSize);
 		        checkArr.push(productPrice);
 		    });
-			
-			alert(checkArr);
-		    
+			  
 		    var $form = $('<form></form>');
 		    $form.attr('action', '${pageContext.request.contextPath}/member/orderPages.do');
 		    $form.attr('method', 'post');

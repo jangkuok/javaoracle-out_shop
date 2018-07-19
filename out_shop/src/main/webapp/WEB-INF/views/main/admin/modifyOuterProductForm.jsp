@@ -61,6 +61,9 @@ $(document).ready(function() {
 		<input type="hidden" name="outerNo" id="outerNo" value="${outerVo.outerNo}"/>
 		<input type="hidden" name="insertDate" id="insertDate" value="${outerVo.insertDate}"/>
 		<input type="hidden" name="thumbnailName" id="thumbnailName" value="${outerVo.thumbnailName}"/>
+		<input type="hidden" name="totalSize" id="totalSize" value="${outerVo.totalSize}"/>
+		<input type="hidden" name="totalColor" id="totalColor" value="${outerVo.totalColor}"/>
+		<input type="hidden" name="totalAmount" id="totalAmount" value="${outerVo.totalAmount}"/>
 		
 		<table id="outerAdd" class="table table-hover">
 			<tr>

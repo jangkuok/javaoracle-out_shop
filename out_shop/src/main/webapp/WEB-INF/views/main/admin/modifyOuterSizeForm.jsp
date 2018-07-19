@@ -101,7 +101,6 @@
 		
 		//상품size 등록
 		$("#modifySizeButton").on('click',function() {				
-			alert("전송");
 			if(confirm('등록 하시겠습니까?')) { 
 				$('#modifySizeForm').submit();
 			}else{
