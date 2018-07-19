@@ -157,6 +157,10 @@ public class AdminOuterController {
     public String addOuterSize(@RequestParam(value="sizeList[]",required=false) List<String> sizeList,
     		@RequestParam(value="outerNo",required=false) int outerNo){
 
+		String totalSize = "";
+		String totalColor = "";
+		int totalAmount = 0;
+		
 		for (int i = 0; i < sizeList.size(); i++) {
 			OuterSizeVo outerSize = new OuterSizeVo();
 			
@@ -170,7 +174,36 @@ public class AdminOuterController {
 			outerSize.setOuterNo(outerNo);
 			
 			sizeService.createOuterSize(outerSize);
+			
+			//사이즈
+			if(totalSize.contains(outerSize.getType())) {
+				totalSize = totalSize + "";
+			}else if(i == sizeList.size()-1) {
+				totalSize = totalSize + outerSize.getType();
+			}else {
+				totalSize = totalSize + outerSize.getType() + " ";
+	        }
+			
+			//색상
+			if(totalColor.contains(outerSize.getColor())) {
+				totalColor = totalColor + "";
+			}else if(i == sizeList.size()-1) {
+				totalColor = totalColor + outerSize.getColor();
+			}else {
+				totalColor = totalColor + outerSize.getColor() + ",";
+	        }
+			
+			//수량
+			totalAmount = totalAmount + outerSize.getAmount();
 		}
+		
+		OuterVo outer = outerService.getOuter(outerNo);
+		outer.setTotalSize(totalSize);
+		outer.setTotalColor(totalColor);
+		outer.setTotalAmount(totalAmount);
+		
+		outerService.modifyOuter(outer);
+		
 		
 		logger.info("############# 아웃터 사이즈 등록 #############");
 		

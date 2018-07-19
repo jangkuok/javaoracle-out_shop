@@ -10,7 +10,8 @@
 	 -->
 	 
 	<sql id="all-column">	
-		OUTER_NO, OUTER_TYPE, OUTER_NAME, OUTER_CONTENT, OUTER_PRICE, OUTER_DATE, OUTER_THUMBNAIL_NAME, OUTER_IMAGENAME
+		OUTER_NO, OUTER_TYPE, OUTER_NAME, OUTER_CONTENT, OUTER_PRICE, OUTER_TOTAL_SIZE,
+		OUTER_TOTAL_COLOR, OUTER_TOTAL_AMOUNT, OUTER_DATE, OUTER_THUMBNAIL_NAME, OUTER_IMAGENAME
 	</sql> 
 	
 	
@@ -18,8 +19,10 @@
 	<sql id="select-Outer-sql">
 		SELECT 	OUTER_NO, OUTER_TYPE, 
 				OUTER_NAME, OUTER_CONTENT, 
-				OUTER_PRICE, OUTER_DATE, 
-				OUTER_THUMBNAIL_NAME, OUTER_IMAGENAME
+				OUTER_PRICE, OUTER_TOTAL_SIZE, 
+				OUTER_TOTAL_COLOR, OUTER_TOTAL_AMOUNT,
+				OUTER_DATE, OUTER_THUMBNAIL_NAME, 
+				OUTER_IMAGENAME
 		FROM OUTER_TB
 	</sql>	 
 	
@@ -27,6 +30,7 @@
 	<sql id="select-Outer-size-sql">
 		SELECT  	o.OUTER_TYPE, o.OUTER_NAME, 
 					o.OUTER_CONTENT, o.OUTER_PRICE, 
+					o.OUTER_TOTAL_SIZE, o.OUTER_TOTAL_COLOR, o.OUTER_TOTAL_AMOUNT,
 					o.OUTER_DATE, o.OUTER_THUMBNAIL_NAME, o.OUTER_IMAGENAME,
 					s.SIZE_NO, s.SIZE_TYPE, s.CHEST,	
 					s.SLEEVE, s.SHOULDER, 
@@ -38,7 +42,8 @@
 	<!-- 아웃터 + 사이즈 + 이미지 select sql -->	
 		<sql id="select-Outer-size-picture-sql">
 		SELECT  	o.OUTER_TYPE, o.OUTER_NAME, 
-					o.OUTER_CONTENT, o.OUTER_PRICE, 
+					o.OUTER_CONTENT, o.OUTER_PRICE,
+					o.OUTER_TOTAL_SIZE, o.OUTER_TOTAL_COLOR, o.OUTER_TOTAL_AMOUNT, 
 					o.OUTER_DATE, o.OUTER_THUMBNAIL_NAME, o.OUTER_IMAGENAME,
 					s.SIZE_NO, s.SIZE_TYPE, s.CHEST,	
 					s.SLEEVE, s.SHOULDER, 
@@ -58,6 +63,9 @@
 		<result column="OUTER_NAME" property="name"/>
 		<result column="OUTER_CONTENT" property="content"/>
 		<result column="OUTER_PRICE" property="price"/>
+		<result column="OUTER_TOTAL_SIZE" property="totalSize"/>
+		<result column="OUTER_TOTAL_COLOR" property="totalColor"/>
+		<result column="OUTER_TOTAL_AMOUNT" property="totalAmount"/>
 		<result column="OUTER_DATE" property="insertDate"/>
 		<result column="OUTER_THUMBNAIL_NAME" property="thumbnailName"/>
 		<result column="OUTER_IMAGENAME" property="imageName"/>
@@ -119,6 +127,9 @@
 				#{name},
 				#{content},
 				#{price},
+				'',
+				'',
+				0,
 				SYSDATE,
 				#{thumbnailName},
 				#{imageName}
@@ -132,6 +143,9 @@
 				OUTER_NAME = #{name},
 				OUTER_CONTENT = #{content},
 				OUTER_PRICE = #{price},
+				OUTER_TOTAL_SIZE = #{totalSize}, 
+				OUTER_TOTAL_COLOR = #{totalColor}, 
+				OUTER_TOTAL_AMOUNT = #{totalAmount},				
 				OUTER_DATE = #{insertDate},
 				OUTER_THUMBNAIL_NAME = #{thumbnailName},
 				OUTER_IMAGENAME = #{imageName}
@@ -195,8 +209,8 @@
 		WHERE ROWNUM &lt;= 18
 		ORDER BY OUTER_DATE DESC
 	</select>
-	 
-	<!-- 카테고리 별 상품 리스트 SQP --> 
+		 	 
+	<!-- 카테고리 별 상품 리스트 SQL --> 
 	<select id="selectItemsOuterList" parameterType="hashmap" resultMap="outer-resultmap">
 		SELECT <include refid="all-column"/>
 			FROM
@@ -243,8 +257,8 @@
 				WHERE ROWNUM &lt;=#{endIndex}
 			)
 			WHERE RNUM>=#{startIndex}
-	</select>	 
-	  
+	</select>	
+	
 	<!-- 상품 상세정보 확인 SQL -->
 	<select id="selectOuterId" parameterType="int" resultMap="outer-size-picture-resultmap">
 		<include refid="select-Outer-size-picture-sql"/>

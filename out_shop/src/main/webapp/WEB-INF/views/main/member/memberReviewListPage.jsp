@@ -64,9 +64,9 @@ $(document).ready(function() {
 	          <h5>${reviewList.subject} (${reviewList.reviewDate})</h5>
 	          <p>${reviewList.content}</p>
 	          <input type="hidden" id="reviewNo_${reviewList.reviewNo}" name="reviewNo" value="${reviewList.reviewNo}">
-	          <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${reviewList.outerNo}" class="btn btn-primary" >상품 상세보기</a>
-	          <a href="${pageContext.request.contextPath}/member/modifyReviewPage.do?reviewNo=${reviewList.reviewNo}" class="btn btn-primary">수정하기</a>
-	          <a id="removeButton_${reviewList.reviewNo}" href="${pageContext.request.contextPath}/member/removeMemberReview.do?reviewNo=${reviewList.reviewNo}" class="btn btn-primary">삭제하기</a>
+	          <a style="color:white;" href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${reviewList.outerNo}" class="btn btn-primary" >상품 상세보기</a>
+	          <a style="color:white;" href="${pageContext.request.contextPath}/member/modifyReviewPage.do?reviewNo=${reviewList.reviewNo}" class="btn btn-primary">수정하기</a>
+	          <a style="color:white;" id="removeButton_${reviewList.reviewNo}" href="${pageContext.request.contextPath}/member/removeMemberReview.do?reviewNo=${reviewList.reviewNo}" class="btn btn-primary">삭제하기</a>
 	        </div>
 	        <div class="col-lg-2">
 	          <p>아이디 : ${reviewList.memberId}</p>

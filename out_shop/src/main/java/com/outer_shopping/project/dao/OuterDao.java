@@ -1,6 +1,7 @@
 package com.outer_shopping.project.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.outer_shopping.project.vo.OuterVo;
 
@@ -50,6 +51,7 @@ public interface OuterDao {
 	 */
 	List<OuterVo> selectItemsOuterList(String items,int startIndex, int endIndex);
 	
+		
 	/**
 	 * 아웃터 상세 정보
 	 * @param outerId

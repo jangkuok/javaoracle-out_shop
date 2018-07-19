@@ -134,16 +134,19 @@ public class OuterDaoImpl implements OuterDao {
 		return list;
 	}
 
-
+	
 	/**
 	 * 카테고리별 상품목록
 	 */
 	@Override
 	public List<OuterVo> selectItemsOuterList(String items, int startIndex, int endIndex) {
+		
 		List<OuterVo> list = new ArrayList<>();
 		
 		try {
+		
 			Map<String, Object> input = new HashMap<String, Object>();
+			
 			input.put("items",items);
 			input.put("startIndex",startIndex);
 			input.put("endIndex",endIndex);
@@ -157,6 +160,7 @@ public class OuterDaoImpl implements OuterDao {
 		
 		return list;
 	}
+	
 
 	/**
 	 * 아웃터 상세 정보

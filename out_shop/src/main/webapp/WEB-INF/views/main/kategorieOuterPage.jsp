@@ -20,6 +20,93 @@ $(document).ready(function(){
 			location.replace('${pageContext.request.contextPath}/kategorieOuterList.do?items='+items);
 		}
 	});
+	
+	//$('input[id^=outerCount_]').each(function(e){
+	$('input[name="outerCount"]').each(function(){
+		//var no = e.target.id.substring(11);
+		var no = $(this).val();
+		
+		var color = $('#colorList'+no).val();
+		
+ 		var colorArray = color.split(',');
+		
+ 		for(var i in colorArray){
+ 			if(colorArray[i] == '블랙'){
+				var colorCss = '<font size="5" style="color:black;">■</font>';
+				
+				$('#colorSpan'+no).append(colorCss);
+			}
+ 			if(colorArray[i] == '화이트'){
+				var colorCss = '<font size="5" style="color:white;">■</font>';
+				
+				$('#colorSpan'+no).append(colorCss);
+			}
+ 			if(colorArray[i] == '레드'){
+				var colorCss = '<font size="5" style="color:red;">■</font>';
+				
+				$('#colorSpan'+no).append(colorCss);
+			}
+ 			if(colorArray[i] == '네이비'){
+				var colorCss = '<font size="5" style="color:#08088A;">■</font>';
+				
+				$('#colorSpan'+no).append(colorCss);
+			}
+ 			if(colorArray[i] == '차콜'){
+				var colorCss = '<font size="5" style="color:#2E2E2E;">■</font>';
+				
+				$('#colorSpan'+no).append(colorCss);
+			}
+			if(colorArray[i] == '아이보리'){
+				var colorCss = '<font size="5" style="color:#FFE4B5;">■</font>';
+				
+				$('#colorSpan'+no).append(colorCss);
+			}	
+		}	
+		
+	});
+	
+	$('input[name="outerTop3Count"]').each(function(){
+		//var no = e.target.id.substring(11);
+		var no = $(this).val();
+		
+		var color = $('#colorTop3List'+no).val();
+		
+ 		var colorArray = color.split(',');
+		
+ 		for(var i in colorArray){
+ 			if(colorArray[i] == '블랙'){
+				var colorCss = '<font size="5" style="color:black;">■</font>';
+				
+				$('#colorTop3Span'+no).append(colorCss);
+			}
+ 			if(colorArray[i] == '화이트'){
+				var colorCss = '<font size="5" style="color:white;">■</font>';
+				
+				$('#colorTop3Span'+no).append(colorCss);
+			}
+ 			if(colorArray[i] == '레드'){
+				var colorCss = '<font size="5" style="color:red;">■</font>';
+				
+				$('#colorTop3Span'+no).append(colorCss);
+			}
+ 			if(colorArray[i] == '네이비'){
+				var colorCss = '<font size="5" style="color:#08088A;">■</font>';
+				
+				$('#colorTop3Span'+no).append(colorCss);
+			}
+ 			if(colorArray[i] == '차콜'){
+				var colorCss = '<font size="5" style="color:#2E2E2E;">■</font>';
+				
+				$('#colorTop3Span'+no).append(colorCss);
+			}
+			if(colorArray[i] == '아이보리'){
+				var colorCss = '<font size="5" style="color:#FFE4B5;">■</font>';
+				
+				$('#colorTop3Span'+no).append(colorCss);
+			}	
+		}	
+		
+	});
 });
 </script>
 </head>
@@ -68,24 +155,58 @@ $(document).ready(function(){
 		</sec:authorize>
 		<div class="row" style="text-align:center;">
 	     <c:forEach var="outer" items="${list}" varStatus="st">
-	       <div class="col-lg-4 col-sm-6 portfolio-item">
-	         <div class="card h-100 cardBox">
-	           <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">
-	           	<img class="card-img-top" src="<c:url value='/image/${outer.imageName}'/>" alt="">
-	           </a>
-	           <div class="card-body">
-	             <h6 class="card-title">
-	             	<strong>
-	               		<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
-	             	</strong>
-	             </h6>
-	             <p class="card-text">
-	             	<h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>
-	             </p>
-	             <span class="border border-dark"><strong>&nbsp;&nbsp;OUTSHOP&nbsp;&nbsp;</strong></span>
-	           </div>
-	         </div>
-	       </div>
+      	<c:if test="${outer.totalAmount == '0'}">
+	        <div class="col-lg-4 col-sm-6 portfolio-item">
+	          <input type="hidden" id="outerCount_${outer.outerNo}" name="outerCount" value="${outer.outerNo}">
+	          <input type="hidden" id="colorList${outer.outerNo}" value="${outer.totalColor}">
+	          <div class="card h-100 cardBox" style="position:relative;">
+            	<img class="card-img-top" style="opacity:0.2" src="<c:url value='/image/${outer.imageName}'/>" alt="">
+            	<div style="position:absolute;">
+            		<font size="10" style="text-align:center;">SOLD OUT</font>
+            	</div>
+	            <div class="card-body">
+	              <h6 class="card-title">
+	                <strong>
+	                	<a href="#">${outer.name}</a>
+	                </strong>
+	              </h6>
+	              <div class="card-text">
+	              	상품이 없습니다.
+	              </div>
+	              <br><br>       
+	            </div>
+	            <div class="card-body">
+	            	<span class="border border-dark"><strong>&nbsp;&nbsp;OUTSHOP&nbsp;&nbsp;</strong></span>
+	            </div>
+	          </div>
+	        </div>      	
+      	</c:if>
+      	<c:if test="${outer.totalAmount != '0'}">
+	        <div class="col-lg-4 col-sm-6 portfolio-item">
+	          <input type="hidden" id="outerCount${outer.outerNo}" name="outerCount" value="${outer.outerNo}">
+	          <input type="hidden" id="colorList${outer.outerNo}" value="${outer.totalColor}">
+	          <div class="card h-100 cardBox">
+	            <a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">
+	            	<img class="card-img-top" src="<c:url value='/image/${outer.imageName}'/>" alt="">
+	            </a>
+	            <div class="card-body">
+	              <h6 class="card-title">
+	                <strong>
+	                	<a href="${pageContext.request.contextPath}/outer/outerView.do?outerNo=${outer.outerNo}">${outer.name}</a>
+	                </strong>
+	              </h6>
+	              <div class="card-text">
+	              	${outer.totalSize}
+	              </div>
+	              <span class="card-text" id="colorSpan${outer.outerNo}"></span>
+	              <h6><fmt:formatNumber value="${outer.price}" pattern="#,###.##"/> won</h6>           
+	            </div>
+	            <div class="card-body">
+	            	<span class="border border-dark"><strong>&nbsp;&nbsp;OUTSHOP&nbsp;&nbsp;</strong></span>
+	            </div>
+	          </div>
+	        </div>    	
+      	</c:if>
 	      </c:forEach>
 	    </div>
 		<%-- ######################################################
