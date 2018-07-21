@@ -200,9 +200,9 @@ public class OrderProductDaoImpl implements OrderProductDao {
 
 
 	@Override
-	public List<OrderCheckVo> selectTopThreeList() {
+	public List<Map<String,Object>>  selectTopThreeList() {
 		
-		List<OrderCheckVo> list = new ArrayList<>();
+		List<Map<String,Object>>  list = new ArrayList<>();
 		
 		try {
 			list = session.selectList(makeSqlId("selectTop3List"));

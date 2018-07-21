@@ -263,7 +263,8 @@ $(document).ready(function() {
           <div class="card h-100">
             <div class="card-body">
             	<div class="col-sm-12">
-     				<h4><input class="textTrans form" type="text" id="outerName" value="${outer.name}" readOnly="readOnly"></h4>
+     				<h4>${outer.name}</h4>
+     				<input class="textTrans form" type="hidden" id="outerName" value="${outer.name}" readOnly="readOnly">
      			</div>
      			<div class="col-sm-12">
      				<h6>${outer.content}</h6>
@@ -277,9 +278,11 @@ $(document).ready(function() {
      			</div>
      			<div class="col-sm-6">
      				<input type="hidden" id="sizeNo" value="">
+     			</div>
+     			<div class="col-sm-12" style="margin-bottom:10px;">
+     				${outer.totalSize} / ${outer.totalColor}
      			</div>	     			
      			<div class="col-sm-5" style="margin-bottom:2px;">
-     			${outer.totalSize} / ${outer.totalColor}
 				<select class="form-control" id ="sizeSelect" name="sizeSelect">
 					<option value="[필수]사이즈 선택">[필수]사이즈 선택</option>
 					<option value="S">S</option>
@@ -344,6 +347,38 @@ $(document).ready(function() {
 			</c:forEach>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-lg-12" style="text-align:center;">
+			<h2 style="text-align:center;">PRODUCT SIZE</h2><hr class="hrStyle"><br><br>	
+		</div>
+	</div>
+	<div class="row" style="margin-bottom:40px;">
+		<div class="col-lg-3"></div>
+		<div class="col-lg-6">
+		<table class="table table-hover" style="text-align:center;">
+			<thead>
+			<tr>
+				<th>사이즈</th>
+				<th>소매</th>
+				<th>어깨</th>
+				<th>가슴</th>
+				<th>어깨</th>
+			</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="size" items="${sizeList}" varStatus="st">
+					<tr>
+						<td>${size.size}</td>
+						<td>${size.sleeve} cm</td>
+						<td>${size.shoulder} cm</td>
+						<td>${size.chest} cm</td>
+						<td>${size.whole} cm</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+		</div>
+	</div>	
 	<div class="row">		
 		<div class="col-lg-12">
 			<h2 style="text-align:center;">REVIEW</h2><hr class="hrStyle"><br><br>

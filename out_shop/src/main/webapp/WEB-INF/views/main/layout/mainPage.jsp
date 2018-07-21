@@ -13,7 +13,7 @@ $(document).ready(function() {
 			
 			var color = $('#colorList'+no).val();
 			
-	 		var colorArray = color.split(',');
+	 		var colorArray = color.split(' ');
 			
 	 		for(var i in colorArray){
 	 			if(colorArray[i] == '블랙'){
@@ -56,7 +56,7 @@ $(document).ready(function() {
 			
 			var color = $('#colorTop3List'+no).val();
 			
-	 		var colorArray = color.split(',');
+	 		var colorArray = color.split(' ');
 			
 	 		for(var i in colorArray){
 	 			if(colorArray[i] == '블랙'){

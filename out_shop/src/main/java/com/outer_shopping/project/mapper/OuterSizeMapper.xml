@@ -59,6 +59,14 @@
 		DELETE FROM OUTER_SIZE WHERE OUTER_NO = #{outerNo}
 	</delete>
 	
+	<!-- 상품 사이즈 중복제거  확인 SQL -->	 	
+	<select id="selectSize" parameterType="int" resultType="java.util.HashMap">
+		SELECT DISTINCT SIZE_TYPE AS "size", CHEST AS "chest", SLEEVE "sleeve", SHOULDER as "shoulder", WHOLE as "whole"
+		FROM OUTER_SIZE
+		WHERE OUTER_NO = #{outerNo}
+	</select>
+	
+	
 	<!-- 상품 목록 확인 SQL -->	 	
 	<select id="selectSizeProductCheck" parameterType="int" resultMap="outerSize-resultmap">
 		<include refid="select-OuterSize-sql"/>

@@ -1,6 +1,8 @@
 package com.outer_shopping.project.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,22 @@ public class OuterSizeServiceImpl implements OuterSizeService {
 			System.out.println("removeOuterSize(service) : ");
 			e.printStackTrace();
 		}
+	}
+
+	
+
+	@Override
+	public List<Map<String, String>> getSizeList(int outerNo) {
+		List<Map<String, String>> list = new ArrayList<>();
+		
+		try {
+			list = sizeDao.selectSize(outerNo);
+		}catch (Exception e) {
+			System.out.println("getSizeList(service) : ");
+			e.printStackTrace();
+		}	
+		
+		return list;
 	}
 
 	@Override

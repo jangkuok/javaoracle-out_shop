@@ -64,13 +64,13 @@ public class HomeController {
 		
 		model.addAttribute("list",outerList);
 						
-		List<OrderCheckVo> orderList = orderProductService.getOrderTopThreeList();
+		List<Map<String,Object>> orderList = orderProductService.getOrderTopThreeList();
 		
 		List<OuterVo> topList = new ArrayList<>();
 		
 		for (int i = 0; i < orderList.size(); i++) {
-			
-			OuterVo outer =  outerService.getOuter(orderList.get(i).getProductList().get(i).getOuterNo());
+			OuterVo outer =  new OuterVo();
+			outer = outerService.getOuter(Integer.parseInt(orderList.get(i).get("OUTER_NO").toString()));
 			
 			topList.add(outer);
 		}

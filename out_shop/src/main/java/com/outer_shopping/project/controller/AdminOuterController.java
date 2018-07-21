@@ -190,7 +190,7 @@ public class AdminOuterController {
 			}else if(i == sizeList.size()-1) {
 				totalColor = totalColor + outerSize.getColor();
 			}else {
-				totalColor = totalColor + outerSize.getColor() + ",";
+				totalColor = totalColor + outerSize.getColor() + " ";
 	        }
 			
 			//수량
@@ -395,6 +395,10 @@ public class AdminOuterController {
 	@RequestMapping(value = "/ModefiyOuterSize", method = RequestMethod.POST)
     public String ModefiyOuterSize(@RequestParam Map<String, Object> map, RedirectAttributes ra){
 		
+		String totalSize = "";
+		String totalColor = "";
+		int totalAmount = 0;
+		
 		//등록하는 사이즈 정보 갯수
 		int tt = Integer.parseInt(map.get("index").toString()) + 1;
 		
@@ -415,7 +419,38 @@ public class AdminOuterController {
 			outerSize.setOuterNo(Integer.parseInt(map.get("outerNo").toString()));
 			
 			sizeService.createOuterSize(outerSize);
+			
+			//사이즈
+			if(totalSize.contains(outerSize.getType())) {
+				totalSize = totalSize + "";
+			}else if(i == tt-1) {
+				totalSize = totalSize + outerSize.getType();
+			}else {
+				totalSize = totalSize + outerSize.getType() + " ";
+	        }
+			
+			//색상
+			if(totalColor.contains(outerSize.getColor())) {
+				totalColor = totalColor + "";
+			}else if(i == tt-1) {
+				totalColor = totalColor + outerSize.getColor();
+			}else {
+				totalColor = totalColor + outerSize.getColor() + " ";
+	        }
+			
+			//수량
+			totalAmount = totalAmount + outerSize.getAmount();
+			
 		}
+		
+		OuterVo outer = outerService.getOuter(Integer.parseInt(map.get("outerNo").toString()));
+		outer.setTotalSize(totalSize);
+		outer.setTotalColor(totalColor);
+		outer.setTotalAmount(totalAmount);
+		
+		outerService.modifyOuter(outer);
+		
+		
 		logger.info("############# 상품수정 등록 #############");
 		
 		return outerViewPage(ra,Integer.parseInt(map.get("outerNo").toString()));

@@ -49,7 +49,7 @@ public interface OrderProductService {
 	 */
 	List<OrderProductVo> getOrderProductList(int orderId);
 	
-	List<OrderCheckVo> getOrderTopThreeList();
+	List<Map<String,Object>> getOrderTopThreeList();
 	
 	List<Map<String, Object>> getMonthProduct();
 	

@@ -1,6 +1,7 @@
 package com.outer_shopping.project.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.outer_shopping.project.vo.OuterSizeVo;
 
@@ -10,6 +11,8 @@ public interface OuterSizeService {
 	
 	
 	void removeOuterSize(int outerNo);
+	
+	List<Map<String, String>> getSizeList(int outerNo);
 	
 	List<OuterSizeVo> getListOuterSizeProduct(int outerNo);
 	
